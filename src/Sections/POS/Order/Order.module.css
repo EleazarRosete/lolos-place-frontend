@@ -1,0 +1,203 @@
+.orderItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent   ;
+  border-bottom: 2px dashed #0e0e0e;
+  max-height: 10rem;
+  padding: 1rem;
+  color: #3e2723;
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 0.1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  overflow: hidden; /* Prevent overflow in both x and y directions */
+  box-sizing: border-box; /* Ensure padding is included in the element's total width */
+}
+
+
+.orderItemDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+  width: 70%; /* Adjust width to take up more space */
+  padding-right: 1rem; /* Add some space between the details and actions */
+}
+
+.productDetails1{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.productName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #3e2723;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.productPrice,
+.productStock {
+  font-size: 1rem;
+  color: #bbbbbb;
+  margin: 0.3rem 0;
+}
+
+.orderItemActions {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Align items to the right */
+  width: 100%;
+  min-width: 180px; /* Ensure a minimum width for the actions section */
+  padding-left: 1rem;
+}
+
+.quantityControl {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+}
+
+.quantityButton {
+  width: 30px;
+  height: 30px;
+  background-color: #555555;
+  color: white;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.quantityButton:hover {
+  background-color: #3a3a3a;
+}
+
+.quantityButton:disabled {
+  background-color: #555555;
+  cursor: not-allowed;
+}
+
+.orderItemQuantity {
+  font-size: 1rem;
+  color: #3e2723;
+  text-align: center;
+  width: 40px;
+  border-top: 1px solid #0e0e0e;
+  border-bottom: 1px solid #0e0e0e;
+}
+
+.orderItemTotal {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #00bfae;
+  margin-left: 1rem;
+}
+
+.removeItemBtn {
+  background-color: transparent;
+  border: none;
+  color: #ff3b3b;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.removeItemBtn:hover {
+  color: #ff5757;
+}
+
+@media (max-width: 768px) {
+  .orderItem {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0.8rem;
+  }
+
+  .orderItemDetails {
+      width: 100%; /* Allow details to take up the full width on smaller screens */
+      padding-right: 0;
+  }
+
+  .orderItemActions {
+      width: 100%; /* Actions should also take up full width */
+      flex-direction: column;
+      gap: 0.5rem;
+      justify-content: flex-start;
+  }
+
+  .quantityControl {
+      gap: 0.3rem;
+  }
+
+  .orderItemTotal {
+      font-size: 1rem;
+      margin-left: 0;
+  }
+
+  .removeItemBtn {
+      font-size: 0.9rem;
+  }
+
+  .productName {
+      font-size: 1.1rem;
+  }
+
+  .productPrice,
+  .productStock {
+      font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .orderItem {
+      padding: 0.6rem;
+  }
+
+  .productName {
+      font-size: 1rem;
+  }
+
+  .productPrice,
+  .productStock {
+      font-size: 0.85rem;
+  }
+
+  .orderItemActions {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.4rem;
+  }
+
+  .quantityButton {
+      width: 28px;
+      height: 28px;
+      font-size: 1rem;
+  }
+
+  .orderItemQuantity {
+      font-size: 0.9rem;
+  }
+
+  .orderItemTotal {
+      font-size: 0.9rem;
+  }
+
+  .removeItemBtn {
+      font-size: 0.9rem;
+  }
+}
+
+

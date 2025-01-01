@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap');
+
+html {
+    overflow-x: hidden;
+}
+.menu-description {
+    margin-top: 5em;
+    text-align: center; /* Center-align text */
+    margin-bottom: 20px; /* Space below the section */
+    position: relative; /* For layering if needed */
+}
+
+.menu-title {
+    font-family: "Tangerine", system-ui; /* Apply the font family */
+    font-weight: 700; /* Use bold font */
+    font-size: 3.5em; /* Large font size for emphasis */
+    margin: 0 0 1em 0; /* No top margin, but with spacing at the bottom */
+    z-index: 1; /* Ensure the title stays on top of other elements */
+    color: #000000; /* Match the red wave's color for cohesion */
+}
+#menu{
+    background-color: #bda871;
+
+}
+
+/* Menu styles */
+.menu-page .menu {
+    padding: 20px;
+    background-color: white;
+    flex: 1; /* Ensures that the main content area takes up available space */
+    display: flex; /* Use flexbox for centering content */
+    flex-direction: column; /* Stack children vertically */
+}
+
+.menu-page .menu-description {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.menu-page .menu-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+    z-index: 100;
+}
+
+.menu-page .filter-button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background-color: #555;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.menu-page .filter-button.active {
+    background-color: #f39c12;
+}
+
+.menu-page .menu-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Adjust to distribute evenly */
+}
+.white{
+    margin-bottom: 15em;
+}
+
+.menu-page .menu-item {
+    background-color: #e2d3ad;
+    width: 30%; /* Each item takes up 30% width for three columns */
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.menu-page .menu-item img {
+    max-width: 100%;
+    height: auto;
+}
+
+.menu-page .menu-item p {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Footer styles */
+
+/* Flexbox to keep footer at the bottom */
+.menu-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the page takes full height */
+}
+
+footer {
+    margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+
+.custom-shape-divider-top-1732374191 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-top-1732374191 svg {
+    position: relative;
+    display: block;
+    width: calc(147% + 1.3px);
+    height: 100px;
+}
+
+.custom-shape-divider-top-1732374191 .shape-fill {
+    fill: #FFE49B;
+}
+
+.custom-shape-divider-bottom-1732374289 {
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.custom-shape-divider-bottom-1732374289 svg {
+    position: relative;
+    display: block;
+    width: calc(147% + 1.3px);
+    height: 117px;
+}
+
+.custom-shape-divider-bottom-1732374289 .shape-fill {
+    fill: #2C281B;
+}

@@ -1,0 +1,114 @@
+/* Updated Inventory.module.css */
+
+.itemTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #FEF7E1; /* Light background for table */
+    margin-top: 1rem; /* Add spacing above the table */
+}
+
+.itemTable th,
+.itemTable td {
+    border: 1px solid #ddd; /* Subtle borders for cells */
+    padding: 10px; /* Consistent padding */
+    text-align: left;
+}
+
+.itemTable th {
+    background-color: #F2E6CE; /* Softer header background for contrast */
+    color: #333; /* Darker text color for better readability */
+    font-weight: bold; /* Emphasize headers */
+    text-transform: uppercase; /* Consistent header style */
+}
+
+.itemRow {
+    background-color: #FFFFFF; /* Keep rows clean with white background */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.itemRow:hover {
+    background-color: #FFD580; /* Highlight row on hover */
+    color: #333; /* Text remains readable on hover */
+}
+
+.emptyRow {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
+.itemTable td {
+    vertical-align: middle; /* Center content vertically */
+}
+
+.itemImage {
+    max-width: 200px; /* Restrict image size */
+    max-height: 200px; /* Maintain aspect ratio */
+    object-fit: cover; /* Ensure the image fits well */
+    border-radius: 5px; /* Rounded corners for images */
+    display: block;
+    margin: 0 auto; /* Center images within cells */
+}
+
+.actionGroup {
+    display: flex; /* Align buttons horizontally */
+    gap: 0.5rem; /* Add space between buttons */
+    justify-content: center; /* Center buttons */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.actionGroup .editButton,
+.actionGroup .removeButton {
+    padding: 0.4rem 0.8rem; /* Compact padding for buttons */
+    border: none; /* Remove default border */
+    border-radius: 5px; /* Rounded corners for buttons */
+    transition: background-color 0.3s, transform 0.2s;
+    font-size: 0.9rem; /* Adjust font size for better readability */
+    cursor: pointer; /* Indicate interactivity */
+    min-width: 80px; /* Consistent minimum width */
+    font-weight: 900;
+}
+
+.actionGroup .editButton {
+    background-color: #3e2723; /* Green for edit */
+    color: #F4F4F9;
+}
+
+.actionGroup {
+    background-color: #66c266; /* Lighter green on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+.actionGroup .removeButton {
+    background-color: #3e2723; /* Red for remove */
+    color: #F4F4F9;
+}
+
+.actionGroup {
+    background-color: #e04a48; /* Lighter red on hover */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .itemTable td, .itemTable th {
+        font-size: 0.85rem; /* Smaller font for smaller screens */
+        padding: 8px; /* Adjust padding */
+    }
+
+    .actionGroup {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 0.3rem; /* Reduce spacing */
+    }
+
+    .editButton,
+    .removeButton {
+        min-width: 100%; /* Buttons take full width */
+    }
+
+    .itemImage {
+        max-width: 50px; /* Reduce image size on smaller screens */
+        max-height: 50px;
+    }
+}

@@ -1,0 +1,842 @@
+.section {
+    width: 79%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 21%;
+    background-color: #F4F4F9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 1rem 1rem 1rem 0;
+}
+
+/* Custom scrollbar styles for webkit browsers */
+.posContainer::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.posContainer::-webkit-scrollbar-track {
+    background: #0e0e0e; /* Background of the scrollbar track */
+}
+
+.posContainer::-webkit-scrollbar-thumb {
+    background: #3a3a3a; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+.posContainer::-webkit-scrollbar-thumb:hover {
+    background: #5a5a5a; /* Darker shade on hover */
+}
+
+/* For Firefox */
+.posContainer {
+    scrollbar-width: thin; /* Thin scrollbar */
+    scrollbar-color: #3a3a3a #0e0e0e; /* Thumb color and track color */
+}
+
+.posContainer {
+    background-color: transparent;
+    position: relative;
+    right: 1%;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 72% 25%;
+    grid-template-rows: 10% 90%;
+    grid-template-areas:
+        "navbar navbar"
+        "menu order";
+    gap: 0.5rem;
+}
+
+.navbar, .forms, .searchContainer, .find, .filterContainer, select, .menuContainer, .orderContainer, .placeOrder, .receipt, .individualProductsContainer, .bundleContainer {
+    background-color: transparent;
+}
+
+.navbar {
+    grid-area: navbar;
+    margin-left: 0.5rem;
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 1%;
+}
+
+.forms {
+    grid-area: navbar;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.searchContainer {
+    width: 70%;
+    height: 5vh;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.searchBar {
+    width: 100rem;
+    height: 2rem;
+    border-radius: 0.4rem;
+    background-color: #FEF7E1;
+    color: #0e0e0e;
+    border: 1px solid #3e2723;
+    padding-left: 1rem;
+    text-align: start;
+    margin: 0;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+    
+}
+
+.find {
+    height: 2.0rem;
+    width: 10%;
+    border: none;
+    border-radius: 0 0.5rem 0.5rem 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    left: 0.4%;
+    margin: 0;
+    padding: 1rem;
+    
+}
+
+.searchIcon{
+    width: 1.2rem;
+    height: 1.2rem;
+    background-color: transparent;
+}
+
+.filterContainer {
+    width: 20%;
+    height: 5vh;
+    border-radius: 0.4rem;
+    margin-bottom: 0.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    gap: 0.4rem;
+    background-color: #3e2723;
+    color: #F4F4F9;
+    border: 1px solid #3e2723;
+    transition: 0.3s ease-in-out;
+}
+
+.filterContainer:hover{
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+
+select {
+    border: 0;
+    width: 70%;
+    cursor: pointer;
+    color: #F4F4F9;
+}
+
+option {
+    background-color: #3e2723;
+    cursor: pointer;
+    font-weight: 500;
+    color: #F4F4F9;
+    cursor: pointer;
+}
+
+
+.menuContainer {
+    grid-area: menu;
+    width: 100%;
+    height: auto; /* Allow dynamic height based on content */
+    padding: 1rem; /* Unified padding */
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping to the next line */
+    justify-content: center; /* Start items from the left */
+    align-items: flex-start; /* Align items at the start for consistency */
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    gap: 1rem; /* Space between product cards */
+    position: relative;
+    left: -1%;
+    
+    /* Hide scrollbar for most browsers */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.menuContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Edge */
+}
+
+
+.productContainer{
+    width: 95%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    overflow-x: hidden;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.pText {
+    opacity: 0.5;
+    font-size: larger;
+    background-color: transparent;
+}
+
+/* Custom scrollbar styles for webkit browsers */
+.orderContainer::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.orderContainer::-webkit-scrollbar-track {
+    background: #0e0e0e; /* Background of the scrollbar track */
+}
+
+.orderContainer::-webkit-scrollbar-thumb {
+    background: #3a3a3a; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+.orderContainer::-webkit-scrollbar-thumb:hover {
+    background: #5a5a5a; /* Darker shade on hover */
+}
+
+/* For Firefox */
+.orderContainer {
+    scrollbar-width: thin; /* Thin scrollbar */
+    scrollbar-color: #3a3a3a #0e0e0e; /* Thumb color and track color */
+}
+
+.orderContainer {
+    grid-area: order;
+    width: 115%;
+    max-height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 1rem;
+    position: relative;
+    top: -10%;
+    left: -5%;
+    background-color: #FEF7E1;
+    overflow: auto;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+
+.orderTxt {
+    margin-top: 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    background-color: transparent;
+}
+
+.orders {
+    width: 95%;
+    height: 100vh;
+    text-align: center;
+    background-color: transparent;
+    overflow: auto; /* Ensure scrolling works */
+  }
+  
+  /* Custom scrollbar styles for WebKit browsers (Chrome, Edge, Safari) */
+  .orders::-webkit-scrollbar {
+    width: 8px; /* Set a width for the scrollbar */
+  }
+  
+  .orders::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Transparent thumb */
+    border-radius: 10px; /* Optional: rounded edges for the thumb */
+  }
+  
+  .orders::-webkit-scrollbar-track {
+    background-color: transparent; /* Transparent track */
+  }
+  
+  /* Custom scrollbar styles for Firefox */
+  .orders {
+    scrollbar-width: thin; /* Thin scrollbar */
+    scrollbar-color: transparent transparent; /* Transparent thumb and track */
+  }
+  
+
+.placeOrder {
+    width: 90%;
+    padding: 0.5rem 1rem;
+    border: 0.1rem solid #0e0e0e;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    background-color: #3e2723;
+    color: #F4F4F9;
+}
+
+.receipt {
+    width: 100%;
+    height: 35vh;
+    border-top: 0.2rem dashed;
+}
+
+.orderCategoryTitle{
+    background-color: #0e0e0e;
+    font-weight: 600;
+    font-size: large;
+    padding: 0.5rem;
+    border-radius: 0.3rem;
+}
+
+.individualProductsContainer,
+.bundleContainer {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.categoryTitle {
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 1.5rem;
+    background-color: #0e0e0e;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+    border-radius: 0.3rem;
+    font-weight: 600;
+}
+
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #3e2723;
+}
+
+.item-details {
+    flex: 1; /* Take remaining space */
+}
+
+.item-actions {
+    display: flex;
+    align-items: center;
+}
+
+/* Quantity Control Styles */
+.quantity-control {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Space between quantity controls and remove button */
+}
+
+.quantity-control button {
+    padding: 5px 10px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.quantity-control button:hover {
+    background-color: #e67e22; /* Darker shade on hover */
+}
+
+.quantity-text {
+    margin: 0 10px; /* Space between buttons and quantity text */
+}
+
+/* Remove Button */
+.cart-button {
+    padding: 5px 10px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cart-button:hover {
+    background-color: #c0392b; /* Darker shade on hover */
+}
+
+.orderDetails {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FEF7E1;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.orderDetailsHeader {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.orderItems {
+    height: 12rem;
+    max-height: 12rem;
+    overflow-y: auto;
+    padding: 0rem 1rem;
+    border-bottom: 1px solid #3e2723;
+  }
+  
+  /* Custom scrollbar styles for WebKit browsers (Chrome, Edge, Safari) */
+  .orderItems::-webkit-scrollbar {
+    width: 8px; /* Set a width for the scrollbar */
+  }
+  
+  .orderItems::-webkit-scrollbar-thumb {
+    background-color: transparent; /* Transparent thumb */
+    border-radius: 10px; /* Optional: rounded edges for the thumb */
+  }
+  
+  .orderItems::-webkit-scrollbar-track {
+    background-color: transparent; /* Transparent track */
+  }
+  
+  /* Custom scrollbar styles for Firefox */
+  .orderItems {
+    scrollbar-width: thin; /* Thin scrollbar */
+    scrollbar-color: transparent transparent; /* Transparent thumb and track */
+  }
+  
+
+.orderItem, .orderItemReceipt {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #3e2723;
+}
+
+.orderItem p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.headerPayment{
+    position: relative;
+    font-size: 1.5rem;
+}
+
+.cashHeader{
+    font-size: 2rem;
+    position: relative;
+    margin: 0;
+}
+
+.removeItem {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.removeItem:hover {
+    background-color: #ff1a1a;
+}
+
+.totalAmount {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: right;
+    margin: 20px 0;
+}
+
+.paymentOptions,
+.additionalOptions {
+    display: flex;
+    gap: 15px;
+    margin: 10px 0;
+    justify-content: center;
+}
+
+.paymentOptions label,
+.additionalOptions label {
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.navOrderDetailButtons{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.paymentOptions input[type="radio"],
+.additionalOptions input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.confirmOrderButton, .cancelOrderButton {
+    width: 30%;
+    padding: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: #3e2723;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.navButtonForGcash{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.paymentDetails{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FEF7E1;
+    border-radius: 8px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    height: 90%;
+    max-width: 600px;
+    padding: 20px;
+    z-index: 1000;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Calculator.css */
+.calculator {
+    width: 100%;
+    height: 80%;
+    
+    background-color: #3e2723;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 5%;
+}
+
+.display {
+    width: 100%;
+    background-color: transparent;
+    margin-bottom: 1rem;
+    position: relative;
+    left: 6%;
+}
+
+.inputData {
+    width: 80%;
+    padding: 10px;
+    font-size: 1.5rem;
+    border: 1px solid #272626;
+    border-radius: 5px;
+    text-align: right;
+    background-color: #FEF7E1;
+}
+
+.contentContainer{
+    margin-top: 1rem;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+.calcButtons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    background-color: transparent;
+}
+
+.cancelPaymentButton{
+    background-color: #6d4c41;
+    width: 25%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 3rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+}
+
+.calcButton {
+    padding: 20px;
+    font-size: 18px;
+    background-color: #6d4c41;
+    border: 1px solid #272626;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.calcButton:hover {
+    background-color: #212233;
+    border: 1px solid #0e0e0e;
+}
+
+.calcButton:active {
+    background-color: #ccc;
+}
+
+
+.details{
+    width: 100%;
+    height: 90%;
+    background-color: transparent;
+    display: flex;
+    justify-content:  space-between;
+    align-items: end;
+    flex-direction: column;
+}
+
+.navButton{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: transparent;
+}
+
+.paymentInfo{
+    width: 100%;
+    height: 85%;
+}
+
+.paymentAmount{
+    width: 100%;
+    padding: 0.3rem 0 0.3rem 0.5rem;
+    margin: 0;
+}
+
+.sum{
+    color: #3e2723;
+    font-size: 1rem;
+    text-align: right;
+}
+
+.orderReceipt{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FEF7E1;
+    border-radius: 8px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 30%;
+    height: 20%;
+    max-width: 600px;
+    padding: 20px;
+    z-index: 1000;  
+    justify-content: center;
+    align-items: center;
+}
+
+.modalH2{
+    margin: 0;
+}
+
+.orderItemReceipt{
+    width: 100%;
+    height: 100%;
+}
+
+
+.modalBackdrop{
+    z-index: 1000;
+    position: absolute;
+    top: 30%;
+    left: 5%;
+}.paymentOptions input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none; /* For Safari */
+    -moz-appearance: none; /* For Firefox */
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #3e2723; /* Border color */
+    background-color: transparent; /* Background color when not selected */
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .paymentOptions input[type="radio"]:checked {
+    background-color: #3e2723; /* Background color when selected */
+  }
+  
+  .paymentOptions input[type="radio"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #fff; /* Inner circle color */
+  }
+
+  /* Common styles for both paymentOptions and additionalOptions */
+input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none; /* For Safari */
+    -moz-appearance: none; /* For Firefox */
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #3e2723; /* Border color */
+    background-color: transparent; /* Background color when not selected */
+    position: relative;
+    cursor: pointer;
+  }
+  
+  input[type="radio"]:checked {
+    background-color: #3e2723; /* Background color when selected */
+  }
+  
+  input[type="radio"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #fff; /* Inner circle color */
+  }
+  
+
+  .modalPOS {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(14, 14, 14, 0.5);
+    z-index: 100;
+  }
+  
+  .modalConfirmation{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FEF7E1;
+    border-radius: 8px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 30%;
+    height: 20%;
+    max-width: 600px;
+    padding: 20px;
+    z-index: 1000;  
+}
+
+.modalConfirmation1{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FEF7E1;
+    border-radius: 8px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 30%;
+    height: 20%;
+    max-width: 600px;
+    padding: 20px;
+    z-index: 1000;  
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+ .modalButtons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ }   
+ 
+ .cancelModalConfirmation{
+    background-color: #6d4c41;
+    padding: 0.5rem 1rem;
+    border-radius: 0.2rem;
+    cursor: pointer;
+ }
+
+ @media (max-width: 768px) {
+    .posContainer {
+        grid-template-columns: 1fr; /* Single column for mobile */
+    }
+    .searchBar {
+        width: 90%; /* Adjust search bar for mobile */
+    }
+}
+
+
+.handleCloseModal1 {
+    background-color: #3e2723;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+

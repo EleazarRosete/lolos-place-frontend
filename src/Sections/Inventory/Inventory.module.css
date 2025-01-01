@@ -1,0 +1,228 @@
+.inventorySection {
+    width: 79%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 21%;
+    background-color: #F4F4F9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 1rem 1rem 1rem 0;  
+}
+
+/* Custom scrollbar styles for webkit browsers */
+.inventoryContainer::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.inventoryContainer::-webkit-scrollbar-track {
+    background: #0e0e0e; /* Background of the scrollbar track */
+}
+
+.inventoryContainer::-webkit-scrollbar-thumb {
+    background: #3a3a3a; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+}
+
+.inventoryContainer::-webkit-scrollbar-thumb:hover {
+    background: #5a5a5a; /* Darker shade on hover */
+}
+
+/* For Firefox */
+.inventoryContainer {
+    scrollbar-width: thin; /* Thin scrollbar */
+    scrollbar-color: #6d4c41 #FEF7E1; /* Thumb color and track color */
+}
+
+
+.inventoryContainer {
+    background-color: transparent;
+    position: relative;
+    width: 100%;
+    height: 98%;
+    display: flex;
+    flex-direction: column; /* Use column layout */
+    padding: 0.5rem; /* Add padding for inner spacing */   
+}
+
+.h2 {
+    background-color: transparent;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #3e2723;
+    margin: 0;
+    padding: 0;
+}
+
+.addButton {
+    background-color: #3e2723; /* Example button color */
+    color: #F4F4F9; /* Button text color */
+    border: none; /* Remove border */
+    border-radius: 0.2rem; /* Round corners */
+    cursor: pointer; /* Change cursor on hover */
+    padding: 0.2rem 1rem;
+    margin-left: 0.5rem;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+
+.itemList {
+    width: 100%;
+    height: 100%;
+    background-color: #FEF7E1;
+    overflow-x: hidden;
+    border: 1px solid #8E8588;
+    color: #3e2723;
+}
+
+.itemTable {
+    width: 100%;
+    border-collapse: collapse; /* Ensures borders are merged */
+    color: #3e2723;
+}
+
+.itemTable th, 
+.itemTable td {
+    padding: 0.8rem; /* Add padding to table cells */
+    border: 1px solid #8E8588; /* Add border to cells */
+    color: #3e2723; /* Text color for better visibility */
+    text-align: left; /* Align text to the left */
+    border-bottom: 1px solid #3e2723;
+}
+
+.itemTable tr:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Highlight on hover */
+}
+
+.itemList * {
+    background-color: transparent;
+}
+
+
+/* Inventory.module.css */
+/* Add these styles to your existing CSS file */
+
+.remove {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9); /* Overlay background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.removeContent {
+    background: #FEF7E1;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.text1 {
+    margin-bottom: 20px; /* Space between text and buttons */
+    background-color: transparent;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-around; /* Space buttons evenly */
+    background-color: transparent;
+}
+
+.confirmButton {
+    background-color: #3e2723;
+    color: #FEF7E1;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+
+.actions {
+    margin: 1rem 0;
+    display: flex; /* Align buttons horizontally */
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    width: 99%;
+    height: 6vh;
+}
+
+.searchInput {
+    border: 0;
+    background-color: #FEF7E1;
+    border-radius: 4px;
+    color: #0e0e0e;
+    width: 100%; /* Adjust as needed */
+    height: 100%;
+    margin-right: 10px; /* Space between input and icon */
+    border-radius: 0.3rem ;
+    text-align: start;
+    padding-left: 0.3rem;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+
+.buttons {
+    cursor: pointer;
+    height: 100%;
+    background-color: #3e2723;
+    color: #F4F4F9;
+    border: 0;
+    font-weight: 400;
+    padding: 0.5rem 1rem;
+    font-size: 0.6rem;
+    margin-left: 0.5rem;
+    border-radius: 0.3rem;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+
+
+.topButtons{
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 1rem;
+}
+
+.searchBar{
+    background-color: transparent;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category{
+    background-color: #3e2723;
+    width: 25%;
+    height: 100%;
+    padding: 0.2rem 0.1rem;
+    border-radius: 0.2rem;
+    font-size: 0.8rem;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+    cursor: pointer;
+}

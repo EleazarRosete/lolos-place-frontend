@@ -1,0 +1,115 @@
+/* General Section */
+.section {
+    width: 100%;
+    position: relative;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+/* Graph and Feedback Container (Flexbox Row) */
+.graphContainer {
+    display: flex;
+    justify-content: center; /* Align items in a row without wrapping */
+    align-items: center; /* Align items to the top of the container */
+    gap: 1rem; /* Small space between the two sections */
+    width: 100%;
+    overflow-x: scroll; /* Allows horizontal scrolling */
+    scroll-snap-type: x mandatory; /* For smooth scroll snapping */
+}
+
+/* Graph Styling */
+.graph {
+    min-width: 100%; /* Ensure each graph takes full width of the container */
+    flex: none; /* Prevents the graph from growing */
+    scroll-snap-align: start; /* Makes sure each graph snaps into place */
+}
+
+.active {
+    border: 2px solid #3e2723; /* Border for active graph */
+}
+
+/* Arrow Buttons Styling */
+.arrowButton {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 2rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 50%;
+}
+
+.arrowButton:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.arrowButton:first-of-type {
+    left: 1%; /* Left arrow button */
+    transform: translateY(-50%);
+}
+
+.arrowButton:last-of-type {
+    right: 1%; /* Right arrow button */
+    transform: translateY(-50%);
+}
+
+/* Card Styling */
+.card {
+    width: 100%;
+    max-width: 320px; /* Small size */
+    background-color: #FEF7E1;
+    border: 0;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    border-top: 1px solid #3e2723;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    margin: 10px;
+    padding-top: 0;
+    margin-top: 0;
+    border-radius: 5px;
+    position: relative;
+    right: 1%;
+}
+
+/* Header Styling */
+.cardHeaderTxt {
+    font-size: 1rem;
+    font-weight: 900;
+    color: #3e2723; /* Dark brown color for the vintage look */
+}
+
+/* Button Styling */
+.salesButton:hover {
+    background-color: #6d4c41;
+ /* Lighter brown when hovering */
+}
+
+/* Sales Text Styling */
+.salesText {
+    width: 95%;
+    padding: 0.5rem;
+    background-color: #3e2723; /* Dark brown background for text */
+    color: #F4F4F9; /* Light text color for contrast */
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Currency Formatting */
+body {
+    background-image: url('https://www.transparenttextures.com/patterns/old_wall.png'); /* Optional background texture */
+    background-repeat: repeat;
+}

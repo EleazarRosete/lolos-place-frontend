@@ -1,0 +1,101 @@
+/* General styles */
+.highestSellingProducts {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .highestSellingProducts h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .yearInput {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .yearInput label {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  
+  .yearInput input {
+    width: 100%;
+    max-width: 250px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+  }
+  
+  .yearInput button {
+    padding: 10px 15px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .yearInput button:disabled {
+    background-color: #ddd;
+  }
+  
+  .error {
+    color: red;
+    font-size: 1.2rem;
+    margin-top: 15px;
+  }
+  
+  .productData {
+    margin-top: 30px;
+    max-width: 100%;
+  }
+  
+  /* Make the chart responsive */
+  @media (max-width: 768px) {
+    .highestSellingProducts {
+      padding: 10px;
+    }
+  
+    .yearInput {
+      width: 100%;
+      gap: 10px;
+    }
+  
+    .yearInput input,
+    .yearInput button {
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    .highestSellingProducts h1 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  /* Ensure the chart is responsive on smaller screens */
+  @media (max-width: 480px) {
+    .highestSellingProducts h1 {
+      font-size: 1.25rem;
+    }
+  
+    .yearInput {
+      gap: 8px;
+    }
+  
+    .yearInput input {
+      font-size: 0.9rem;
+    }
+  
+    .yearInput button {
+      font-size: 0.9rem;
+    }
+  }
+  
