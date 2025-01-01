@@ -23,7 +23,7 @@ const SalesForecastGraph = () => {
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
-        const response = await fetch('http://localhost:5001/sales-forecast', {
+        const response = await fetch('http://localhost:5000/graphs/sales-forecast', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

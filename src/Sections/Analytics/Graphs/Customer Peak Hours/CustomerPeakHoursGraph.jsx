@@ -16,11 +16,11 @@ const CustomerPeakHoursGraph = () => {
     const fetchGraphAndData = async () => {
       try {
         setLoading(true);
-
-        // Fetch the peak hours data
-        const dataResponse = await axios.get("http://localhost:5001/peak-hours-data");
-        setPeakHoursData(dataResponse.data);
-
+    
+        // Fetch the peak hours data from the Node.js backend
+        const dataResponse = await axios.get("http://localhost:5000/graphs/get-peak-hours");
+        setPeakHoursData(dataResponse.data.highest_orders);  // Assuming the data is in 'highest_orders'
+    
         setLoading(false);
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -28,7 +28,7 @@ const CustomerPeakHoursGraph = () => {
         setLoading(false);
       }
     };
-
+    
     fetchGraphAndData();
   }, []);
 
@@ -43,7 +43,7 @@ const CustomerPeakHoursGraph = () => {
       return "Loading insights...";
     }
 
-    const highestOrders = peakHoursData.highest_orders;
+    const highestOrders = peakHoursData;
     const weekOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     return weekOrder
@@ -61,16 +61,17 @@ const CustomerPeakHoursGraph = () => {
 
   // Prepare data for the line chart
   const chartData = () => {
-    if (!peakHoursData) return {};
+    if (!peakHoursData) return {}; // Early exit if no peakHoursData
 
-    const highestOrders = peakHoursData.highest_orders;
+    const highestOrders = peakHoursData;
     const hours = [];
     const orders = [];
 
     const weekOrder = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    
+
+    // Check if highestOrders has data for each day and map correctly
     weekOrder.forEach((day) => {
-      if (highestOrders[day] && highestOrders[day].order_count > 0) {
+      if (highestOrders && highestOrders[day] && highestOrders[day].order_count > 0) {
         hours.push(`${day}: ${formatHour(highestOrders[day].hour)}`); // Include both day and hour
         orders.push(highestOrders[day].order_count);
       } else {

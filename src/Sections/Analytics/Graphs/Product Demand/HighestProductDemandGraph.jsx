@@ -23,7 +23,10 @@ const HighestSellingProducts = () => {
     setError('');
 
     try {
-      const response = await axios.post(`http://localhost:5001/highest-selling-products?year=${year}&month=${month}`);
+      // Update the request to a GET request
+      const response = await axios.get(`http://localhost:5000/graphs/get-product-demand`, {
+        params: { year, month } // Send year and month as query parameters
+      });
       setProductData(response.data);
     } catch (err) {
       setError('Error fetching data');
