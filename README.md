@@ -10,3 +10,4 @@ Currently, two official plugins are available:
 "# lolos-place-decent-ver" 
 "# lolos-place" 
 "# lolos-place" 
+# lolos-place-frontend
