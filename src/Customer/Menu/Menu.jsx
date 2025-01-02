@@ -14,7 +14,7 @@ const Menu = () => {
     // Fetch menu data from backend API
     const fetchMenuData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/menu');
+        const response = await fetch('https://lolos-place-backend.onrender.com/api/menu');
         const data = await response.json();
         setMenuData(data);
         setLoading(false);
