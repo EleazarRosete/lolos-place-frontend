@@ -173,7 +173,7 @@ function POS() {
 
         const getProducts = async () => {
             try {
-                const response = await fetch("http://localhost:5000/menu/get-product", {
+                const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-product", {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
