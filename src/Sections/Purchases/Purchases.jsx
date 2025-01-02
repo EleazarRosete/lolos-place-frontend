@@ -17,7 +17,7 @@ const Purchases = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/order/get-order');
+      const response = await axios.get('https://lolos-place-backend.onrender.com/order/get-order');
       const filteredOrders = response.data.filter(
         (order) => order.user_id === 14 && order.status === 'preparing'
       );
@@ -30,7 +30,7 @@ const Purchases = () => {
 
   const fetchOrderHistory = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/order/order-history');
+      const response = await axios.get('https://lolos-place-backend.onrender.com/order/order-history');
       setAllOrders(response.data);
       console.log("ALL ORDERS",allOrders);
     } catch (err) {
@@ -41,7 +41,7 @@ const Purchases = () => {
 
   const fetchDeliveries = async () => {
     try {
-      const response = await fetch('http://localhost:5000/order/get-delivery', {
+      const response = await fetch('https://lolos-place-backend.onrender.com/order/get-delivery', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -114,7 +114,7 @@ const Purchases = () => {
 
     if (matchedDelivery) {
         try {
-            const response = await fetch(`http://localhost:5000/order/update-delivery/${matchedDelivery.delivery_id}`, {
+            const response = await fetch(`https://lolos-place-backend.onrender.com/order/update-delivery/${matchedDelivery.delivery_id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status: "Delivered" }),
@@ -133,7 +133,7 @@ const Purchases = () => {
     }
 
     try {
-        const response = await axios.put(`http://localhost:5000/order/order-served/${selectedOrderId}`);
+        const response = await axios.put(`https://lolos-place-backend.onrender.com/order/order-served/${selectedOrderId}`);
         if (response.status === 200) {
             await fetchOrders();
             await fetchOrderHistory();

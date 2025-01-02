@@ -64,7 +64,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
             uploadFormData.append('file', file);
 
             try {
-                const response = await fetch('http://localhost:5000/upload', {
+                const response = await fetch('https://lolos-place-backend.onrender.com/upload', {
                     method: 'POST',
                     body: uploadFormData,
                 });
@@ -105,7 +105,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
 
     const handleUpdateItem = async (updatedItem) => {
         try {
-            const response = await fetch(`http://localhost:5000/menu/edit-product/${updatedItem.id}`, {
+            const response = await fetch(`https://lolos-place-backend.onrender.com/menu/edit-product/${updatedItem.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
 
     const handleAddItem = async (newItem) => {
         try {
-            const response = await fetch('http://localhost:5000/menu/add-product', {
+            const response = await fetch('https://lolos-place-backend.onrender.com/menu/add-product', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

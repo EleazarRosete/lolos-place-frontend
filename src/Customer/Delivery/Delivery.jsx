@@ -179,7 +179,7 @@ const Delivery = () => {
       
   
     try {
-      const response = await axios.post('http://localhost:5000/api/orders', orderDetails);
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/orders', orderDetails);
   
       if (response.status === 201) {
         const { order, delivery } = response.data;
@@ -213,7 +213,7 @@ const Delivery = () => {
       let orderSum = 0; // Variable to sum individual order totals
   
       try {
-        const productResponse = await axios.get('http://localhost:5000/menu/get-product');
+        const productResponse = await axios.get('https://lolos-place-backend.onrender.com/menu/get-product');
         products = productResponse.data;
       } catch (err) {
         console.error('Error fetching products:', err.message);
@@ -274,7 +274,7 @@ const Delivery = () => {
     };
 
     try {
-        const response = await axios.post('http://localhost:5000/api/create-gcash-checkout-session', body);
+        const response = await axios.post('https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session', body);
         const { url } = response.data;
         window.location.href = url;
     } catch (error) {

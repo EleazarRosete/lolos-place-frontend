@@ -38,7 +38,7 @@ const LoginPage = () => {
 
     // If both fields are valid, you can proceed with the form submission
     try {
-      const response = await axios.post('http://localhost:5000/api/login', {
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/login', {
         identifier, 
         password,
       });
@@ -96,7 +96,7 @@ const LoginPage = () => {
 
     // Proceed with the signup request
     try {
-      const response = await axios.post('http://localhost:5000/api/signup', {
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/signup', {
         firstName,
         lastName,
         address,

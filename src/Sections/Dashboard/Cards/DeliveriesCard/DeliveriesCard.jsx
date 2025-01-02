@@ -15,7 +15,7 @@
     
         const getReservations = async () => {
             try {
-                const response = await fetch("http://localhost:5000/order/get-reservation", {
+                const response = await fetch("https://lolos-place-backend.onrender.com/order/get-reservation", {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
@@ -50,7 +50,7 @@
             }
     
             try {
-                const response = await fetch("http://localhost:5000/order/order-history", {
+                const response = await fetch("https://lolos-place-backend.onrender.com/order/order-history", {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
@@ -63,7 +63,7 @@
     
         const cancelReservation = async (reservation_id) => {
             try {
-                const response = await fetch(`http://localhost:5000/order/cancel-reservation/${reservation_id}`, {
+                const response = await fetch(`https://lolos-place-backend.onrender.com/order/cancel-reservation/${reservation_id}`, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
                 });

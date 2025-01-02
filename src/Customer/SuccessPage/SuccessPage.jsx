@@ -72,12 +72,12 @@ const SuccessPage = () => {
     };
   
     try {
-      const response = await axios.post('http://localhost:5000/api/orders', orderDetails);
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/orders', orderDetails);
   
       if (response.status === 201) {
         const updateStockPromises = cartOrders.map(async ({ menu_id, quantity }) => {
           try {
-            const response = await fetch(`http://localhost:5000/menu/update-product-stock/${menu_id}`, {
+            const response = await fetch(`https://lolos-place-backend.onrender.com/menu/update-product-stock/${menu_id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ quantity }),
@@ -102,7 +102,7 @@ const SuccessPage = () => {
       
         let products = [];
         try {
-          const productResponse = await axios.get('http://localhost:5000/menu/get-product');
+          const productResponse = await axios.get('https://lolos-place-backend.onrender.com/menu/get-product');
           products = productResponse.data;
         } catch (err) {
           console.error('Error fetching products:', err.message);
@@ -131,7 +131,7 @@ const SuccessPage = () => {
             };
   
             try {
-              const salesResponse = await axios.post('http://localhost:5000/sales/add-sales', updatedSalesData);
+              const salesResponse = await axios.post('https://lolos-place-backend.onrender.com/sales/add-sales', updatedSalesData);
               console.log("Sales data added successfully:", salesResponse.data);
             } catch (err) {
               console.error("Error adding sales data:", err.message);
@@ -170,12 +170,12 @@ const SuccessPage = () => {
   
     try {
       // Save reservation details first
-      const response = await axios.post('http://localhost:5000/api/reservations', orderDetails);
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/reservations', orderDetails);
   
       if (response.status === 201) {
         const updateStockPromises = cartReservations.map(async ({ menu_id, quantity }) => {
           try {
-            const response = await fetch(`http://localhost:5000/menu/update-product-stock/${menu_id}`, {
+            const response = await fetch(`https://lolos-place-backend.onrender.com/menu/update-product-stock/${menu_id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ quantity }),
@@ -201,7 +201,7 @@ const SuccessPage = () => {
         // Fetch products after reservation is saved
         let products = [];
         try {
-          const productResponse = await axios.get('http://localhost:5000/menu/get-product');
+          const productResponse = await axios.get('https://lolos-place-backend.onrender.com/menu/get-product');
           products = productResponse.data;
         } catch (err) {
           console.error('Error fetching products:', err.message);
@@ -227,7 +227,7 @@ const SuccessPage = () => {
             };
   
             try {
-              const salesResponse = await axios.post('http://localhost:5000/sales/add-sales', updatedSalesData);
+              const salesResponse = await axios.post('https://lolos-place-backend.onrender.com/sales/add-sales', updatedSalesData);
               console.log("Sales data added successfully:", salesResponse.data);
             } catch (err) {
               console.error("Error adding sales data:", err.message);
@@ -257,7 +257,7 @@ const SuccessPage = () => {
     const fetchPaymentStatus = async () => {
       const user_id = customer.id;
       try {
-        const response = await axios.get(`http://localhost:5000/api/check-payment-status/${user_id}`);
+        const response = await axios.get(`https://lolos-place-backend.onrender.com/api/check-payment-status/${user_id}`);
         if (sessionId === response.data.session_id && response.data.payment_status === 'pending') {
           if (isAdvanceOrder) {
             handleReservation();

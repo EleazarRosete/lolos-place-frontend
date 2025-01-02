@@ -212,7 +212,7 @@ function POS() {
     useEffect(() => {
         const getCategories = async () => {
             try {
-                const response = await fetch("http://localhost:5000/menu/get-categories", {
+                const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-categories", {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
@@ -342,7 +342,7 @@ function POS() {
     
             try {
                 const updateStockPromises = order.map(async ({ menu_id, quantity }) => {
-                    const response = await fetch(`http://localhost:5000/menu/update-product-stock/${menu_id}`, {
+                    const response = await fetch(`https://lolos-place-backend.onrender.com/menu/update-product-stock/${menu_id}`, {
                         method: "PATCH",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ quantity })
@@ -359,7 +359,7 @@ function POS() {
                 await Promise.all(updateStockPromises);
     
                 // Add the order to the server
-                const response = await fetch(`http://localhost:5000/order/add-order`, {
+                const response = await fetch(`https://lolos-place-backend.onrender.com/order/add-order`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(paidOrder)
@@ -394,7 +394,7 @@ function POS() {
                         
 
                         try {
-                            const response = await fetch('http://localhost:5000/sales/add-sales', {
+                            const response = await fetch('https://lolos-place-backend.onrender.com/sales/add-sales', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(updatedSalesData),
@@ -479,7 +479,7 @@ function POS() {
         
         try {
             // Step 1: Create checkout session
-            const response = await fetch("http://localhost:5000/api/create-gcash-checkout-session", {
+            const response = await fetch("https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -507,7 +507,7 @@ function POS() {
             }
     
             // Step 2: Add data to temp_data table
-            const tempDataResponse = await fetch("http://localhost:5000/order/add-temp-data", {
+            const tempDataResponse = await fetch("https://lolos-place-backend.onrender.com/order/add-temp-data", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

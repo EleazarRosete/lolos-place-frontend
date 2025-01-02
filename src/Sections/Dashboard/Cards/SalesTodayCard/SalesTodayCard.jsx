@@ -11,7 +11,7 @@ function SalesTodayCard() {
 
     const getSales = async () => {
         try {
-            const response = await fetch("http://localhost:5000/sales/get-sales", {
+            const response = await fetch("https://lolos-place-backend.onrender.com/sales/get-sales", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
