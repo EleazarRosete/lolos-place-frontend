@@ -1,7 +1,7 @@
 import React from 'react';
 import './About.css'; // Update the stylesheet reference
 import MainLayout from '../../components/MainLayout';
-//helloo
+//hello
 const AboutPage = () => {
   return (
     <MainLayout>
