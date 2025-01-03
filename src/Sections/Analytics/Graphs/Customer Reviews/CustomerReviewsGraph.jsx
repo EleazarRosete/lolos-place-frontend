@@ -20,7 +20,7 @@ const CustomerReviewsGraph = () => {
 
         // Fetch the graph image (not used in the pie chart version)
         const graphResponse = await axios.get(
-          'https://lolos-place-backend.onrender.com/graphs/feedback-graph',
+          'https://lolos-place-backend.onrender.com/graphs/call-feedback-graph',
           { responseType: 'blob' }
         );
 
@@ -33,7 +33,7 @@ const CustomerReviewsGraph = () => {
         }
 
         // Fetch the feedback statistics
-        const statsResponse = await axios.get('https://lolos-place-backend.onrender.com/graphs/feedback-stats');
+        const statsResponse = await axios.get('https://lolos-place-backend.onrender.com/graphs/call-feedback-stats');
         setFeedbackStats(statsResponse.data);
 
         setLoading(false);
