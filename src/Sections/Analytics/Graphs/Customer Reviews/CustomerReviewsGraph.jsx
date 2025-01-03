@@ -20,7 +20,7 @@ const CustomerReviewsGraph = () => {
 
         // Fetch the graph image (not used in the pie chart version)
         const graphResponse = await axios.post(
-          'http://localhost:5001/feedback-graph',
+          'https://lolos-place-backend.onrender.com/feedback-graph',
           {},
           { responseType: 'blob' }
         );
