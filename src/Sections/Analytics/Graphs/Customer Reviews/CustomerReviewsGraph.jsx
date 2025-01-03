@@ -19,16 +19,21 @@ const CustomerReviewsGraph = () => {
         setLoading(true);
 
         // Fetch the graph image (not used in the pie chart version)
-        const graphResponse = await axios.post(
-          'http://localhost:5001/feedback-graph',
-          {},
+        const graphResponse = await axios.get(
+          'https://lolos-place-backend.onrender.com/graphs/call-feedback-graph',
           { responseType: 'blob' }
         );
-        const imageUrl = URL.createObjectURL(graphResponse.data);
-        setGraphImage(imageUrl);
+
+        // Check if the response is of the correct type
+        if (graphResponse.data instanceof Blob) {
+          const imageUrl = URL.createObjectURL(graphResponse.data);
+          setGraphImage(imageUrl);
+        } else {
+          throw new Error('Invalid response format for graph image');
+        }
 
         // Fetch the feedback statistics
-        const statsResponse = await axios.get('http://localhost:5001/feedback-stats');
+        const statsResponse = await axios.get('https://lolos-place-backend.onrender.com/graphs/call-feedback-stats');
         setFeedbackStats(statsResponse.data);
 
         setLoading(false);
