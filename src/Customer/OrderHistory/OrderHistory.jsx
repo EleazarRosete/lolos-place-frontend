@@ -22,7 +22,6 @@ const OrderHistory = () => {
       try {
         const response = await axios.get(
           `https://lolos-place-backend.onrender.com/api/order-history?user_id=${customer.id}`
-          
         );
 
         console.log("Fetched Order History:", response.data); // Log response to debug data
