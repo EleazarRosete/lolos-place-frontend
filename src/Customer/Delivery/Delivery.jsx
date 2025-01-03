@@ -219,7 +219,7 @@ const Delivery = () => {
     };
 
     try {
-        const response = await axios.post('http://localhost:5000/api/create-gcash-checkout-session', body);
+        const response = await axios.post('https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session', body);
 
         const { url } = response.data;
 
