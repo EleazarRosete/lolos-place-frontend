@@ -18,7 +18,7 @@ const CustomerPeakHoursGraph = () => {
         setLoading(true);
     
         // Fetch the peak hours data from the Node.js backend
-        const dataResponse = await axios.get("https://lolos-place-backend.onrender.com/graphs/get-peak-hours");
+        const dataResponse = await axios.get("https://lolos-place-backend.onrender.com/graphs/peak-hours-data");
         setPeakHoursData(dataResponse.data.highest_orders);  // Assuming the data is in 'highest_orders'
     
         setLoading(false);
