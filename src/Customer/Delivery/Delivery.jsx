@@ -170,7 +170,7 @@ const Delivery = () => {
       
   
     try {
-      const response = await axios.post('http://localhost:5000/api/orders', orderDetails);
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/orders', orderDetails);
   
       if (response.status === 201) {
         const { order, delivery } = response.data;
