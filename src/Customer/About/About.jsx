@@ -1,12 +1,12 @@
 import React from 'react';
 import './About.css'; // Update the stylesheet reference
 import MainLayout from '../../components/MainLayout';
-
+//helloo
 const AboutPage = () => {
   return (
     <MainLayout>
       <div className="about-page"> {/* Change the class name to reflect the About page */}
-        
+      
         
 
         <section id="about" className="about-section"> {/* Updated section ID and class */}
