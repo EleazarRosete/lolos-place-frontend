@@ -18,23 +18,23 @@ const HighestSellingProducts = () => {
       setError("Year and month are required");
       return;
     }
-
+  
     setLoading(true);
     setError('');
-
+  
     try {
-      // Update the request to a GET request
-      const response = await axios.get(`http://localhost:5000/graphs/get-product-demand`, {
+      // Update the request to a GET request with the correct URL and parameters
+      const response = await axios.get('https://lolos-place-backend.onrender.com/graphs/highest-selling-products', {
         params: { year, month } // Send year and month as query parameters
       });
-      setProductData(response.data);
+      setProductData(response.data); // Assuming the response contains product data
     } catch (err) {
       setError('Error fetching data');
     } finally {
       setLoading(false);
     }
   };
-
+  
   const getChartData = () => {
     const months = Object.keys(productData);
     const productNames = [];
