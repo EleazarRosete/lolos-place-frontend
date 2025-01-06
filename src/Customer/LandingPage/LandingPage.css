@@ -13,7 +13,6 @@ html, body {
     min-height: 100vh; /* Make sure about page takes up the full viewport */
     display: flex;
     flex-direction: column;
-    background-color: #FFE49B;
 }
 /* Intro section styles */
 .landing-page .intro-section {
@@ -277,89 +276,90 @@ section {
   .about_button:focus {
     outline: 3px solid #ffcc00; /* Yellow outline for focus */
   }
+  
 
-.landing-carousel {
-  margin-bottom: 40px;
+  .custom-shape-divider-top-1733154295 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
 }
 
-.carousel-image {
-  width: 100%;
-  height: auto;
-  max-height: 500px; /* Adjust as needed */
-  object-fit: cover;
-}
-.custom-shape-divider-top-1735748832 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
+.custom-shape-divider-top-1733154295 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 175px;
+    transform: rotateY(180deg);
 }
 
-.custom-shape-divider-top-1735748832 svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 150px;
+.custom-shape-divider-top-1733154295 .shape-fill {
+    fill: #FFE49B;
 }
 
-.custom-shape-divider-top-1735748832 .shape-fill {
-  fill: #FFE49B;
-}.custom-shape-divider-top-1735749046 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
+.custom-shape-divider-top-1733154424 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
 }
 
-.custom-shape-divider-top-1735749046 svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 172px;
-  transform: rotateY(180deg);
+.custom-shape-divider-top-1733154424 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 130px;
 }
 
-.custom-shape-divider-top-1735749046 .shape-fill {
-  fill: #D1BB80;
-}.custom-shape-divider-top-1735749107 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
+.custom-shape-divider-top-1733154424 .shape-fill {
+    fill: #D1BB80;
 }
 
-.custom-shape-divider-top-1735749107 svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 124px;
+
+
+.custom-shape-divider-top-1733154549 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
 }
 
-.custom-shape-divider-top-1735749107 .shape-fill {
-  fill: #A39365;
-}.custom-shape-divider-bottom-1735749142 {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  overflow: hidden;
-  line-height: 0;
-  transform: rotate(180deg);
+.custom-shape-divider-top-1733154549 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 208px;
+    transform: rotateY(180deg);
 }
 
-.custom-shape-divider-bottom-1735749142 svg {
-  position: relative;
-  display: block;
-  width: calc(100% + 1.3px);
-  height: 157px;
+.custom-shape-divider-top-1733154549 .shape-fill {
+    fill: #A39365;
 }
 
-.custom-shape-divider-bottom-1735749142 .shape-fill {
-  fill: #2C281B;
+.custom-shape-divider-bottom-1733154741 {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1733154741 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 208px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1733154741 .shape-fill {
+    fill: #2C281B;
 }
