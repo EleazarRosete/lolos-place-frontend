@@ -258,7 +258,7 @@ const SuccessPage = () => {
       const user_id = customer.id;
       try {
         const response = await axios.get(`https://lolos-place-backend.onrender.com/api/check-payment-status/${user_id}`);
-        if (sessionId === response.data.session_id && response.data.payment_status === 'Pending') {
+        if (sessionId === response.data.session_id && response.data.payment_status === 'pending') {
           if (isAdvanceOrder) {
             handleReservation();
           } else {
