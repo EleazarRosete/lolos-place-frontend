@@ -2,6 +2,7 @@
 .order-history-page {
     padding: 20px;
     font-family: Arial, sans-serif;
+    min-height: 65vh; /* Make sure about page takes up the full viewport */
   }
   
   h1 {
