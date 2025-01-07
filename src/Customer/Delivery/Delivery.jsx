@@ -123,9 +123,7 @@ const Delivery = () => {
   };
 
   const handlePlaceOrder = () => {
-    setPopupVisible(false); // Ensure popup is hidden
-    setShowCart(false); // Close the cart popup
-  
+    setShowCart(false);
     if (!customer || customer === '') {
       setPopupVisible(true);
       window.scrollTo(0, 0);
@@ -136,10 +134,9 @@ const Delivery = () => {
       setPopupVisible(true);
       window.scrollTo(0, 0);
     } else {
-      setConfirmationPopupVisible(true);
+      setConfirmationPopupVisible(true)
     }
   };
-  
 
   const closeToLogin = () => {
     setPopupVisible(false);
@@ -170,7 +167,7 @@ const Delivery = () => {
       
   
     try {
-      const response = await axios.post('https://lolos-place-backend.onrender.com/api/orders', orderDetails);
+      const response = await axios.post('http://localhost:5000/api/orders', orderDetails);
   
       if (response.status === 201) {
         const { order, delivery } = response.data;
@@ -219,7 +216,7 @@ const Delivery = () => {
     };
 
     try {
-        const response = await axios.post('https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session', body);
+        const response = await axios.post('http://localhost:5000/api/create-gcash-checkout-session', body);
 
         const { url } = response.data;
 
@@ -344,16 +341,13 @@ const Delivery = () => {
             <button className="submit-btn" onClick={handlePlaceOrder}>
               Place Order
             </button>
+            <button className="close-button" onClick={() => setShowCart(false)}>
+              Close
+            </button>
           </div>
         </div>
       )}
     </>
-
-
-          
-
-          
-
           {popupVisible && (
   <div className="delivery-popup">
     <div className="delivery-popup-content">
@@ -365,7 +359,6 @@ const Delivery = () => {
     </div>
   </div>
 )}
-
               {confirmationPopupVisible && customer && (
                 <div className="confirmation-popup">
                   <div className="popup-content receipt">
