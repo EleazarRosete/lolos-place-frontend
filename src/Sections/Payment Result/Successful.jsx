@@ -9,7 +9,7 @@ function Successful() {
 
     const fetchTempDataAndAddOrder = async () => {
         try {
-            const response = await fetch("http://localhost:5000/order/get-temp-data");
+            const response = await fetch("https://lolos-place-backend.onrender.com/order/get-temp-data");
             if (!response.ok) {
                 throw new Error(`Failed to fetch temp data. Status: ${response.status}`);
             }
@@ -37,7 +37,7 @@ function Successful() {
                     const updatedPaidOrder = { ...paidOrderData, total_amount: paidOrderData.total_amount };
 
                     // Add order
-                    const paidorderResponse = await fetch("http://localhost:5000/order/add-order", {
+                    const paidorderResponse = await fetch("https://lolos-place-backend.onrender.com/order/add-order", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(updatedPaidOrder),
@@ -50,7 +50,7 @@ function Successful() {
                     }
                     console.log("ORDER ADDED");
 
-                    const productResponse = await fetch("http://localhost:5000/menu/get-product");
+                    const productResponse = await fetch("https://lolos-place-backend.onrender.com/menu/get-product");
                     const jsonData = await productResponse.json();
 
                     // Add sales and update stocks in parallel
@@ -73,7 +73,7 @@ function Successful() {
                                 order_type: paidOrderData.order_type,
                             };
 
-                            const salesResponse = await fetch("http://localhost:5000/sales/add-sales", {
+                            const salesResponse = await fetch("https://lolos-place-backend.onrender.com/sales/add-sales", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify(updatedSalesData),
@@ -90,7 +90,7 @@ function Successful() {
                     });
 
                     const stockUpdatePromises = paidOrderData.items.map(async (orderedItem) => {
-                        const response = await fetch(`http://localhost:5000/menu/update-product-stock/${orderedItem.menu_id}`, {
+                        const response = await fetch(`https://lolos-place-backend.onrender.com/menu/update-product-stock/${orderedItem.menu_id}`, {
                             method: "PATCH",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ quantity: orderedItem.quantity }),
@@ -106,7 +106,7 @@ function Successful() {
                     await Promise.allSettled([...salesPromises, ...stockUpdatePromises]);
 
 
-                    const deleteResponse = await fetch(`http://localhost:5000/order/delete-temp-data/${firstData.purchases_id}`, {
+                    const deleteResponse = await fetch(`https://lolos-place-backend.onrender.com/order/delete-temp-data/${firstData.purchases_id}`, {
                         method: 'DELETE',
                         headers: { 'Content-Type': 'application/json' },
                     });
