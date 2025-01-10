@@ -21,24 +21,12 @@ const Delivery = () => {
   const [filter, setFilter] = useState('all');
   const [scrollPos, setScrollPos] = useState(window.scrollY);
   const [formValid, setFormValid] = useState(false);
-  const [totalAmount, setTotalAmount] = useState(0);
   const [formData, setFormData] = useState({ 
     name: "", 
     address: "", 
     contact: "" 
     });
     const navigate = useNavigate();
-    const [salesData, setSalesData] = useState({
-      amount:'',
-      service_charge:'',
-      gross_sales:'',
-      product_name:'',
-      category:'',
-      quantity_sold:'',
-      price_per_unit:'',
-      mode_of_payment:'',
-      order_type:''
-  });
     
     const [showCart, setShowCart] = useState(false);
     const toggleCart = () => {
@@ -135,6 +123,7 @@ const Delivery = () => {
   };
 
   const handlePlaceOrder = () => {
+    setShowCart(false);
     if (!customer || customer === '') {
       setPopupVisible(true);
       window.scrollTo(0, 0);
@@ -145,7 +134,6 @@ const Delivery = () => {
       setPopupVisible(true);
       window.scrollTo(0, 0);
     } else {
-      setShowCart(false);
       setConfirmationPopupVisible(true)
     }
   };
@@ -193,7 +181,6 @@ const Delivery = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-
   };
 
   const closeQrCodePopup = () => {
@@ -206,44 +193,10 @@ const Delivery = () => {
     setConfirmationPopupVisible(false);
   };
 
-  useEffect(() => {
-    const fetchTotalAmount = async () => {
-      let products = [];
-      let total = 0;
-      let orderSum = 0; // Variable to sum individual order totals
-  
-      try {
-        const productResponse = await axios.get('https://lolos-place-backend.onrender.com/menu/get-product');
-        products = productResponse.data;
-      } catch (err) {
-        console.error('Error fetching products:', err.message);
-        return;
-      }
-  
-      // Iterate through cartOrders and calculate the total
-      cartOrders.forEach(order => {
-        const product = products.find(p => p.menu_id === order.menu_id);
-        if (product) {
-          // Calculate the order total based on price and quantity
-          const orderTotal = product.price * order.quantity;
-          orderSum += parseFloat(orderTotal.toFixed(2)); // Add individual order total to orderSum
-          total += parseFloat((product.price * 0.10).toFixed(2)); // Add discount to total
-        }
-      });
-  
-      // Add the sum of the orders (orderSum) to the main total
-      total += orderSum;
-  
-      console.log('Order Sum:', orderSum); // Debugging the sum of individual orders
-      console.log('Calculated Total:', total); // Debugging the final total
-  
-      setTotalAmount(total); // Update the state with the calculated total
-    };
-  
-    fetchTotalAmount(); // Call the async function to calculate total amount
-  }, [cartOrders]); // Re-run when cartOrders changes
-  
-  
+  const getTotalAmount = () => {
+    return cartOrders.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({
@@ -255,33 +208,23 @@ const Delivery = () => {
   const makePaymentGCash = async () => {
     const body = {
         user_id: customer.id,
-        lineItems: cartOrders.map(product => {
-            // Ensure that product.price is a valid number before proceeding
-            const price = parseFloat(product.price);
-            if (isNaN(price)) {
-                console.error('Invalid price:', product.price);
-                return {};  // Skip this item if the price is invalid
-            }
-            // Calculate the total price (product price + 10% of product price)
-            const totalPrice = price * 0.1 + price;
-
-            return {
-                quantity: product.quantity,
-                name: product.name,
-                price: totalPrice.toFixed(2),  // Format the price to two decimal places
-            };
-        }),
+        lineItems: cartOrders.map(product => ({
+            quantity: product.quantity,
+            name: product.name,
+            price: product.price
+        })),
     };
 
     try {
         const response = await axios.post('https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session', body);
+
         const { url } = response.data;
+
         window.location.href = url;
     } catch (error) {
-        console.error('Error initiating payment:', error.response?.data || error.message);
+        console.error('Error initiating payment:', error);
     }
-};
-
+}
 
   return (
     <MainLayout>
@@ -334,7 +277,7 @@ const Delivery = () => {
           <p>Price: ₱{menuItem.price}</p>
           <p>{menuItem.description}</p> {/* Add the description here */}
           <>
-                      <img src={menuItem.img} alt={menuItem.name} />
+                      <img src={menuItem.image} alt={menuItem.name} />
                     </>
           
           {/* Check for bundle items and render them */}
@@ -345,7 +288,6 @@ const Delivery = () => {
               ))}
             </ul>
           ) : null}
-          <p>Stocks: {menuItem.stocks}</p>
 
           <div>
             <button
@@ -399,16 +341,13 @@ const Delivery = () => {
             <button className="submit-btn" onClick={handlePlaceOrder}>
               Place Order
             </button>
+            <button className="close-button" onClick={() => setShowCart(false)}>
+              Close
+            </button>
           </div>
         </div>
       )}
     </>
-
-
-          
-
-          
-
           {popupVisible && (
   <div className="delivery-popup">
     <div className="delivery-popup-content">
@@ -420,7 +359,6 @@ const Delivery = () => {
     </div>
   </div>
 )}
-
               {confirmationPopupVisible && customer && (
                 <div className="confirmation-popup">
                   <div className="popup-content receipt">
@@ -442,7 +380,7 @@ const Delivery = () => {
                         </li>
                       ))}
                     </ul>
-                    <h4 className="total">Total Amount: ₱{totalAmount}</h4>
+                    <h4 className="total">Total Amount: ₱{getTotalAmount()}</h4>
                     <div className="receipt-footer">
                       <button className="confirm-btn" onClick={makePaymentGCash}>
                         Confirm

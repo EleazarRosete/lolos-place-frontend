@@ -22,7 +22,6 @@ const Reservation = () => {
   const [filter, setFilter] = useState('all');
   const [scrollPos, setScrollPos] = useState(window.scrollY);
   const [formValid, setFormValid] = useState(false);
-  const [totalAmount, setTotalAmount] = useState(0);
   const navigate = useNavigate();
 
   const validateForm = () => {
@@ -36,6 +35,10 @@ const Reservation = () => {
   const toggleCart = () => {
     setShowCart((prev) => !prev);
   };
+  const handleButtonClick = () => {
+    setShowCart(false);  // Close the cart
+    closePopup();        // Close the popup
+};
   
 
   useEffect(() => {
@@ -330,24 +333,13 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
 
   const makePaymentGCash = async () => {
     const body = {
-      user_id: customer.id,
-      lineItems: cartReservations.map(product => {
-          // Ensure that product.price is a valid number before proceeding
-          const price = parseFloat(product.price);
-          if (isNaN(price)) {
-              console.error('Invalid price:', product.price);
-              return {};  // Skip this item if the price is invalid
-          }
-          // Calculate the total price (product price + 10% of product price)
-          const totalPrice = price * 0.1 + price;
-
-          return {
-              quantity: product.quantity,
-              name: product.name,
-              price: totalPrice.toFixed(2),  // Format the price to two decimal places
-          };
-      }),
-  };
+        user_id: customer.id,
+        lineItems: cartReservations.map(product => ({
+            quantity: product.quantity,
+            name: product.name,
+            price: product.price
+        })),
+    };
 
     try {
         const response = await axios.post('https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session', body);
@@ -359,49 +351,6 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
         console.error('Error initiating payment:', error);
     }
 }
-
-useEffect(() => {
-  const fetchTotalAmount = async () => {
-    let products = [];
-    let total = 0;
-    let orderSum = 0;  // Variable to sum individual order totals
-
-    try {
-      const productResponse = await axios.get('https://lolos-place-backend.onrender.com/menu/get-product');
-      products = productResponse.data;
-    } catch (err) {
-      console.error('Error fetching products:', err.message);
-      return;
-    }
-
-    // Ensure cartOrders is defined before attempting to iterate
-    if (cartReservations && Array.isArray(cartReservations)) {
-      // Iterate through cartOrders and calculate the total
-      cartReservations.forEach(order => {
-        const product = products.find(p => p.menu_id === order.menu_id);
-        if (product) {
-          // Calculate the order total based on price and quantity
-          const orderTotal = product.price * order.quantity;
-          orderSum += parseFloat(orderTotal.toFixed(2)); // Add individual order total to orderSum
-          total += parseFloat((product.price * 0.10).toFixed(2)); // Add discount to total
-        }
-      });
-
-      // Add the sum of the orders (orderSum) to the main total
-      total += orderSum;
-
-      console.log('Order Sum:', orderSum); // Debugging the sum of individual orders
-      console.log('Calculated Total:', total); // Debugging the final total
-
-      setTotalAmount(total); // Update the state with the calculated total
-    } else {
-      console.error('cartOrders is not properly defined');
-    }
-  };
-
-  fetchTotalAmount(); // Call the async function to calculate total amount
-}, [cartReservations]); // Added cartOrders to the dependency array
-
 
   return (
     <MainLayout>
@@ -533,7 +482,7 @@ useEffect(() => {
           <p>Price: ₱{menuItem.price}</p>
           <p>{menuItem.description}</p> {/* Add the description here */}
           <>
-                      <img src={menuItem.img} alt={menuItem.name} />
+                      <img src={menuItem.image} alt={menuItem.name} />
                     </>
           {/* Check for bundle items and render them */}
           {menuItem.items && menuItem.items.length > 0 ? (
@@ -543,7 +492,6 @@ useEffect(() => {
               ))}
             </ul>
           ) : null}
-          <p>Stocks: {menuItem.stocks}</p>
 
           <div>
             <button
@@ -621,7 +569,7 @@ useEffect(() => {
         ? "Your cart is empty" 
         : "Please fill out the form"
       }
-      <button onClick={closePopup}>OK</button>
+      <button onClick={handleButtonClick}>Close</button>
     </div>
   </div>
 )}
@@ -665,7 +613,7 @@ useEffect(() => {
                     </li>
                   ))}
                 </ul>
-                <h4 className="total">Total: ₱{totalAmount}</h4>
+                <h4 className="total">Total: ₱{getTotalAmount()}</h4>
                 <div className="receipt-footer">
               <button className="confirm-btn" onClick={makePaymentGCash}>
                 Confirm

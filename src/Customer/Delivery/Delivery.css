@@ -263,7 +263,32 @@
     padding: 20px;
     width: 90%;
     max-width: 400px;
+    z-index: 1;
 }
+
+.delivery .receipt {
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.delivery .popup-content.receipt {
+    max-height: 90vh; /* Adjust the height to fit smaller screens */
+    overflow-y: auto; /* Enable vertical scrolling */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
+    scrollbar-width: none; /* For Firefox */
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.delivery .popup-content.receipt::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
+
 
 .receipt {
     background: white;
@@ -495,27 +520,12 @@
     padding: 5px 8px; /* Adjust padding for smaller buttons */
     font-size: 12px; /* Smaller font size */
   }
-  
-  /* Cart button for removing items inside .delivery */
-  .delivery .cart-button {
-    padding: 6px 12px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 12px; /* Smaller button text */
-  }
-  
-  .delivery .cart-button:hover {
-    background-color: #c82333;
-  }
-  
+
   /* Submit button styles inside .delivery */
   .delivery .submit-btn {
     width: 100%;
     padding: 10px;
-    background-color: #28a745;
+    background-color: #969696;
     color: white;
     border: none;
     border-radius: 4px;
@@ -525,10 +535,31 @@
     font-size: 14px; /* Smaller font size */
   }
   
-  .delivery .submit-btn:hover {
-    background-color: #218838;
+  .delivery .submit-buttonn:hover {
+    background-color: #438150;
   }
-  
+
+  .delivery .close-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #853434; /* Retaining the original color for close button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px; /* Smaller font size */
+}
+
+.delivery .close-button:hover {
+    background-color: #ff0000; /* Darker shade for hover effect */
+}
+
+
+
+
+
   /* Responsive styles for very small screens (e.g., 320px width) inside .delivery */
   @media (max-width: 480px) {
     .delivery .cart-popup {
