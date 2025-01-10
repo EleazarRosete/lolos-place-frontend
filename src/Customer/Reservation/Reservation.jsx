@@ -181,7 +181,7 @@ const Reservation = () => {
 
 
     try {
-        const response = await axios.post('http://localhost:5000/api/reservations', orderDetails);
+        const response = await axios.post('https://lolos-place-backend.onrender.com/api/reservations', orderDetails);
 
         if (response.status === 201) {
             setConfirmationPopupVisible(false);
@@ -342,7 +342,7 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
     };
 
     try {
-        const response = await axios.post('http://localhost:5000/api/create-gcash-checkout-session', body);
+        const response = await axios.post('https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session', body);
 
         const { url } = response.data;
 
