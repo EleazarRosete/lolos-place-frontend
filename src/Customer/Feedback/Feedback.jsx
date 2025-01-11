@@ -67,7 +67,7 @@ const FeedbackForm = () => {
     
         try {
             // Analyze sentiment for the comment
-            const sentimentResponse = await axios.post('http://localhost:5001/api/analyze-sentiment', { text: comment });
+            const sentimentResponse = await axios.post('https://lolos-place-backend.onrender.com/graphs/api/call-analyze-sentiment', { text: comment });
             const compoundScore = sentimentResponse.data.compound; // Get the compound score from the backend
     
             // Classify the sentiment based on the compound score
