@@ -12,7 +12,6 @@ function InventoryCard() {
                 headers: { "Content-Type": "application/json" },
             });
             const jsonData = await response.json();
-            console.log("Fetched products:", jsonData); // Debug log
             setProduct(jsonData); // Update product state with fetched data
         } catch (err) {
             console.error('Error fetching products:', err.message);

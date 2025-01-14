@@ -4,7 +4,6 @@ import styles from './ReservationCard.module.css';
 function ReservationCard() {
     const [reservations, setReservations] = useState({
         today: [],
-        upcoming: []
     });
     const [orders, setOrders] = useState([]);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -32,18 +31,16 @@ function ReservationCard() {
 
             const todayReservations = sortedReservations.filter(reservation => {
                 const reservationDate = new Date(reservation.reservation_date).toISOString().split("T")[0];
+                const todayISOString = new Date().toISOString().split("T")[0];
                 return reservationDate === todayISOString;
             });
-
-            const upcomingReservations = sortedReservations.filter(reservation => {
-                const reservationDate = new Date(reservation.reservation_date).toISOString().split("T")[0];
-                return reservationDate > todayISOString;
-            });
+            
 
             setReservations({
                 today: todayReservations,
-                upcoming: upcomingReservations
             });
+
+            console.log(todayReservations);
         } catch (err) {
             setErrorMessage(err.message);
             console.error('Error fetching reservations:', err.message);
@@ -61,6 +58,8 @@ function ReservationCard() {
         }
     };
 
+
+
     const cancelReservation = async (reservation_id) => {
         try {
             const response = await fetch(`https://lolos-place-backend.onrender.com/order/cancel-reservation/${reservation_id}`, {
@@ -75,7 +74,6 @@ function ReservationCard() {
 
             setReservations(prevState => ({
                 today: prevState.today.filter(res => res.reservation_id !== reservation_id),
-                upcoming: prevState.upcoming.filter(res => res.reservation_id !== reservation_id),
             }));
             setShowConfirmation(false);
         } catch (err) {
@@ -122,12 +120,6 @@ function ReservationCard() {
             {reservations.today.length > 0 ? (
                 reservations.today.map(({ reservation_id, first_name, last_name, guest_number, reservation_date, reservation_time }) => (
                     <div key={reservation_id} className={styles.reservationItem}>
-                        <p><strong>Guest number:</strong> {guest_number}</p>
-                        {orders
-                            .filter(order => order.reservation_id === reservation_id)
-                            .map(order => (
-                                <p key={order.order_id}><strong>Order ID:</strong> #{order.order_id}</p>
-                            ))}
                         <p><strong>Name:</strong> {first_name} {last_name}</p>
                         <p><strong>Reservation Date:</strong> {formatDate(reservation_date)}</p>
                         <p><strong>Reservation Time:</strong> {formatTime(reservation_time)}</p>
@@ -161,7 +153,9 @@ function ReservationCard() {
                 <div className={styles.modal}>
                     <div className={styles.modalContent}>
                         <h3>Reservation Details</h3>
+                        <p><strong>Reservation Number:</strong>#{modalData.reservation_id}</p>
                         <p><strong>Customer Name:</strong> {modalData.customer_name}</p>
+                        <p><strong>Contact Number:</strong>{orders.find(order => order.reservation_id === modalData.reservation_id)?.phone}</p>
                         <p><strong>Reservation Date:</strong> {formatDate(modalData.reservation_date)}</p>
                         {modalData.order && modalData.order.length > 0 ? (
                             <div>

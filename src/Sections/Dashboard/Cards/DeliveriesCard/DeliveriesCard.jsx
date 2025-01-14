@@ -3,7 +3,6 @@
 
     function DeliveriesCard() {
         const [reservations, setReservations] = useState({
-            today: [],
             upcoming: []
         });
         const [orders, setOrders] = useState([]);
@@ -24,24 +23,17 @@
                 }
                 const jsonData = await response.json();
     
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const todayISOString = today.toISOString().split("T")[0];
-    
                 const sortedReservations = jsonData.sort((a, b) => new Date(a.reservation_date) - new Date(b.reservation_date));
-    
-                const todayReservations = sortedReservations.filter(reservation => {
-                    const reservationDate = new Date(reservation.reservation_date).toISOString().split("T")[0];
-                    return reservationDate === todayISOString;
-                });
+
     
                 const upcomingReservations = sortedReservations.filter(reservation => {
                     const reservationDate = new Date(reservation.reservation_date).toISOString().split("T")[0];
+                    const todayISOString = new Date().toISOString().split("T")[0];
                     return reservationDate > todayISOString;
                 });
+                
     
                 setReservations({
-                    today: todayReservations,
                     upcoming: upcomingReservations
                 });
             } catch (err) {
@@ -74,7 +66,6 @@
                 }
     
                 setReservations(prevState => ({
-                    today: prevState.today.filter(res => res.reservation_id !== reservation_id),
                     upcoming: prevState.upcoming.filter(res => res.reservation_id !== reservation_id),
                 }));
                 setShowConfirmation(false);
@@ -122,6 +113,7 @@
                 {reservations.upcoming.length > 0 ? (
                 reservations.upcoming.map(({ reservation_id, first_name, last_name, guest_number, reservation_date, reservation_time }) => (
                     <div key={reservation_id} className={styles.reservationItem}>
+                        <p><strong>Name:</strong> {first_name} {last_name}</p>
                         <p><strong>Reservation Date:</strong> {formatDate(reservation_date)}</p>
                         <p><strong>Reservation Time:</strong> {formatTime(reservation_time)}</p>
                         <button 
@@ -152,7 +144,9 @@
     <div className={styles.modal}>
         <div className={styles.modalContent}>
             <h3>Reservation Details</h3>
+            <p><strong>Reservation Number:</strong>#{modalData.reservation_id}</p>
             <p><strong>Customer Name:</strong> {modalData.customer_name}</p>
+            <p><strong>Contact Number:</strong>{orders.find(order => order.reservation_id === modalData.reservation_id)?.phone}</p>
             <p><strong>Reservation Date:</strong> {formatDate(modalData.reservation_date)}</p>
             {modalData.order && modalData.order.length > 0 ? (
                 <div>

@@ -3,7 +3,6 @@ import axios from 'axios';
 import styles from './Purchases.module.css';
 
 const Purchases = () => {
-  const [orders, setOrders] = useState([]);
   const [allOrders, setAllOrders] = useState([]);
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,30 +12,15 @@ const Purchases = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [orderTypeFilter, setOrderTypeFilter] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc'); // Add sortOrder state
-
-  const fetchOrders = async () => {
-    try {
-      const response = await axios.get('https://lolos-place-backend.onrender.com/order/get-order');
-      const filteredOrders = response.data.filter(
-        (order) => order.user_id === 14 && order.status === 'preparing'
-      );
-      setOrders(filteredOrders);
-    } catch (err) {
-      setError('Failed to fetch orders. Please try again later.');
-    }
-  
-  };
+  const [sortOrder, setSortOrder] = useState('asc');
 
   const fetchOrderHistory = async () => {
     try {
       const response = await axios.get('https://lolos-place-backend.onrender.com/order/order-history');
       setAllOrders(response.data);
-      console.log("ALL ORDERS",allOrders);
     } catch (err) {
       setError('Failed to fetch order history. Please try again later.');
     }
-
   };
 
   const fetchDeliveries = async () => {
@@ -56,7 +40,6 @@ const Purchases = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        await fetchOrders();
         await fetchOrderHistory();
         await fetchDeliveries();
       } catch (err) {
@@ -86,10 +69,6 @@ const Purchases = () => {
     }
   };
 
-  const sortedOrders = orders.sort((a, b) => {
-    return sortOrder === 'asc' ? a.order_id - b.order_id : b.order_id - a.order_id;
-  });
-
   const sortedAllOrders = allOrders.sort((a, b) => {
     return sortOrder === 'asc' ? a.order_id - b.order_id : b.order_id - a.order_id;
   });
@@ -109,7 +88,6 @@ const Purchases = () => {
   };
 
   const handleServeOrder = async () => {
-    console.log("ODELIVERY ID", deliveries);
     const matchedDelivery = deliveries.find(delivery => delivery.order_id === selectedOrderId);
 
     if (matchedDelivery) {
@@ -123,7 +101,7 @@ const Purchases = () => {
                 setDeliveries(prev =>
                     prev.filter(delivery => delivery.delivery_id !== matchedDelivery.delivery_id)
                 );
-                closeModal();
+                handleCloseModal();
             } else {
                 console.error("Failed to update delivery status.");
             }
@@ -135,45 +113,40 @@ const Purchases = () => {
     try {
         const response = await axios.put(`https://lolos-place-backend.onrender.com/order/order-served/${selectedOrderId}`);
         if (response.status === 200) {
-            await fetchOrders();
             await fetchOrderHistory();
             handleCloseModal();
         }
     } catch (error) {
         alert('Failed to update order status. Please try again later.');
     }
-};
-
-  const filteredOrders = (view === 'orders' && orderTypeFilter === 'deliveries'
-    ? sortedAllOrders // Use sortedAllOrders for deliveries
-    : sortedOrders // Otherwise, use sortedOrders
-  ).filter((order) => {
-    const ordertype = filterOrderType(order) || '';
-    const searchQueryLower = searchQuery.toLowerCase();
-  
-    // Match order ID to deliveries and check the status
-    const matchingDelivery = deliveries.find(delivery => delivery.order_id === order.order_id);
-    const isDeliveryPending = matchingDelivery ? matchingDelivery.delivery_status === 'Pending' : false;
-  
-    return (
-      (order.order_id?.toString().toLowerCase().includes(searchQueryLower) || // Search by order_id
-      ordertype.toString().toLowerCase().includes(searchQueryLower)) &&
-      (orderTypeFilter ? ordertype.includes(orderTypeFilter) : true) &&
-      (orderTypeFilter === 'deliveries' ? isDeliveryPending : true) // Filter deliveries with pending status
-    );
-  });
-  
-  
+  };
 
   const filteredAllOrders = sortedAllOrders.filter((order) => {
     const ordertype = filterOrderType(order) || '';
     const searchQueryLower = searchQuery.toLowerCase();
     return (
-      (order.order_id?.toString().toLowerCase().includes(searchQueryLower) || // Search by order_id
-      ordertype.toString().toLowerCase().includes(searchQueryLower)) &&
+      order.status !== 'preparing' &&
+      (!order.reservation_id || new Date(order.reservation_date) <= new Date()) &&
+      (order.order_id?.toString().toLowerCase().includes(searchQueryLower) ||
+        ordertype.toString().toLowerCase().includes(searchQueryLower)) &&
       (orderTypeFilter ? ordertype.includes(orderTypeFilter) : true)
     );
   });
+  
+  
+  const filteredPreparingOrders = sortedAllOrders.filter((order) => {
+    const ordertype = filterOrderType(order) || '';
+    const searchQueryLower = searchQuery.toLowerCase();
+    return (
+      order.status === 'preparing' &&
+      (order.order_id?.toString().toLowerCase().includes(searchQueryLower) ||
+        ordertype.toString().toLowerCase().includes(searchQueryLower)) &&
+      (orderTypeFilter ? ordertype.includes(orderTypeFilter) : true)
+    );
+  });
+  
+  
+  
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -254,28 +227,26 @@ const Purchases = () => {
         ) : view === 'orders' ? (
           <div className={styles.pendingOrdersContainer}>
             <h1 className={styles.pendingOrdersHeader}>Pending Orders</h1>
-            {filteredOrders.length > 0 ? (
+            {filteredPreparingOrders.length > 0 ? (
               <ul className={styles.orderList}>
-                {filteredOrders.map((order) => {
-                  const matchingOrder = allOrders.find(
-                    (allOrder) => allOrder.order_id === order.order_id
-                  );
+                {filteredPreparingOrders.map((order) => {
                   return (
                     <li key={order.order_id} className={styles.orderItem}>
                       <h3>Order #{order.order_id}</h3>
                       <p>Name: {order.customer_name ? order.customer_name : `${order.firstName} ${order.lastName}`}</p>                      
-                      <p>Number of people: {order.number_of_people ? order.number_of_people : "2"}</p>
+                      <p>Number of people: {order.numberOfPeople == null ? "1" : order.numberOfPeople}</p>
+                      <p>Contact Number: {order.phone == "09682823420" ? "N/A" : order.phone}</p>
                       <p>Date: {formatDate(order.date)}</p>
                       <p>Time: {formatTime(order.time)}</p>
                       <p>Items:</p>
                       <ul>
-                        {(matchingOrder?.items || []).map((item, index) => (
+                        {order.items.map((item, index) => (
                           <li key={index}>
                             {item.menu_name} (Qty: {item.order_quantity})
                           </li>
                         ))}
                       </ul>
-                      <p>Order Type: {order.order_type}</p>
+                    <p>Order Type: {order.reservation_id != null ? `Reservation #${order.reservation_id}` : order.delivery === true ? `Delivery #${deliveries.find(delivery => delivery.order_id === order.order_id)?.delivery_id}` : order.orderType}</p>
                       <p>Total: ₱{order.total_amount}</p>
                       <button onClick={() => handleStatusClick(order.order_id)}>Preparing</button>
                     </li>
@@ -283,60 +254,55 @@ const Purchases = () => {
                 })}
               </ul>
             ) : (
-              <p className={styles.noOrdersTxt}>No Orders</p>
+              <p>No pending orders available.</p>
             )}
           </div>
         ) : (
-          <div className={styles.historyOrdersContainer}>
-            <h1 className={styles.historyOrdersHeader}>Order History</h1>
-            <ul className={styles.orderList1}>
-              {filteredAllOrders.map((order) => {
-                const matchingDelivery = deliveries.find(
-                  (delivery) => delivery.order_id === order.order_id
-                );
-                return (
+          <div className={styles.orderHistoryContainer}>
+            <h1 className={styles.orderHistoryHeader}>Order History</h1>
+            {filteredAllOrders.length > 0 ? (
+              <ul className={styles.orderList}>
+                {filteredAllOrders.map((order) => (
                   <li key={order.order_id} className={styles.orderItem}>
                     <h3>Order #{order.order_id}</h3>
-                    <p>Name: {order.firstName && order.lastName ? `${order.firstName} ${order.lastName}` : "Lolo's Place"}</p>
-
-<p>Number of people: {order.numberOfPeople ? order.numberOfPeople : "1"}</p>
-
+                    <p>Name: {order.customer_name ? order.customer_name : `${order.firstName} ${order.lastName}`}</p>
+                    <p>Number of people: {order.numberOfPeople == null ? "1" : order.numberOfPeople}</p>
+                    <p>Contact Number: {order.phone == "09682823420" ? "N/A" : order.phone}</p>
                     <p>Date: {formatDate(order.date)}</p>
                     <p>Time: {formatTime(order.time)}</p>
                     <p>Items:</p>
                     <ul>
-                      {(order.items || []).map((item, index) => (
+                      {order.items.map((item, index) => (
                         <li key={index}>
                           {item.menu_name} (Qty: {item.order_quantity})
                         </li>
                       ))}
                     </ul>
-                    <p>Order Type: {matchingDelivery ? `Delivery #${matchingDelivery.delivery_id}` : order.reservation_id != null ? `Reservation #${order.reservation_id}` : order.orderType}</p>
-
-                    <p>Total: ₱{order.total_amount}</p>
+                    <p>Order Type: {order.reservation_id != null ? `Reservation #${order.reservation_id}` : order.delivery === true ? `Delivery #${deliveries.find(delivery => delivery.order_id === order.order_id)?.delivery_id}` : order.orderType}</p>                    <p>Total: ₱{order.total_amount}</p>
                   </li>
-                );
-              })}
-            </ul>
+                ))}
+              </ul>
+            ) : (
+              <p>No order history available.</p>
+            )}
           </div>
         )}
       </div>
-
-      {modalOpen && selectedOrderId && (
-        <div className={styles.modalOrders}>
-        <div className={styles.modalOrder}>
-          <div className={styles.modalContents}>
-            <h3>Mark Order as Served</h3>
-            <div className={styles.navButtonOrders}>
-            <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Close</button>
-              <button onClick={handleServeOrder} className={styles.orderButtonsHistory}>Served</button>
-
+      {modalOpen && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h2>Update Order Status</h2>
+            <p>Are you sure you want to mark this order as served?</p>
+            <div className={styles.modalActions}>
+              <button className={styles.serveButton} onClick={handleServeOrder}>
+                Serve Order
+              </button>
+              <button className={styles.closeButton} onClick={handleCloseModal}>
+                Close
+              </button>
             </div>
-
           </div>
         </div>
-        </div>
-
       )}
     </section>
   );
