@@ -288,21 +288,21 @@ const Purchases = () => {
           </div>
         )}
       </div>
-      {modalOpen && (
-        <div className={styles.modal}>
-          <div className={styles.modalContent}>
-            <h2>Update Order Status</h2>
-            <p>Are you sure you want to mark this order as served?</p>
-            <div className={styles.modalActions}>
-              <button className={styles.serveButton} onClick={handleServeOrder}>
-                Serve Order
-              </button>
-              <button className={styles.closeButton} onClick={handleCloseModal}>
-                Close
-              </button>
+      {modalOpen && selectedOrderId && (
+        <div className={styles.modalPurchase}>
+        <div className={styles.modalOrders}>
+          <div className={styles.modalOrder}>
+            <h3>Mark Order as Served</h3>
+            <div className={styles.navButtonOrders}>
+            <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Close</button>
+              <button onClick={handleServeOrder} className={styles.orderButtonsHistory}>Served</button>
+
             </div>
+
           </div>
         </div>
+        </div>
+
       )}
     </section>
   );
