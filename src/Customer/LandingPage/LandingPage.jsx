@@ -62,11 +62,6 @@ const LandingPage = () => {
   
     fetchTopSellers();
   }, []);
-  
-   const handleLogout = () => {
-    setCustomer(null); // Clear customer context on logout
-    setDropdownActive(false);
-  };
 
   // Carousel settings
   const sliderSettings = {
