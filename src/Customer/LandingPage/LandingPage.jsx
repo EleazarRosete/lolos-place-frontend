@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import './LandingPage.css';
 import { useCustomer } from '../../api/CustomerProvider'; // Adjust the import path if necessary
 import MainLayout from '../../components/MainLayout';
-
+import carousel1 from '../../assets/carousel1.jpeg';
+import carousel2 from '../../assets/carousel2.jpeg';
+import carousel5 from '../../assets/carousel5.jpeg';
+import carousel6 from '../../assets/carousel6.jpeg';
 
 const LandingPage = () => {
   const { customer, setCustomer } = useCustomer(); // Get the customer from context
@@ -57,6 +63,23 @@ const LandingPage = () => {
     fetchTopSellers();
   }, []);
   
+   const handleLogout = () => {
+    setCustomer(null); // Clear customer context on logout
+    setDropdownActive(false);
+  };
+
+  // Carousel settings
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    arrows: true,
+  };
+  
 
   return (
     <MainLayout>
@@ -68,6 +91,22 @@ const LandingPage = () => {
             Enjoy a unique dining experience with our freshly made meals, private dining, and events venue.
           </p>
         </section>
+
+         {/* Carousel Section */}
+        <Slider {...sliderSettings} className="landing-carousel">
+          <div>
+            <img src={carousel1} alt="Slide 1" className="carousel-image" />
+          </div>
+          <div>
+            <img src={carousel2} alt="Slide 2" className="carousel-image" />
+          </div>
+          <div>
+            <img src={carousel5} alt="Slide 5" className="carousel-image" />
+          </div>
+          <div>
+            <img src={carousel6} alt="Slide 6" className="carousel-image" />
+          </div>
+        </Slider>
 
         {/* About Section */}
         <section className="about-section">
