@@ -33,9 +33,8 @@
 }
 
 .text-content h1 {
-  margin-top: -2em;
   font-family: 'Tangerine', cursive; /* Ensure the correct font */
-  font-size: 5em; /* Adjust as needed */
+  font-size: 4em; /* Adjust as needed */
   font-weight: bold;
   color: #1a202c;
 }
@@ -81,7 +80,7 @@
 }
 
 .best-sellers-section {
-  background-color: #ecf0f1;
+  background-color: #ffffff;
 }
 
 .best-sellers-section h1 {
@@ -138,11 +137,10 @@
   display: flex;
   align-items: center; /* Vertically align content */
   justify-content: space-between; /* Space out text and image */
-  background-color: white;
   padding: 50px;
   max-width: 1200px;
   margin: 0 auto;
-  height: 100vh; /* Set height to full viewport height */
+  background-color: #fff;
 }
 
 .about-section .text-content {
@@ -150,7 +148,7 @@
 }
 
 .about-section h2 {
-  font-family: 'Tangerine', cursive; /* Match the font */
+  font-family: 'Tangerine', cursive;
   font-size: 5em;
   font-weight: bold;
   color: #1a202c;
@@ -164,11 +162,10 @@
   margin-bottom: 20px;
 }
 
-.image-left {
+.image-right {
   max-width: 50%; /* Restrict image size relative to text */
   height: auto; /* Maintain aspect ratio */
   border-radius: 10px; /* Optional rounded edges */
-  margin-right: 20px; /* Add space between image and text */
 }
 
 .about-button {
@@ -193,24 +190,24 @@
 
 .order-now-section {
   display: flex;
-  align-items: center; /* Vertically align content */
-  justify-content: space-between; /* Space out text and image */
-  background-color: rgb(255, 255, 255);
-  padding: 50px;
-  max-width: 100%; /* Set max-width to 100% to take full width of the container */
-  width: 100%; /* Set width to 100% to ensure it spans the full width */
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center content horizontally */
+  justify-content: center; /* Center content vertically */
+  text-align: center; /* Center-align text */
+  padding: 50px 20px;
+  max-width: 1200px;
   margin: 0 auto;
-  height: 90vh; /* Set height to 90% of viewport height */
+  height: 100vh; /* Full viewport height */
+  background-color: #fff; /* Optional background color */
 }
 
 .order-now-section .text-content {
-  max-width: 600px; /* Restrict width for readability */
+  max-width: 600px; /* Limit text content width */
 }
 
 .order-now-section h2 {
-  margin-top: -4em;
-  font-family: 'Tangerine', cursive; /* Match the font */
-  font-size: 5em; /* Adjust as needed */
+  font-family: 'Tangerine', cursive;
+  font-size: 5em;
   font-weight: bold;
   color: #1a202c;
   margin-bottom: 20px;
@@ -220,8 +217,7 @@
   font-size: 1.2em;
   color: #4a5568;
   line-height: 1.6; /* Improve readability */
-  margin-bottom: 20px;
-  margin-right: 50px;
+  margin-bottom: 30px;
 }
 
 .order-button {
@@ -242,4 +238,101 @@
 .order-button:hover {
   background-color: #a08f62; /* Darker red on hover */
   color: #FFE49B;
+}
+
+
+/* Base styles remain unchanged, responsive adjustments below */
+
+@media (max-width: 768px) { /* For tablets and small screens */
+  .section,
+  .intro-section,
+  .best-sellers-section,
+  .about-section,
+  .order-now-section {
+    flex-direction: column; /* Stack content vertically */
+    text-align: center; /* Center-align text */
+    height: auto; /* Let the content dictate the height */
+    padding: 30px 20px; /* Adjust padding for smaller screens */
+  }
+
+  .text-content {
+    max-width: 100%; /* Allow text to take full width */
+    margin-bottom: 20px; /* Add space between text and image */
+  }
+
+  .image-right,
+  .image-left {
+    max-width: 90%; /* Reduce image size */
+    margin: 0 auto; /* Center the image */
+  }
+
+  .order-now-section .text-content h2,
+  .about-section h2 {
+    font-size: 3em; /* Scale down heading size */
+  }
+
+  .text-content p {
+    font-size: 1em; /* Adjust paragraph font size */
+  }
+
+  .order-button,
+  .about-button {
+    width: 80%; /* Expand button width */
+    margin: 0 auto; /* Center the button */
+  }
+}
+
+@media (max-width: 480px) { /* For small phones like iPhone SE */
+  .section,
+  .intro-section,
+  .best-sellers-section,
+  .about-section,
+  .order-now-section {
+    padding: 20px 10px; /* Reduce padding further */
+  }
+
+  .text-content h1,
+  .text-content h2 {
+    font-size: 2.5em; /* Further reduce heading size */
+  }
+
+  .text-content p {
+    font-size: 0.9em; /* Adjust font size for readability */
+  }
+
+  .order-button,
+  .about-button {
+    padding: 10px; /* Adjust padding for smaller buttons */
+    font-size: 0.9em; /* Reduce font size */
+  }
+
+  .image-right,
+  .image-left {
+    max-width: 100%; /* Ensure images fit within the viewport */
+  }
+}
+
+@media (min-width: 1200px) { /* For large screens */
+  .section,
+  .intro-section,
+  .best-sellers-section,
+  .about-section,
+  .order-now-section {
+    max-width: 1400px; /* Expand max-width for large screens */
+    padding: 70px; /* Add more padding */
+  }
+
+  .text-content h1,
+  .text-content h2 {
+    font-size: 5em; /* Increase heading size */
+  }
+
+  .text-content p {
+    font-size: 1.5em; /* Increase paragraph font size */
+  }
+
+  .image-right,
+  .image-left {
+    max-width: 50%; /* Allow larger images */
+  }
 }
