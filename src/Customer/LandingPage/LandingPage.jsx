@@ -101,7 +101,6 @@ const LandingPage = () => {
 
         {/* About Section */}
         <section className="about-section">
-          <img src={pic2} alt="Lolo's Place" className="image-left" />
           <div className="text-content">
             <h2>About Us</h2>
             <p>
@@ -112,23 +111,27 @@ const LandingPage = () => {
               <button className="about-button">Learn more about Lolo's Place</button>
             </Link>
           </div>
+          <img src={pic2} alt="About Us at Lolo's Place" className="image-right" />
         </section>
+
+
 
 
       
 
         {/* Order Now Section */}
         <section className="order-now-section">
-          <div className="text-content">
-            <h2>Order Now</h2>
-            <p>
-              Choose delivery for convenience, reserve a table to enjoy dining with us, or reserve a table with an advance order for a seamless experience.
-            </p>
-            <Link to="/delivery-and-reservation">
-              <button className="order-button">Order Now →</button>
-            </Link>
-          </div>
-        </section>
+  <div className="text-content">
+    <h2>Order Now</h2>
+    <p>
+      Choose delivery for convenience, reserve a table to enjoy dining with us, or reserve a table with an advance order for a seamless experience.
+    </p>
+    <Link to="/delivery-and-reservation">
+      <button className="order-button">Place Your Order</button>
+    </Link>
+  </div>
+</section>
+
       </div>
     </MainLayout>
   );
