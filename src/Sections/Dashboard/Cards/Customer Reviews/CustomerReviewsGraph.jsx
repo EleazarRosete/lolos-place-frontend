@@ -104,10 +104,6 @@ const CustomerReviewsGraph = () => {
             <div className={styles.pieChart}>
               <Pie data={pieChartData()} />
             </div>
-            <div className={styles.feedbackGraph}>
-              <strong>Insights: </strong>
-              <p>{generateDynamicInsight()}</p>
-            </div>
           </>
         ) : (
           <p className={styles.loading}>Loading graph...</p>

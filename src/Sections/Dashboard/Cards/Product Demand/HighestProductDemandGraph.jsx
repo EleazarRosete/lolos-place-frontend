@@ -9,10 +9,8 @@ ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 const HighestSellingProducts = () => {
   const today = new Date().toISOString().split('T')[0];
   const startOfYear = new Date(
-    Date.UTC(new Date().getFullYear(), 0, 1) // Create a UTC date for January 1
+    Date.UTC(new Date().getFullYear(), 0, 1)
   ).toLocaleDateString('en-CA', { timeZone: 'Asia/Manila' });
-  
-  console.log(startOfYear);
 
   const [startDate, setStartDate] = useState(startOfYear);
   const [endDate, setEndDate] = useState(today);
@@ -46,8 +44,11 @@ const HighestSellingProducts = () => {
   }, []);
 
   const getChartData = () => {
-    // Filter out products with quantity_sold === 0
-    const filteredData = productData.filter((product) => product.quantity_sold > 0);
+    // Sort products by quantity_sold in descending order and take the top 10
+    const filteredData = productData
+      .filter((product) => product.quantity_sold > 0)
+      .sort((a, b) => b.quantity_sold - a.quantity_sold)
+      .slice(0, 10);
 
     const productNames = filteredData.map((product) => product.product_name);
     const quantitiesSold = filteredData.map((product) => product.quantity_sold);
@@ -106,7 +107,7 @@ const HighestSellingProducts = () => {
               plugins: {
                 title: {
                   display: true,
-                  text: `Product Demand from ${startDate} to ${endDate}`,
+                  text: `Top 10 Highest Selling Products from ${startDate} to ${endDate}`,
                 },
               },
             }}

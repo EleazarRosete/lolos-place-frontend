@@ -16,9 +16,13 @@ import styles from './SalesForecastingInsightsGraph.module.css';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 const SalesForecastGraph = () => {
-  const [salesData, setSalesData] = useState([]);
+  const [selectedYear, setSelectedYear] = useState('current'); // Default option
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [allSalesData, setAllSalesData] = useState({
+    past: {},
+    predicted: [],
+  });
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -42,7 +46,10 @@ const SalesForecastGraph = () => {
         const data = await response.json();
 
         if (data && data.predicted_sales_current_year) {
-          setSalesData(data.predicted_sales_current_year);
+          setAllSalesData((prevData) => ({
+            ...prevData,
+            predicted: data.predicted_sales_current_year,
+          }));
         } else {
           throw new Error('Invalid data format');
         }
@@ -54,24 +61,75 @@ const SalesForecastGraph = () => {
       }
     };
 
+
+    const fetchPastData = async () => {
+      try {
+        const response = await fetch('http://localhost:10000/graphs/sales-past-data', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+    
+        const data = await response.json();
+      
+        if (data && data.sales_per_month) {
+          setAllSalesData((prevData) => ({
+            ...prevData,
+            past: data.sales_per_month,
+          }));
+        } else {
+          console.error('Invalid past sales data format');
+        }
+    
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+    
     fetchSalesData();
+    fetchPastData();
   }, []);
 
-  const salesValues = salesData.map((item) => item.predicted_sales);
+    const salesValues = selectedYear === 'current'
+  ? allSalesData.predicted.map((item) => item.predicted_sales)
+  : allSalesData.past[selectedYear]
+  ? Object.values(allSalesData.past[selectedYear])  // Extract sales values as an array
+  : [];  // Return empty array if the data is not found
+
+
+
+
+
   const minSales = Math.min(...salesValues);
   const maxSales = Math.max(...salesValues);
 
-  // Adjusting the y-axis range dynamically
-  const rangePadding = 1000; // Padding for the range
-  const yAxisMin = Math.floor((minSales - rangePadding) / 500) * 500; // Round down to the nearest 500
-  const yAxisMax = Math.ceil((maxSales + rangePadding) / 500) * 500; // Round up to the nearest 500
-  const yAxisStep = (yAxisMax - yAxisMin) <= 5000 ? 500 : 1000; // Adjust step size based on range
+  // Apply a safe margin if values are too close or too large
+  const rangePadding = 1000;
+  const calculatedMin = Math.floor((minSales - rangePadding) / 500) * 500;
+  const calculatedMax = Math.ceil((maxSales + rangePadding) / 500) * 500;
+
+  // Ensure min/max are finite
+  const yAxisMin = !isFinite(calculatedMin) ? 0 : calculatedMin;
+  const yAxisMax = !isFinite(calculatedMax) ? 5000 : calculatedMax;
+
+  // Avoid an excessive range for stepSize
+  const yAxisStep = yAxisMax - yAxisMin <= 5000 ? 500 : Math.max(1000, Math.floor((yAxisMax - yAxisMin) / 10));
 
   const data = {
     labels: monthNames,
     datasets: [
       {
-        label: 'Predicted Sales (₱)',
+        label:
+          selectedYear === 'current'
+            ? 'Predicted Sales'
+            : `Sales for ${selectedYear}`,
         data: salesValues,
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: (context) => {
@@ -123,7 +181,10 @@ const SalesForecastGraph = () => {
       },
       title: {
         display: true,
-        text: 'Predicted Sales for the Current Year (₱)',
+        text:
+          selectedYear === 'current'
+            ? 'Predicted Sales for the Current Year'
+            : `Sales Data for ${selectedYear}`,
         font: {
           size: 18,
         },
@@ -171,9 +232,26 @@ const SalesForecastGraph = () => {
       {loading && <p>Loading data...</p>}
       {error && <p>Error: {error}</p>}
       {!loading && !error && (
-        <div className={styles.graphContainer}>
-          <Line data={data} options={options} />
-        </div>
+        <>
+          <div className={styles.dropdown}>
+            <label htmlFor="year">Select Year: </label>
+            <select
+              id="year"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+            >
+              <option value="current">Predicted Sales for Current Year</option>
+              {Object.keys(allSalesData.past).map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.graphContainer}>
+            <Line data={data} options={options} />
+          </div>
+        </>
       )}
     </div>
   );
