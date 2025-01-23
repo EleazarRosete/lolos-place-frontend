@@ -156,14 +156,17 @@ const Purchases = () => {
   };
 
   const formatTime = (timeString) => {
-    const time = new Date(`1970-01-01T${timeString}`);
+    const time = new Date(`1970-01-01T${timeString}Z`); // Append 'Z' to treat as UTC time
     if (isNaN(time)) return 'Invalid Time';
     return time.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: true,
+      timeZone: 'Asia/Manila', // Philippine Time Zone
     });
   };
+  
+  
 
   return (
     <section className={styles.section}>

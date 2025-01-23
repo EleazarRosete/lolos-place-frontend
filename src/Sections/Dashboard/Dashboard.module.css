@@ -1,26 +1,42 @@
-.section{
+.section {
     width: 79%;
-    height: 100vh;
+    max-height: 100vh;
     position: fixed;
     top: 0;
     left: 21%;
     background-color: #F4F4F9;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    flex-direction: column;
+    align-items: start;
+    justify-content: flex-start;
+    overflow-y: auto; /* Enable vertical scrolling */
     margin: 0;
     padding: 1rem 1rem 1rem 0;
 }
 
-.cardContainer{
+.cardContainer {
     width: 100%;
-    height: 100%;
+    height: auto; /* Allow height to adjust based on content */
     position: relative;
     left: -1%;
     display: grid;
     grid-template-columns: 33% 33% 33%;
     grid-template-rows: 20% 80%;
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.analyticsContainer {
+    width: 100%;
+    height: auto; /* Allow height to adjust based on content */
+    position: relative;
+    left: -1%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 25% 25% 25% 25%;
     background-color: transparent;
     margin: 0;
     padding: 0;

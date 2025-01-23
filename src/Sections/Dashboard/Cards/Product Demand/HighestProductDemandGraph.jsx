@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
@@ -7,15 +7,22 @@ import styles from './ProductDemandGraph.module.css';
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 const HighestSellingProducts = () => {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const today = new Date().toISOString().split('T')[0];
+  const startOfYear = new Date(
+    Date.UTC(new Date().getFullYear(), 0, 1) // Create a UTC date for January 1
+  ).toLocaleDateString('en-CA', { timeZone: 'Asia/Manila' });
+  
+  console.log(startOfYear);
+
+  const [startDate, setStartDate] = useState(startOfYear);
+  const [endDate, setEndDate] = useState(today);
   const [productData, setProductData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const fetchProductData = async () => {
     if (!startDate || !endDate) {
-      setError("Start date and end date are required");
+      setError('Start date and end date are required');
       return;
     }
 
@@ -23,10 +30,10 @@ const HighestSellingProducts = () => {
     setError('');
 
     try {
-      const response = await axios.get('http://localhost:10000/graphs/highest-selling-products', {
-        params: { startDate, endDate }, // Send startDate and endDate as query parameters
+      const response = await axios.get('https://lolos-place-backend.onrender.com/graphs/highest-selling-products', {
+        params: { startDate, endDate },
       });
-      setProductData(response.data); // Assuming the response contains product data
+      setProductData(response.data);
     } catch (err) {
       setError('Error fetching data');
     } finally {
@@ -34,9 +41,16 @@ const HighestSellingProducts = () => {
     }
   };
 
+  useEffect(() => {
+    fetchProductData();
+  }, []);
+
   const getChartData = () => {
-    const productNames = productData.map((product) => product.product_name);
-    const quantitiesSold = productData.map((product) => product.quantity_sold);
+    // Filter out products with quantity_sold === 0
+    const filteredData = productData.filter((product) => product.quantity_sold > 0);
+
+    const productNames = filteredData.map((product) => product.product_name);
+    const quantitiesSold = filteredData.map((product) => product.quantity_sold);
 
     return {
       labels: productNames,
@@ -63,7 +77,7 @@ const HighestSellingProducts = () => {
           id="startDate"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          max={new Date().toISOString().split('T')[0]} // Limit to the current date
+          max={today}
         />
 
         <label htmlFor="endDate">End Date:</label>
@@ -72,7 +86,7 @@ const HighestSellingProducts = () => {
           id="endDate"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
-          max={new Date().toISOString().split('T')[0]} // Limit to the current date
+          max={today}
         />
 
         <button onClick={fetchProductData} disabled={!startDate || !endDate}>

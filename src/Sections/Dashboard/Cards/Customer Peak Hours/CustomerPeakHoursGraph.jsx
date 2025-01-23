@@ -8,10 +8,14 @@ import styles from "./CustomerPeakHoursGraph.module.css";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const CustomerPeakHoursGraph = () => {
+  // Get today's day of the week
+  const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const today = daysOfWeek[new Date().getDay()];
+
   const [peakHoursData, setPeakHoursData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedDay, setSelectedDay] = useState("Monday"); // Track selected day
+  const [selectedDay, setSelectedDay] = useState(today); // Default to today's day
 
   useEffect(() => {
     const fetchGraphAndData = async () => {
@@ -19,7 +23,7 @@ const CustomerPeakHoursGraph = () => {
         setLoading(true);
 
         // Fetch the peak hours data from the Node.js backend
-        const dataResponse = await axios.get("http://localhost:10000/graphs/peak-hours-data", {
+        const dataResponse = await axios.get("https://lolos-place-backend.onrender.com/graphs/peak-hours-data", {
           params: { day: selectedDay }
         });
 
@@ -88,7 +92,7 @@ const CustomerPeakHoursGraph = () => {
                   onChange={(e) => setSelectedDay(e.target.value)}
                   className={styles.daySelect}
                 >
-                  {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+                  {daysOfWeek.map((day) => (
                     <option key={day} value={day}>
                       {day}
                     </option>

@@ -28,7 +28,7 @@ const SalesForecastGraph = () => {
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:5000/sales-forecast', {
+        const response = await fetch('https://lolos-place-backend-1.onrender.com/sales-forecast', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

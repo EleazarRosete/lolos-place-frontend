@@ -1,4 +1,4 @@
-.MainSection{
+.MainSection {
   width: 100%;
   height: 100vh;
   background-color: #F4F4F9;
@@ -9,20 +9,20 @@
   overflow: hidden;
 }
 
-
 .aside {
   background-color: #f9e6c9;
-  width: 20%; /* 100% width for responsive design */
-  height: 97.1vh; /* Full viewport height */
+  width: 20%;
+  height: 97.1vh;
   color: #503B36;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Use space-between to ensure proper spacing */
+  justify-content: space-between;
   align-items: center;
   position: relative;
   padding: 1rem 0;
   overflow-x: hidden;
   border-right: 5px dashed #503B36;
+  transition: transform 0.3s ease;
 }
 
 .logoContainer {
@@ -40,13 +40,13 @@
 .dinerName {
   font-family: "Tangerine", cursive;
   font-weight: 200;
-  font-size: 3rem; /* Make the font size more responsive */
+  font-size: 3rem;
   background-color: transparent;
   position: relative;
 }
 
 .restaurant {
-  font-size: 1rem; /* Adjust font size for smaller screens */
+  font-size: 1rem;
   position: relative;
   top: -30%;
 }
@@ -144,87 +144,54 @@ nav {
   cursor: pointer;
 }
 
-/* Media queries for responsiveness */
+.burgerButton {
+  display: none;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #503B36;
+  color: white;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1010;
+}
+
+.burgerButton:hover {
+  background-color: #F4F4F9;
+  color: #503B36;
+}
+
+.aside.hidden {
+  display: none;
+  transform: translateX(100%);
+}
+
 @media (max-width: 1200px) {
   .sideButton {
-    width: 8rem; /* Adjust width for medium screens */
-  }
-
-  .dinerName {
-    font-size: 2rem; /* Adjust font size for medium screens */
-  }
-
-  .restaurant {
+    width: 100%;
+    position: relative;
+    left: -8%;
     font-size: 1rem;
   }
-}
-
-@media (max-width: 768px) {
-  .aside {
-    width: 100%; /* Full width for smaller screens */
-    flex-direction: row; /* Change layout to row for mobile devices */
-    height: auto; /* Allow height to adjust on mobile */
-    padding: 1rem;
-  }
-
-  .logoContainer {
-    flex-direction: row;
-    justify-content: flex-start;
-  }
 
   .dinerName {
-    font-size: 1.5rem; /* Smaller font size on mobile */
-    top: 0;
+    font-size: 200%;
   }
 
   .restaurant {
-    font-size: 0.9rem; /* Smaller font size on mobile */
-    top: 0;
+    font-size: 80%;
   }
 
-  .sideButton {
-    width: 7rem; /* Adjust button size for mobile */
-  }
-
-  .logout {
-    width: 80%; /* Reduce logout box width on mobile */
-  }
-}
-
-@media (max-width: 480px) {
-  .sideButton {
-    width: 6rem; /* Smaller buttons for very small screens */
-  }
-
-  .dinerName {
-    font-size: 1.2rem; /* Smaller font size for very small screens */
-  }
-
-  .restaurant {
-    font-size: 0.8rem;
-  }
-
-  .logout {
-    width: 90%; /* Maximize logout box width for very small screens */
-  }
-}
-
-
-/* Responsive adjustments for the layout */
-
-@media (max-width: 1200px) {
   .MainSection {
     flex-direction: column;
     height: auto;
   }
 
   .aside {
-    width: 20%; /* Adjust width for medium screens */
-    height: auto; /* Allow content to flow */
-  }
-
-  .dinerName {
-    font-size: 2rem;
+    width: 20%;
+    height: 95.5vh;
+    display: flex; /* Ensure it's visible */
   }
 
   .sideButton {
@@ -233,34 +200,46 @@ nav {
 }
 
 @media (max-width: 768px) {
-  .MainSection {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   .aside {
-    flex-direction: row;
-    width: 100%;
-    height: auto;
-    justify-content: space-evenly; /* Spread buttons evenly */
+    display: none; /* Hide the aside on smaller screens */
   }
 
-  .sideButton {
-    width: auto; /* Adjust width for better fit */
-    padding: 0.5rem;
-    font-size: 0.8rem;
+  .burgerButton {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #503B36;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1010;
   }
 
-  .logoContainer {
-    display: none; /* Hide logo on smaller screens */
-  }
-
-  .logout {
-    width: 80%;
+  .burgerButton:hover {
+    background-color: #F4F4F9;
+    color: #503B36;
   }
 }
 
 @media (max-width: 480px) {
+  .sideButton {
+    width: 6rem;
+  }
+
+  .dinerName {
+    font-size: 1.2rem;
+  }
+
+  .restaurant {
+    font-size: 0.8rem;
+  }
+
+  .logout {
+    width: 90%;
+  }
+
   .aside {
     flex-direction: column;
     align-items: stretch;
@@ -268,7 +247,7 @@ nav {
   }
 
   .sideButton {
-    width: 100%; /* Full-width buttons for small screens */
+    width: 100%;
     padding: 0.3rem;
     font-size: 0.7rem;
   }
@@ -276,14 +255,8 @@ nav {
   .logout {
     width: 90%;
   }
-}
 
-.logoutOverlay{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(14, 14, 14, 0.5);
-  z-index: 100;
+  .logoutOverlay {
+    background-color: rgba(14, 14, 14, 0.5);
+  }
 }

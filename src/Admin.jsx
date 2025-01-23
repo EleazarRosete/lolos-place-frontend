@@ -8,9 +8,6 @@ import Feedback from './Sections/Feedback/Feedback.jsx';
 import Analytics from './Sections/Analytics/Analytics.jsx';
 import Purchases from './Sections/Purchases/Purchases.jsx';
 
-
-
-
 import dashboardIcon from './assets/dashboard.png';
 import posIcon from './assets/menu.png';
 import inventoryIcon from './assets/inventory.png';
@@ -21,6 +18,7 @@ import logoutIcon from './assets/logout.png';
 const Admin = () => {
     const navigate = useNavigate();
     const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+    const [isAsideVisible, setIsAsideVisible] = useState(true);
 
     const handleLogout = () => {
         setIsLogoutOpen(true);
@@ -39,9 +37,13 @@ const Admin = () => {
         navigate(`/admin/${section}`);
     };
 
+    const toggleAside = () => {
+        setIsAsideVisible(prevState => !prevState);
+    };
+
     return (
         <section className={styles.MainSection}>
-            <aside className={styles.aside}>
+            <aside className={`${styles.aside} ${!isAsideVisible ? styles.hidden : ''}`}>
                 <div className={styles.logoContainer}>
                     <h1 className={styles.dinerName}>LoLo's Place</h1>
                     <h2 className={styles.restaurant}>Restaurant</h2>
@@ -95,6 +97,10 @@ const Admin = () => {
                     <Route path="*" element={<Navigate to="dashboard" />} />
                 </Routes>
             </div>
+
+            <button className={styles.burgerButton} onClick={toggleAside}>
+                ☰
+            </button>
         </section>
     );
 };
