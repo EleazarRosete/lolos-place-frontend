@@ -132,14 +132,9 @@ const FeedbackForm = () => {
     };
     
     return (
-        <MainLayout>
+            <MainLayout>
             <div className="feedback-page">
-                <div className="custom-shape-divider-top-1733895035">
-                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" className="shape-fill"></path>
-                    </svg>
-                </div>
-
+                {/* Reference the h1 element for scrolling */}
                 <h1 ref={feedbackFormRef}>Feedback Form</h1>
 
                 {step === 1 && (
@@ -179,33 +174,34 @@ const FeedbackForm = () => {
                         </div>
 
                         {category && (
-                            <div className="form-group">
-                                <p>Select feedback types for {category}:</p>
-                                {['positive', 'neutral', 'negative'].map((sentiment) => (
-                                    <div key={sentiment}>
-                                        <p>{sentiment.charAt(0).toUpperCase() + sentiment.slice(1)} Feedback</p>
-                                        <div className="feedback-options">
-                                            {comments[sentiment][category].map((option, index) => (
-                                                <button
-                                                    key={index}
-                                                    type="button"
-                                                    className={`feedback-option ${feedbackTypes.includes(option) ? 'selected' : ''}`}
-                                                    onClick={() => toggleFeedbackType(option)}
-                                                >
-                                                    {option}
-                                                </button>
-                                            ))}
+                            <>
+                                <div className="form-group">
+                                    <p>Select feedback types for {category}:</p>
+                                    {['positive', 'neutral', 'negative'].map((sentiment) => (
+                                        <div key={sentiment}>
+                                            <div className="feedback-options">
+                                                {comments[sentiment][category].map((option, index) => (
+                                                    <button
+                                                        key={index}
+                                                        type="button"
+                                                        className={`feedback-option ${feedbackTypes.includes(option) ? 'selected' : ''}`}
+                                                        onClick={() => toggleFeedbackType(option)}
+                                                    >
+                                                        {option}
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                                    ))}
+                                </div>
 
-                        <button type="button" className="submit-button" onClick={handleNext}>Next</button>
+                                <button type="button" className="submit-button" onClick={handleNext}>Next</button>
+                            </>
+                        )}
                     </>
                 )}
 
-{step === 2 && (
+                {step === 2 && (
                     <>
                         <p>Please provide additional comments to help us improve:</p>
                         <div>
@@ -218,7 +214,7 @@ const FeedbackForm = () => {
                         </div>
                         <form className="feedback-form" onSubmit={handleSubmit}>
                             <div className="form-group">
-                                <label htmlFor="comment">Your  additional comments to help us improve:</label>
+                                <label htmlFor="comment">Your comments in this feedback so we can immprove next time we serve you:</label>
                                 <textarea
                                     id="comment"
                                     name="comment"
@@ -245,13 +241,6 @@ const FeedbackForm = () => {
                         </div>
                     </>
                 )}
-                <div className='whitey'></div>
-
-                <div className="custom-shape-divider-bottom-1733895105">
-                    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                        <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="shape-fill"></path>
-                    </svg>
-                </div>
             </div>
         </MainLayout>
     );
