@@ -37,6 +37,7 @@
   font-size: 4em; /* Adjust as needed */
   font-weight: bold;
   color: #1a202c;
+  margin-top: -3em;
 }
 
 .text-content p {
@@ -255,9 +256,16 @@
     padding: 30px 20px; /* Adjust padding for smaller screens */
   }
 
+
+
   .text-content {
     max-width: 100%; /* Allow text to take full width */
     margin-bottom: 20px; /* Add space between text and image */
+  }
+    .text-content h1,
+  .text-content h2 {
+    font-size: 4em; /* Further reduce heading size */
+    margin-top: 1em;
   }
 
   .image-right,
@@ -268,7 +276,7 @@
 
   .order-now-section .text-content h2,
   .about-section h2 {
-    font-size: 3em; /* Scale down heading size */
+    font-size: 6em; /* Scale down heading size */
   }
 
   .text-content p {
@@ -290,10 +298,14 @@
   .order-now-section {
     padding: 20px 10px; /* Reduce padding further */
   }
-
+  .best-sellers-section h1 {
+    font-size: 6em;
+}
   .text-content h1,
-  .text-content h2 {
-    font-size: 2.5em; /* Further reduce heading size */
+  .text-content h2,
+  .best-sellers-section h1 {
+    font-size: 4em; /* Further reduce heading size */
+    margin-top: 1em;
   }
 
   .text-content p {
