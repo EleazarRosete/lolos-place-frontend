@@ -307,6 +307,67 @@
   color: #FFE49B;
 }
 
+/* General styles for the popup */
+.delivery-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+/* Content inside the popup */
+.delivery-popup-content p {
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Buttons container */
+.delivery-popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Button styles */
+.delivery-popup-buttons button {
+  background-color: #ffe49b;
+  color: #a08f62;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  flex: 1; /* Ensures buttons have equal width */
+}
+
+.delivery-popup-buttons button:hover {
+  background-color: #a08f62;
+  color: #ffe49b;
+  transform: scale(1.05);
+}
+
+/* Overlay to dim the background */
+.delivery-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+}
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .delivery .menu-content {
