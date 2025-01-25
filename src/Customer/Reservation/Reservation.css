@@ -49,34 +49,61 @@
   margin-bottom: 10px;
 }
 
-.reservation .reservation-switch {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.reservation .reservation-slider {
+/* Styling for the switch container */
+.reservation-switch {
+  position: relative;
+  display: inline-block;
   width: 50px;
   height: 25px;
-  background-color: #ccc;
-  border-radius: 15px;
-  position: relative;
-  cursor: pointer;
-  transition: background-color 0.4s;
 }
 
-/* Toggle circle inside the slider */
-.reservation .reservation-slider::before {
+/* Hide the default checkbox input */
+.reservation-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Slider design */
+.reservation-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  border-radius: 25px;
+  transition: background-color 0.4s ease;
+}
+
+/* Circle inside the slider */
+.reservation-slider::before {
   content: '';
   position: absolute;
-  width: 20px;
   height: 20px;
+  width: 20px;
+  left: 2.5px;
+  bottom: 2.5px;
   background-color: white;
   border-radius: 50%;
-  top: 2.5px;
-  left: 2.5px;
-  transition: transform 0.4s;
+  transition: transform 0.4s ease;
 }
+
+/* When the input is checked, change the slider color and move the circle */
+.reservation-switch input:checked + .reservation-slider {
+  background-color: #4caf50;
+}
+
+.reservation-switch input:checked + .reservation-slider::before {
+  transform: translateX(25px);
+}
+
+/* Add focus style for accessibility */
+.reservation-switch input:focus + .reservation-slider {
+  box-shadow: 0 0 1px #4caf50;
+}
+
 
 .reservation .filter-buttons {
   display: flex;
@@ -326,6 +353,64 @@
   background-color: #a08f62;
   color: #FFE49B;
 }
+
+/* General styles for the reservation popup */
+.reservation-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Popup content styling */
+.reservation-popup-content {
+  font-size: 1.2em;
+  color: #333;
+}
+
+/* Specific styling for the Close button */
+.reservation-close-btn {
+  background-color: #ffe49b;
+  color: #a08f62;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 1em;
+}
+
+.reservation-close-btn:hover {
+  background-color: #a08f62;
+  color: #ffe49b;
+  transform: scale(1.05);
+}
+
+/* Overlay to dim the background */
+.reservation-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+}
+
+
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
