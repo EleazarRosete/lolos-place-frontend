@@ -353,11 +353,9 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
 }
 
   return (
-      <MainLayout>
+        <MainLayout>
       <section>
     <div className="reservation">
-      
-
       <main>
         <section>
           <h2>Make a Reservation</h2>
@@ -552,17 +550,25 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
       </main>
 
       {popupVisible && (
-  <div className="reservation-popup">
-    <div className="reservation-popup-content">
-      {/* Show different messages based on the conditions */}
-      {isAdvanceOrder && cartReservations.length === 0 
-        ? "Your cart is empty" 
-        : "Please fill out the form"
-      }
-      <button onClick={handleButtonClick}>Close</button>
-    </div>
-  </div>
-)}
+        <>
+          <div
+            className="reservation-popup-overlay"
+            onClick={handleButtonClick}
+          ></div>
+          <div className="reservation-popup">
+            <div className="reservation-popup-content">
+              {isAdvanceOrder && cartReservations.length === 0
+                ? "Your cart is empty"
+                : "Please fill out the form"}
+              <button className="reservation-close-btn" onClick={handleButtonClick}>
+                Close
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+
 
 
 {popupVisibleLogin && (
