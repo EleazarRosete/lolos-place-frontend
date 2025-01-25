@@ -1,10 +1,11 @@
 import React from 'react';
 import './About.css'; // Update the stylesheet reference
 import MainLayout from '../../components/MainLayout';
-//hello
+import pic3 from '../../assets/lolos-place3.jpeg';
+
 const AboutPage = () => {
   return (
-   <MainLayout>
+    <MainLayout>
       <div className="about-page"> {/* Scoped class name for the About page */}
   <section id="about" className="about-section"> {/* Updated section ID and class */}
     <div className="text-content">
