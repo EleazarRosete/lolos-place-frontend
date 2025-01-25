@@ -43,6 +43,7 @@
     border-radius: 5px;
     background-color: #fff;
     box-sizing: border-box;
+    color: black;
   }
   
   .feedback-page .form-group textarea {
