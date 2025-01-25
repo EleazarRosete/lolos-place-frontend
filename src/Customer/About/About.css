@@ -14,8 +14,8 @@
     padding: 50px 20px;
     max-width: 1200px;
     margin: 0 auto;
-    height: 72vh; /* Full viewport height */
-    background-color: white;
+    height: 100vh; /* Full viewport height */
+    background-color: rgba(255, 255, 255, 0);
   }
   
   .about-page .text-content {
@@ -28,7 +28,7 @@
     font-size: 5em;
     font-weight: bold;
     color: #1a202c;
-    margin-bottom: 20px;
+    margin-top: 1em;
   }
   
   .about-page .text-content .description {
@@ -61,4 +61,3 @@
       margin-top: 20px; /* Add spacing above the image */
     }
   }
-  
