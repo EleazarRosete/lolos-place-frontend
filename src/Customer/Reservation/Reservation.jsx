@@ -132,6 +132,7 @@ const Reservation = () => {
 
   const handleReserve = (event) => {
     event.preventDefault(); // Prevent page reload
+    setShowCart(false);
     if (!customer || customer === '') {
       setPopupVisibleLogin(true);
       window.scrollTo(0, 0);
