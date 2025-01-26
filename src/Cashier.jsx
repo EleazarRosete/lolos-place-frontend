@@ -15,7 +15,7 @@ import feedbackIcon from './assets/feedback.png';
 import analyticsIcon from './assets/analytics.png';
 import logoutIcon from './assets/logout.png';
 
-const Admin = () => {
+const Cashier = () => {
     const navigate = useNavigate();
     const [isLogoutOpen, setIsLogoutOpen] = useState(false);
     const [isAsideVisible, setIsAsideVisible] = useState(true);
@@ -34,7 +34,7 @@ const Admin = () => {
     };
 
     const navigateToSection = (section) => {
-        navigate(`/admin/${section}`);
+        navigate(`/cashier/${section}`);
     };
 
     const toggleAside = () => {
@@ -49,7 +49,7 @@ const Admin = () => {
                     <h2 className={styles.restaurant}>Restaurant</h2>
                 </div>
                 <button className={styles.sideButton} onClick={() => navigateToSection('dashboard')}>
-                    <img src={dashboardIcon} alt="dashboard" className={styles.buttonIcons} /> Dashboard
+                    <img src={dashboardIcon} alt="dashboard" className={styles.buttonIcons}/> Dashboard
                 </button>
                 <button className={styles.sideButton} onClick={() => navigateToSection('pos')}>
                     <img src={posIcon} alt="point of sale" className={styles.buttonIcons} /> Point of Sale
@@ -57,13 +57,14 @@ const Admin = () => {
                 <button className={styles.sideButton} onClick={() => navigateToSection('orders')}>
                     <img src={posIcon} alt="orders" className={styles.buttonIcons} /> Orders
                 </button>
-                <button className={styles.sideButton} onClick={() => navigateToSection('inventory')}>
-                    <img src={inventoryIcon} alt="inventory" className={styles.buttonIcons} /> Inventory
+               <button className={styles.sideButton} onClick={() => navigateToSection('inventory')} disabled>
+  <img src={inventoryIcon} alt="inventory" className={styles.buttonIcons} /> Inventory
+</button>
+
+                <button className={styles.sideButton} onClick={() => navigateToSection('feedback')} >
+                    <img src={feedbackIcon} alt="feedback" className={styles.buttonIcons}/> Feedback
                 </button>
-                <button className={styles.sideButton} onClick={() => navigateToSection('feedback')}>
-                    <img src={feedbackIcon} alt="feedback" className={styles.buttonIcons} /> Feedback
-                </button>
-                <button className={styles.sideButton} onClick={() => navigateToSection('adminSettings')}>
+                <button className={styles.sideButton} onClick={() => navigateToSection('adminSettings')} disabled>
                     <img src={analyticsIcon} alt="adminSettings" className={styles.buttonIcons} /> Admin
                 </button>
                 <button className={styles.sideButton} onClick={handleLogout}>
@@ -105,4 +106,4 @@ const Admin = () => {
     );
 };
 
-export default Admin;
+export default Cashier;

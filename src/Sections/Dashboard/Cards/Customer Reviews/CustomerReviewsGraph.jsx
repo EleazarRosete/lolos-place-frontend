@@ -98,6 +98,7 @@ const CustomerReviewsGraph = () => {
 
   return (
     <section className={styles.section}>
+            <h1>Customer Reviews</h1>
       <div className={styles.graphContainer}>
         {feedbackStats ? (
           <>

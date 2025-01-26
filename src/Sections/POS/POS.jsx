@@ -762,6 +762,8 @@ function POS() {
 
                 <div className={styles.details}>
                     <div className={styles.paymentInfo}>
+                        <div className={styles.customerDetails}>
+                        <label>Enter Username:</label>
                         <input
                             type="text"
                             placeholder="Enter your name"
@@ -769,6 +771,8 @@ function POS() {
                             onChange={(e) => setName(e.target.value)} // Assuming you have a setter function for name           
                             value={name}
                         />
+                                                <label>Number of pax:</label>
+
                         <input
                             type="number"
                             placeholder="Number of people"
@@ -776,6 +780,8 @@ function POS() {
                             onChange={(e) => setNumberOfPeople(e.target.value)} // Assuming you have a setter function for number of people
                             value={numberOfPeople}
                         />
+                                                <label>Enter Amount:</label>
+
                         <input
                             type="number"
                             placeholder="Payment Amount"
@@ -783,6 +789,7 @@ function POS() {
                             min="1"
                             className={styles.paymentAmount}
                         />
+                        </div>
                         <h1 className={styles.headerPayment}>Order Items:</h1>
                         <div className={styles.orderItems}>
                             {order.length > 0 ? (
@@ -857,7 +864,7 @@ function POS() {
 {handleAddNameAndNumberOfPeople && (
     <div className={styles.modalPOS}>
         <div className={styles.modalConfirmation1}>
-            <label>Name</label>
+            <label>Enter username:</label>
             <input
                 type="text"
                 placeholder="Enter your name"
@@ -865,7 +872,7 @@ function POS() {
                 onChange={(e) => setName(e.target.value)} // Assuming you have a setter function for name
                 value={name}
             />
-                        <label>Number of people</label>
+                        <label>Number of pax:</label>
 
             <input
                 type="number"

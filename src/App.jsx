@@ -13,6 +13,8 @@ import { CustomerProvider } from './api/CustomerProvider';
 import SuccessPage from './Customer/SuccessPage/SuccessPage';
 import OrderHistory from './Customer/OrderHistory/OrderHistory';
 import Admin from './Admin';
+import Cashier from './Cashier';
+
 
 
 
@@ -35,6 +37,8 @@ function App() {
         <Route path='/successpage' element={<SuccessPage/>}/>
         <Route path='/order-history' element={<OrderHistory/>}/>
         <Route path="/admin/*" element={<Admin />} />
+        <Route path="/cashier/*" element={<Cashier />} />
+
 
       </Routes>
     </Router>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // Import Link for routing
 import './Login.css';
 import logo from '../../assets/logo.png'; // Correct path to the logo
@@ -12,6 +12,67 @@ const LoginPage = () => {
   const [isLoginVisible, setIsLoginVisible] = useState(true);
   const navigate = useNavigate();
   const { setCustomer } = useCustomer();
+    const [adminData, setAdminData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        address: "",
+        oldPassword: "",
+        password: "",
+        newPassword: "",  
+        confirmPassword: ""  
+    });
+
+    const [cashierData, setCashierData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        address: "",
+        password: "",
+        oldPassword: "",
+        newPassword: "",  
+        confirmPassword: ""  
+    });
+
+   useEffect(() => {
+        // Fetch Admin Data
+        fetch('http://localhost:10000/user/get-user?id=14')
+            .then(response => response.json())
+            .then(data => {
+                setAdminData({
+                    firstName: data.first_name || "",
+                    lastName: data.last_name || "",
+                    email: data.email || "",
+                    phone: data.phone || "",
+                    address: data.address || "",
+                    password: data.password || "",
+                    newPassword: "",  // This should remain empty initially until the user enters a new password
+                    confirmPassword: "" // This should remain empty initially until the user enters a new password
+                });
+            })
+            .catch(error => console.error("Error fetching admin data:", error));
+        
+        // Fetch Cashier Data
+        fetch('http://localhost:10000/user/get-user?id=13')
+            .then(response => response.json())
+            .then(data => {
+                setCashierData({
+                    firstName: data.first_name || "",
+                    lastName: data.last_name || "",
+                    email: data.email || "",
+                    phone: data.phone || "",
+                    address: data.address || "",
+                    password: data.password || "",
+                    newPassword: "",  // Same here, initially empty
+                    confirmPassword: "" // Same here, initially empty
+                });
+            })
+            .catch(error => console.error("Error fetching cashier data:", error));
+    }, []);
+    
+
 
   // Function to toggle between login and signup forms
   const toggleForms = () => {
@@ -44,8 +105,14 @@ const LoginPage = () => {
       });
 
       if (response.status === 200) {
-        if (identifier === 'lolos-place@gmail.com') {
+        if (identifier === adminData.email) {
+          console.log(adminData.email);
           navigate('/admin'); // Redirect to admin dashboard if the identifier matches
+        }
+        else if(identifier == cashierData.email){
+          console.log(cashierData.email);
+
+          navigate('/cashier')
         }
         else{
           const customer = response.data.data; // Adjust according to your API response structure

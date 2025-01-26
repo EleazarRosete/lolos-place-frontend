@@ -75,7 +75,10 @@ const CustomerPeakHoursGraph = () => {
   };
 
   return (
+
     <div className={styles.section}>
+            <h1>Customer Peak Hours</h1>
+
       {loading ? (
         <p className={styles.loading}>Loading graph and insights...</p>
       ) : error ? (
@@ -83,7 +86,7 @@ const CustomerPeakHoursGraph = () => {
       ) : (
         <div className={styles.graphFeedbackContainer}>
           {peakHoursData && (
-            <>
+            <div className={styles.peakHoursContainer}>
               <div className={styles.filterContainer}>
                 <label htmlFor="daySelect">Select Day:</label>
                 <select
@@ -99,11 +102,12 @@ const CustomerPeakHoursGraph = () => {
                   ))}
                 </select>
               </div>
+              <h3>Customer Peak Hours for {today == selectedDay ? "Today" : selectedDay}</h3>
 
               <div className={styles.graphContainer}>
                 <Line data={chartData()} options={{ responsive: true }} />
               </div>
-            </>
+            </div>
           )}
         </div>
       )}

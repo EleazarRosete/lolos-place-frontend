@@ -239,6 +239,7 @@ const SalesForecastGraph = () => {
               id="year"
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
+              className={styles.selectYear}
             >
               <option value="current">Predicted Sales for Current Year</option>
               {Object.keys(allSalesData.past).map((year) => (
