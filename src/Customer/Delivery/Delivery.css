@@ -263,9 +263,12 @@
   padding: 20px;
   width: 90%;
   max-width: 500px;
+  max-height: 80vh; /* Limit height to 80% of the viewport */
+  overflow-y: auto; /* Enable scrolling for overflowing content */
   z-index: 999;
   text-align: center;
 }
+
 
 
 .popup-content {
