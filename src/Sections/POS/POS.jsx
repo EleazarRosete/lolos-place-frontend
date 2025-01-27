@@ -22,6 +22,7 @@ function POS() {
     const [GCashDetails, setGCashtDetails] = useState(false);
     const [CashDetails, setCashDetails] = useState(false);
     const [receipt, setReceipt] = useState(false);
+    const [receiptPayLater, setReceiptPayLater] = useState(false);
     const [order, setOrder] = useState([]);
     const [input, setInput] = useState('');
     const [change, setChange] = useState('0.00')
@@ -35,6 +36,7 @@ function POS() {
     const [loading, setLoading] = useState(false);
     const [name, setName] = useState("Lolo's Place");
     const [numberOfPeople, setNumberOfPeople] = useState(1);
+    const [showModalPayLater, setShowModalPayLater] = useState(false);
     const [paidOrder, setPaidOrder] = useState({
         mop: '',
         total_amount: '' ,
@@ -44,6 +46,17 @@ function POS() {
         items: [],
         customer_name: '',
         number_of_people: ''
+    });
+    const [payLater, setPayLater] = useState({
+        mop: '',
+        total_amount: '' ,
+        delivery: '',
+        reservation_id: '',
+        order_type: '',
+        items: [],
+        customer_name: '',
+        number_of_people: '',
+        ispaid: false,
     });
     const [salesData, setSalesData] = useState({
         amount:'',
@@ -86,15 +99,24 @@ function POS() {
         ifPaid();
       };
     
+      const handleOpenModalPayLater = () => {
+        setShowModalPayLater(true); // Open the confirmation modal
+        ifPaid();
+      };
+
       const handleCloseModal = () => {
         setShowModal(false); // Close the modal without submitting
+        setShowModalPayLater(false); // Close the modal without submitting
+
       };
 
       const handleCloseModal1 = () => {
         setReceipt(false);
+        setReceiptPayLater(false);
         setPaidOrder([]);
         setOrder([]);
         setSalesData([]);
+        setPayLater([]);
       };
       
       
@@ -337,7 +359,8 @@ function POS() {
                 order_type: orderType,
                 items: order,
                 customer_name: name,
-                number_of_people: numberOfPeople
+                number_of_people: numberOfPeople,
+                ispaid: true,
             };
     
             try {
@@ -439,6 +462,80 @@ function POS() {
             alert("The order must be paid before proceeding");
         }
     };
+
+
+    const submitOrderPayLater = async () => {
+       
+        setShowModal(false);
+    if (isPaid && !loading) {  // Check if the order is paid and not already loading
+        setLoading(true);  // Set loading state to true to block subsequent clicks
+        setInput('');  // Reset input field
+            
+
+
+        const payLater = {
+            mop: paymentMethod,
+            total_amount: amount,
+            delivery: ifDelivery === 'true',
+            reservation_id: reservationID,
+            order_type: orderType,
+            items: order,
+            customer_name: name,
+            number_of_people: numberOfPeople,
+            ispaid: false,
+        };
+
+        try {
+            const updateStockPromises = order.map(async ({ menu_id, quantity }) => {
+                const response = await fetch(`https://lolos-place-backend.onrender.com/menu/update-product-stock/${menu_id}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ quantity })
+                });
+                if (!response.ok) throw new Error(`Error updating stock: ${response.statusText}`);
+                setProducts(prevProducts =>
+                    prevProducts.map(product =>
+                        product.menu_id === menu_id ? { ...product, stocks: product.stocks - quantity } : product
+                    )
+                );
+            });
+
+            // Wait for all stock updates to complete
+            await Promise.all(updateStockPromises);
+
+            // Add the order to the server
+            const response = await fetch(`https://lolos-place-backend.onrender.com/order/add-order`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payLater)
+            });
+            console.log("Added Orders!");
+            if (!response.ok) throw new Error(`Error adding order: ${response.statusText}`);
+ 
+            
+
+            // Reset order-related states
+            setAmount(0);
+            setIfDelivery('false');
+            setReservationID(null);
+            setOrderType(null);
+            setPaymentMethod(null);
+            setOrderDetails(false);
+            setCashDetails(false);
+            setShowModalPayLater(false);
+            setReceiptPayLater(true);
+            setIsPaid(false);
+        } catch (err) {
+            console.error('Error processing order:', err.message);
+            alert('There was an error processing your order. Please try again.');
+        } finally {
+            setLoading(false);  // Reset loading state
+        }
+    } else {
+        alert("The order must be paid before proceeding");
+    }
+};
+
     
     const handleOpenModalOrders = () => {
         console.log("THIS IS UPDATED",name,numberOfPeople);
@@ -763,25 +860,30 @@ function POS() {
                 <div className={styles.details}>
                     <div className={styles.paymentInfo}>
                         <div className={styles.customerDetails}>
-                        <label>Enter Username:</label>
+                        <label>Username:
                         <input
                             type="text"
                             placeholder="Enter your name"
                             required
                             onChange={(e) => setName(e.target.value)} // Assuming you have a setter function for name           
                             value={name}
+                            className={styles.inputBox}
                         />
-                                                <label>Number of pax:</label>
-
+                        </label>
+                                                <label># of pax:
                         <input
                             type="number"
                             placeholder="Number of people"
                             required
                             onChange={(e) => setNumberOfPeople(e.target.value)} // Assuming you have a setter function for number of people
                             value={numberOfPeople}
-                        />
-                                                <label>Enter Amount:</label>
+                            className={styles.inputBox}
 
+                        />
+                        </label>
+                        </div>
+                        <label className={styles.inputBox}
+                        >Enter Amount:
                         <input
                             type="number"
                             placeholder="Payment Amount"
@@ -789,7 +891,7 @@ function POS() {
                             min="1"
                             className={styles.paymentAmount}
                         />
-                        </div>
+                        </label>
                         <h1 className={styles.headerPayment}>Order Items:</h1>
                         <div className={styles.orderItems}>
                             {order.length > 0 ? (
@@ -822,6 +924,13 @@ function POS() {
                     <div className={styles.navButton}>
                         <button className={styles.cancelPaymentButton} onClick={handleCancelPayment}>CANCEL</button>
                         <button 
+                            onClick={handleOpenModalPayLater} 
+                            className={styles.cancelPaymentButton}
+                            disabled={!name || !numberOfPeople} // Disable the button if either name or numPeople is empty
+                        >
+                            Pay later
+                        </button>
+                        <button 
                             onClick={handleOpenModal} 
                             className={styles.cancelPaymentButton}
                             disabled={!name || !numberOfPeople} // Disable the button if either name or numPeople is empty
@@ -836,6 +945,17 @@ function POS() {
 )}
 
                 {receipt && (
+                    <div className={styles.modalPOS}>
+
+                    <div className={styles.orderReceipt}>
+                        <h1>Successful!</h1>
+                        <button className={styles.handleCloseModal1} onClick={handleCloseModal1}>Close</button>
+                    </div>
+                    </div>
+
+                )}
+
+{receiptPayLater && (
                     <div className={styles.modalPOS}>
 
                     <div className={styles.orderReceipt}>
@@ -860,6 +980,20 @@ function POS() {
           </div>
         </div>
       )}
+
+{showModalPayLater && (
+        <div className={styles.modalPOS}>
+          <div className={styles.modalConfirmation}>
+            <h2 className={styles.modalH2}>Confirm Pay Later</h2>
+            <p  className={styles.modalP}>Are you sure you want to proceed to pay later?</p>
+            <div className={styles.modalButtons}>
+              <button onClick={handleCloseModal} className={styles.cancelModalConfirmation}>CANCEL</button>
+              <button onClick={submitOrderPayLater } disabled={loading} className={styles.cancelModalConfirmation}>CONTINUE</button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
 {handleAddNameAndNumberOfPeople && (
     <div className={styles.modalPOS}>

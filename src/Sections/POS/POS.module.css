@@ -417,7 +417,7 @@ option {
 
 .orderItems {
     height: 12rem;
-    max-height: 12rem;
+    max-height: 10rem;
     overflow-y: auto;
     padding: 0rem 1rem;
     border-bottom: 1px solid #3e2723;
@@ -460,6 +460,8 @@ option {
 .headerPayment{
     position: relative;
     font-size: 1.5rem;
+    margin: 0.5rem 0 0 0 ;
+    padding: 0;
 }
 
 .cashHeader{
@@ -658,6 +660,8 @@ option {
 .paymentInfo{
     width: 100%;
     height: 85%;
+    margin: 0;
+    padding: 0;
 }
 
 .paymentAmount{
@@ -843,8 +847,17 @@ input[type="radio"] {
 
 
 .customerDetails{
+    height: 20%;
     display: flex;  
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    max-width: 100%;
+    flex-direction: row;
+    align-items: start;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+
+}
+
+.inputBox{
+    width: 70%;
 }

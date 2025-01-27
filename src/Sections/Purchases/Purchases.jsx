@@ -125,7 +125,7 @@ const Purchases = () => {
     const ordertype = filterOrderType(order) || '';
     const searchQueryLower = searchQuery.toLowerCase();
     return (
-      order.status !== 'preparing' &&
+      order.status !== 'preparing' && order.ispaid == true &&
       (!order.reservation_id || new Date(order.reservation_date) <= new Date()) &&
       (order.order_id?.toString().toLowerCase().includes(searchQueryLower) ||
         ordertype.toString().toLowerCase().includes(searchQueryLower)) &&
@@ -134,9 +134,15 @@ const Purchases = () => {
   });
   
   
+  
   const filteredPreparingOrders = sortedAllOrders.filter((order) => {
     const ordertype = filterOrderType(order) || '';
     const searchQueryLower = searchQuery.toLowerCase();
+  
+    if (orderTypeFilter === 'pay-later') {
+      return !order.ispaid && order.order_id?.toString().toLowerCase().includes(searchQueryLower);
+    }
+  
     return (
       order.status === 'preparing' &&
       (order.order_id?.toString().toLowerCase().includes(searchQueryLower) ||
@@ -144,6 +150,8 @@ const Purchases = () => {
       (orderTypeFilter ? ordertype.includes(orderTypeFilter) : true)
     );
   });
+  
+  
   
   
   
@@ -219,6 +227,9 @@ const Purchases = () => {
             <button onClick={() => setOrderTypeFilter('deliveries')} className={styles.filterButton}>
               Deliveries
             </button>
+            <button onClick={() => setOrderTypeFilter('pay-later')} className={styles.filterButton}>
+              Pay later
+            </button>
           </div>
         )}
       </div>
@@ -250,7 +261,7 @@ const Purchases = () => {
                         ))}
                       </ul>
                     <p>Order Type: {order.reservation_id != null ? `Reservation #${order.reservation_id}` : order.delivery === true ? `Delivery #${deliveries.find(delivery => delivery.order_id === order.order_id)?.delivery_id}` : order.orderType}</p>
-                      <p>Total: ₱{order.total_amount}</p>
+                      <p>Total: ₱{order.total_amount}  <strong>{order.ispaid === true ? "PAID" : "PAY LATER"}</strong></p>
                       <button onClick={() => handleStatusClick(order.order_id)}>Preparing</button>
                     </li>
                   );
@@ -261,8 +272,8 @@ const Purchases = () => {
             )}
           </div>
         ) : (
-          <div className={styles.orderHistoryContainer}>
-            <h1 className={styles.orderHistoryHeader}>Order History</h1>
+          <div className={styles.pendingOrdersContainer}>
+            <h1 className={styles.pendingOrdersHeader}>Order History</h1>
             {filteredAllOrders.length > 0 ? (
               <ul className={styles.orderList}>
                 {filteredAllOrders.map((order) => (
@@ -281,7 +292,8 @@ const Purchases = () => {
                         </li>
                       ))}
                     </ul>
-                    <p>Order Type: {order.reservation_id != null ? `Reservation #${order.reservation_id}` : order.delivery === true ? `Delivery #${deliveries.find(delivery => delivery.order_id === order.order_id)?.delivery_id}` : order.orderType}</p>                    <p>Total: ₱{order.total_amount}</p>
+                    <p>Order Type: {order.reservation_id != null ? `Reservation #${order.reservation_id}` : order.delivery === true ? `Delivery #${deliveries.find(delivery => delivery.order_id === order.order_id)?.delivery_id}` : order.orderType}</p>                                          
+                    <p>Total: ₱{order.total_amount}  <strong>{order.ispaid === true ? "PAID" : "PAY LATER"}</strong></p>
                   </li>
                 ))}
               </ul>
