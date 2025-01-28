@@ -9,6 +9,9 @@ function Successful(order_id) {
 
     const fetchTempDataAndAddOrder = async () => {
 
+        console.log("ORDER ID FROM LABAS", order_id);
+
+
         try {
             const response = await fetch("https://lolos-place-backend.onrender.com/order/get-temp-data");
             if (!response.ok) {
@@ -129,7 +132,6 @@ function Successful(order_id) {
                 }
 
 
-                console.log("ORDER ID FROM LABAS", order_id);
 
 
                 // Navigate after a slight delay to ensure the page reloads first
