@@ -7,6 +7,7 @@ import Failed from './Payment Result/Failed';
 
 const Purchases = () => {
   const [products, setProducts] = useState([]);
+  const [tables, setTables] = useState([]);
   const [allOrders, setAllOrders] = useState([]);
   const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -53,12 +54,34 @@ const Purchases = () => {
     }
   };
 
+  const fetchTables = async () => {
+    try {
+      const response = await fetch("https://lolos-place-backend.onrender.com/table/get-table", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+      });
+      
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
+      const jsonData = await response.json();
+
+
+      setTables(jsonData);
+  } catch (err) {
+      console.error('Error fetching table:', err.message);
+  }
+  };
+
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         await fetchOrderHistory();
         await fetchDeliveries();
+        await fetchTables();
       } catch (err) {
         setError('An error occurred while fetching data.');
       } finally {
@@ -257,7 +280,7 @@ const Purchases = () => {
         throw new Error("Selected order ID is not defined.");
       }
     
-      const response = await fetch(`http://localhost:10000/order/update-is-paid/${selectedOrderId}`, {
+      const response = await fetch(`https://lolos-place-backend.onrender.com/order/update-is-paid/${selectedOrderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -485,6 +508,15 @@ const handleGCashPayment = async () => {
                       <p>Contact Number: {order.phone == "09682823420" ? "N/A" : order.phone}</p>
                       <p>Date: {formatDate(order.date)}</p>
                       <p>Time: {formatTime(order.time)}</p>
+                      <p>
+  Table: {tables.find((table) => table.table_id === order.tableID) 
+    ? tables.find((table) => table.table_id === order.tableID).table_name 
+    : 'table'}
+</p>
+
+
+
+
                       <p>Items:</p>
                       <ul>
                         {order.items.map((item, index) => (

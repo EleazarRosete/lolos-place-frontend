@@ -226,7 +226,7 @@ function POS() {
 
   const getTable = async () => {
             try {
-                const response = await fetch("http://localhost:10000/table/get-table", {
+                const response = await fetch("https://lolos-place-backend.onrender.com/table/get-table", {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
@@ -413,7 +413,7 @@ function POS() {
                 await Promise.all(updateStockPromises);
     
                 // Add the order to the server
-                const response = await fetch(`http://localhost:10000/order/add-order`, {
+                const response = await fetch(`https://lolos-place-backend.onrender.com/order/add-order`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(paidOrder),
@@ -547,7 +547,7 @@ function POS() {
             // Wait for all stock updates to complete
             await Promise.all(updateStockPromises);
 
-            const response = await fetch(`http://localhost:10000/order/add-order`, {
+            const response = await fetch(`https://lolos-place-backend.onrender.com/order/add-order`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payLater),
@@ -679,7 +679,7 @@ console.log("Added Orders with ID:", data.orderId);
         };
 
 
-        const response = await fetch(`http://localhost:10000/order/add-order`, {
+        const response = await fetch(`https://lolos-place-backend.onrender.com/order/add-order`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(paidOrder),
@@ -995,7 +995,7 @@ console.log("Added Orders with ID:", data.orderId);
                     <select className={styles.selectTableDesign} onChange={handleTableChange} value={tableID}>
         {table.map((table) => (
           <option key={table.table_id} value={table.table_id}>
-            {table.table_name} <span className={styles.status}>*<strong>{table.isoccupied === false ? "Available" : "Occupied"}</strong></span>
+            {/* {table.table_name} <span className={styles.status}>*<strong>{table.isoccupied === false ? "Available" : "Occupied"}</strong></span> */}
           </option>
         ))}
       </select>
