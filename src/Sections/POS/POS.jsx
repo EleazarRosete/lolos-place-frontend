@@ -9,12 +9,15 @@ import Failed from '../Payment Result/Failed.jsx';
 function POS() {
     const navigate = useNavigate();
     const [handleAddNameAndNumberOfPeople, setHandleAddNameAndNumberOfPeople] = useState(false);            
+    const [orderID, setOrderID] = useState();
     const [showModal, setShowModal] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [serviceCharge, setServiceCharge] = useState(0);
     const [quantity, setQuantity] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [products, setProducts] = useState([]);
+    const [tableID, setTableID] = useState();
+    const [table, setTable] = useState([]);
     const [payment, setPayment] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -69,7 +72,11 @@ function POS() {
         mode_of_payment:'',
         order_type:''
     });
-      
+    
+    const handleTableChange = (event) => {
+        setTableID(event.target.value); // Update state with the selected table_id
+        console.log(tableID);
+      };
 
     const calculateServiceCharges = async () => {
         let totalServiceCharge = 0; // Initialize a variable to accumulate service charges
@@ -216,11 +223,34 @@ function POS() {
             }
         };
 
+
+  const getTable = async () => {
+            try {
+                const response = await fetch("http://localhost:10000/table/get-table", {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const jsonData = await response.json();
+    
+    
+                setTable(jsonData);
+            } catch (err) {
+                console.error('Error fetching table:', err.message);
+            }
+        };
+
+
       useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
         await getProducts();
+        await getTable();
       } catch (err) {
         setError('An error occurred while fetching data.');
       } finally {
@@ -361,6 +391,7 @@ function POS() {
                 customer_name: name,
                 number_of_people: numberOfPeople,
                 ispaid: true,
+                table_id:tableID,
             };
     
             try {
@@ -382,14 +413,26 @@ function POS() {
                 await Promise.all(updateStockPromises);
     
                 // Add the order to the server
-                const response = await fetch(`https://lolos-place-backend.onrender.com/order/add-order`, {
+                const response = await fetch(`http://localhost:10000/order/add-order`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(paidOrder)
+                    body: JSON.stringify(paidOrder),
                 });
-                console.log("Added Orders!");
-                if (!response.ok) throw new Error(`Error adding order: ${response.statusText}`);
-
+                
+                console.log("Response Status:", response.status);  // Check the response status
+                
+                if (!response.ok) {
+                    const errorText = await response.text(); // Get the response text to debug
+                    console.log("Error response:", errorText);  // Log the raw response body
+                    throw new Error(`Error adding order: ${response.statusText}`);
+                }
+                
+                const data = await response.json(); // Parse the response body
+                console.log("Response Data:", data);  // Log the parsed response
+                
+    setOrderID(data.orderId);
+    console.log("Added Orders with ID:", data.orderId);
+                
                 const salesPromises = order.map(async (orderedItem, i) => {
                     const product = products.find(p => p.menu_id === orderedItem.menu_id);
                     console.log(product.price);
@@ -483,6 +526,7 @@ function POS() {
             customer_name: name,
             number_of_people: numberOfPeople,
             ispaid: false,
+            table_id:tableID,
         };
 
         try {
@@ -503,16 +547,89 @@ function POS() {
             // Wait for all stock updates to complete
             await Promise.all(updateStockPromises);
 
-            // Add the order to the server
-            const response = await fetch(`https://lolos-place-backend.onrender.com/order/add-order`, {
+            const response = await fetch(`http://localhost:10000/order/add-order`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payLater)
+                body: JSON.stringify(payLater),
             });
-            console.log("Added Orders!");
-            if (!response.ok) throw new Error(`Error adding order: ${response.statusText}`);
- 
             
+            console.log("Response Status:", response.status);  // Check the response status
+            
+            if (!response.ok) {
+                const errorText = await response.text(); // Get the response text to debug
+                console.log("Error response:", errorText);  // Log the raw response body
+                throw new Error(`Error adding order: ${response.statusText}`);
+            }
+            
+            const data = await response.json(); // Parse the response body
+            console.log("Response Data:", data);  // Log the parsed response
+            
+setOrderID(data.orderId);
+console.log("Added Orders with ID:", data.orderId);
+
+            
+
+            const orderedItem = order[0];
+            if (!orderedItem) {
+                console.error("No ordered item found.");
+                return;
+            }
+        
+            const product = products.find((p) => p.menu_id === orderedItem.menu_id);
+            if (!product) {
+                console.error("No product found for menu_id:", orderedItem.menu_id);
+                return;
+            }
+        
+            const price = parseFloat(product?.price) || 0; // Ensure price is a valid number
+            const updatedSalesData = {
+                amount: parseFloat((orderedItem.quantity * price).toFixed(2)),
+                service_charge: parseFloat((price * 0.1).toFixed(2)),
+                gross_sales: parseFloat((price + price * 0.1) * orderedItem.quantity),
+                product_name: product.name,
+                category: product.category,
+                quantity_sold: orderedItem.quantity,
+                price_per_unit: parseFloat(price.toFixed(2)),
+                mode_of_payment: paymentMethod,
+                order_type: orderType,
+    
+            };
+        
+
+
+            const tempDataResponse = await fetch("https://lolos-place-backend.onrender.com/order/add-temp-data", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    order: order, // Send the order data as text[]
+                    salesdata: [JSON.stringify(updatedSalesData)], // Send sales data as text[]
+                    paidorder: [
+                        JSON.stringify({
+                            orderID: orderID,
+                            mop: paymentMethod,
+                            
+                            total_amount: amount,
+                            delivery: ifDelivery === "true",
+                            reservation_id: reservationID,
+                            order_type: orderType,
+                            items: order,
+                            customer_name: name,
+                            number_of_people: numberOfPeople,
+                            ispaid: true,
+                        }),
+                    ], // Send paid order as text[]
+                }),
+                
+            });
+            if (!tempDataResponse.ok) {
+                throw new Error(`Error adding temp data! status: ${tempDataResponse.status}`);
+            }
+    
+            const tempDataResponseData = await tempDataResponse.json();
+            console.log("Temporary data added successfully:", tempDataResponseData);
+    
 
             // Reset order-related states
             setAmount(0);
@@ -547,6 +664,40 @@ function POS() {
     const handleGCashPayment = async () => {
         const admin = 14;
     
+
+        const paidOrder = {
+            mop: paymentMethod,
+            total_amount: amount,
+            delivery: ifDelivery === 'true',
+            reservation_id: reservationID,
+            order_type: orderType,
+            items: order,
+            customer_name: name,
+            number_of_people: numberOfPeople,
+            ispaid: true,
+            table_id:tableID,
+        };
+
+
+        const response = await fetch(`http://localhost:10000/order/add-order`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(paidOrder),
+        });
+        
+        console.log("Response Status:", response.status);  // Check the response status
+        
+        if (!response.ok) {
+            const errorText = await response.text(); // Get the response text to debug
+            console.log("Error response:", errorText);  // Log the raw response body
+            throw new Error(`Error adding order: ${response.statusText}`);
+        }
+        
+        const data = await response.json(); // Parse the response body
+        console.log("Response Data:", data);  // Log the parsed response
+        
+setOrderID(data.orderId);
+console.log("Added Orders with ID:", data.orderId);
         
 
         const orderedItem = order[0];
@@ -572,6 +723,7 @@ function POS() {
             price_per_unit: parseFloat(price.toFixed(2)),
             mode_of_payment: paymentMethod,
             order_type: orderType,
+
         };
         
         try {
@@ -614,6 +766,7 @@ function POS() {
                     salesdata: [JSON.stringify(updatedSalesData)], // Send sales data as text[]
                     paidorder: [
                         JSON.stringify({
+                            orderID: orderID,
                             mop: paymentMethod,
                             total_amount: amount,
                             delivery: ifDelivery === "true",
@@ -622,6 +775,7 @@ function POS() {
                             items: order,
                             customer_name: name,
                             number_of_people: numberOfPeople,
+                            ispaid: true,
                         }),
                     ], // Send paid order as text[]
                 }),
@@ -824,6 +978,7 @@ function POS() {
                         </label>
                     </div>
 
+
                     <div className={styles.additionalOptions}>
                     <label>
                             <input type="radio" name="order" value="Dine-in" checked={orderType === 'Dine-in'}
@@ -835,6 +990,15 @@ function POS() {
                         </label>
 
                     </div>
+                    <div className={styles.assignTable}>
+                    <select className={styles.selectTableDesign} onChange={handleTableChange} value={tableID}>
+        {table.map((table) => (
+          <option key={table.table_id} value={table.table_id}>
+            {table.table_name} <span className={styles.status}>*<strong>{table.isoccupied === false ? "Available" : "Occupied"}</strong></span>
+          </option>
+        ))}
+      </select>
+    </div>
                         <div className={styles.navOrderDetailButtons}>
                         <button className={styles.cancelOrderButton} onClick={handleCancelOrder}>
                         Cancel
@@ -1033,8 +1197,8 @@ function POS() {
 
 
       <Routes>
-        <Route path="successful" element={<Successful/>} />
-        <Route path="failed" element={<Failed/>} />
+        <Route path="successful" element={<Successful orderID/>} />
+        <Route path="failed" element={<Failed orderID/>} />
       </Routes>
         </section>
     );

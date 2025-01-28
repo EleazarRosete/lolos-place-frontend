@@ -861,3 +861,19 @@ input[type="radio"] {
 .inputBox{
     width: 70%;
 }
+
+.assignTable{
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    align-items: start;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.selectTableDesign{
+    border: 1px solid;
+    color: #000;
+}

@@ -90,7 +90,7 @@ const Admin = () => {
                 <Routes>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="pos/*" element={<POS />} />
-                    <Route path="orders" element={<Purchases />} />
+                    <Route path="orders/*" element={<Purchases />} />
                     <Route path="inventory" element={<Inventory />} />
                     <Route path="feedback" element={<Feedback />} />
                     <Route path="adminSettings" element={<AdminSettings />} />

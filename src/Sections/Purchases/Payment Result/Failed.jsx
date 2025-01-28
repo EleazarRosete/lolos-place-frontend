@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Failed.module.css";
 
-function Failed({ order_id }) {
+function Failed(order_id) {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,13 +17,10 @@ function Failed({ order_id }) {
                 console.log(data.purchases_id);
 
                 // Check if data exists and has the needed property
-                if (data && data.paidOrder && data.paidOrder.length > 0) {
-                    // Iterate through the paidOrder array and find the matching order_id
-                    const matchingOrder = data.paidOrder.find(order => order.order_id === order_id);
-                    
-                    if (matchingOrder) {
-                        // If matching order found, delete the corresponding temp data
-                        const deleteResponse = await fetch(`https://lolos-place-backend.onrender.com/order/delete-temp-data/${matchingOrder.purchases_id}`, {
+                if (data && data.length > 0) {
+                    // Iterate through the data array
+                    for (let i = 0; i < data.length; i++) {
+                        const deleteResponse = await fetch(`https://lolos-place-backend.onrender.com/order/delete-temp-data/${data[i].purchases_id}`, {
                             method: 'DELETE',
                             headers: { 'Content-Type': 'application/json' },
                         });
@@ -31,11 +28,9 @@ function Failed({ order_id }) {
                         if (!deleteResponse.ok) {
                             throw new Error(`Failed to delete temp data. Status: ${deleteResponse.status}`);
                         }
-                    } else {
-                        throw new Error('Order ID not found in paid orders');
                     }
                 } else {
-                    throw new Error('No paid orders found in temp data');
+                    throw new Error('No valid purchases_id found in temp data');
                 }
 
                 // Navigate after 1 second
@@ -50,7 +45,7 @@ function Failed({ order_id }) {
         };
 
         fetchDataAndDelete();
-    }, [navigate, order_id]);
+    }, [navigate]);
 
     return (
         <section className={styles.modalPOS}>
