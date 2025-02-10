@@ -11,7 +11,7 @@
 
 .aside {
   background-color: #f9e6c9;
-  width: 20%;
+  width: 15%;
   height: 97.1vh;
   color: #503B36;
   display: flex;
@@ -31,18 +31,23 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 90%;
-  height: 15vh;
+  width: 100%;
+  height: 35vh;
   gap: 1rem;
   padding: 0;
 }
 
-.dinerName {
-  font-family: "Tangerine", cursive;
+.lolosplaceuser {
   font-weight: 200;
-  font-size: 3rem;
+  font-size: 1.125rem;
   background-color: transparent;
   position: relative;
+  top: -10%;
+  font-weight: 600;
+}
+
+.userIcon{
+  width: 55%;
 }
 
 .restaurant {
@@ -60,13 +65,32 @@ nav {
   margin-top: 2rem;
 }
 
+.navbuttons{
+  width: 100%;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navgroup1{
+  width: 100%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
 .sideButton {
   width: 10.5rem;
   border-radius: 0.3rem;
   padding: 0.5rem 0.8rem;
   border: 0;
   background-color: transparent;
-  font-size: 1.06rem;
+  font-size: 1rem;
   transition: 0.5s ease-in-out;
   cursor: pointer;
   display: flex;

@@ -219,7 +219,14 @@ function Admin() {
     return (
         <section className={styles.section}>
             <h2>Account Settings</h2>
-            <div className={styles.adminSettings}>
+            <div className={styles.accountSettingContainer}>
+            <div className={styles.selectAccount}>
+                <button>Admin Setting</button>
+                <button>Cashier Setting</button>
+                <button>Kitchen Setting</button>
+
+            </div>
+            <div className={styles.accountSetting}>
                 <h3>Admin Settings</h3>
                 <label>First Name:</label>
                 <input 
@@ -327,6 +334,8 @@ function Admin() {
                     <button className={styles.saveBtn} onClick={handleSave}>Save</button>
                 </div>
             </div>
+            </div>
+          
         </section>
     );
 }

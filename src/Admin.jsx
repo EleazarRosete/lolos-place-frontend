@@ -8,6 +8,8 @@ import Feedback from './Sections/Feedback/Feedback.jsx';
 import AdminSettings from './Sections/Admin Settings/AdminSettings.jsx';
 import Purchases from './Sections/Purchases/Purchases.jsx';
 
+
+import user from './assets/user.svg';
 import dashboardIcon from './assets/dashboard.png';
 import posIcon from './assets/menu.png';
 import inventoryIcon from './assets/inventory.png';
@@ -45,9 +47,12 @@ const Admin = () => {
         <section className={styles.MainSection}>
             <aside className={`${styles.aside} ${!isAsideVisible ? styles.hidden : ''}`}>
                 <div className={styles.logoContainer}>
-                    <h1 className={styles.dinerName}>LoLo's Place</h1>
-                    <h2 className={styles.restaurant}>Restaurant</h2>
+                    <img src={user} alt="user" className={styles.userIcon} />
+                    <h1 className={styles.lolosplaceuser}>LoLo's Place Admin</h1>
                 </div>
+                <div className={styles.navbuttons}>
+                <div className={styles.navgroup1}>
+
                 <button className={styles.sideButton} onClick={() => navigateToSection('dashboard')}>
                     <img src={dashboardIcon} alt="dashboard" className={styles.buttonIcons} /> Dashboard
                 </button>
@@ -66,9 +71,15 @@ const Admin = () => {
                 <button className={styles.sideButton} onClick={() => navigateToSection('adminSettings')}>
                     <img src={analyticsIcon} alt="adminSettings" className={styles.buttonIcons} /> Admin
                 </button>
+                </div>
+
+                <div className={styles.navgroup2}>
                 <button className={styles.sideButton} onClick={handleLogout}>
                     <img src={logoutIcon} alt="logout" className={styles.buttonIcons} /> Logout
                 </button>
+                </div>
+                </div>
+                
 
                 {isLogoutOpen && (
                     <div className={styles.modalLogout}>

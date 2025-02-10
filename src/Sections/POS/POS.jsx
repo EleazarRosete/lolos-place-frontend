@@ -9,8 +9,10 @@ import Failed from '../Payment Result/Failed.jsx';
 function POS() {
     const navigate = useNavigate();
     const [handleAddNameAndNumberOfPeople, setHandleAddNameAndNumberOfPeople] = useState(false);            
+    const [updatedStock, setUpdatedStock] = useState(0);
     const [orderID, setOrderID] = useState();
     const [showModal, setShowModal] = useState(false);
+    const [OrderClick, setOrderClick] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [serviceCharge, setServiceCharge] = useState(0);
     const [quantity, setQuantity] = useState(0);
@@ -226,7 +228,7 @@ function POS() {
 
   const getTable = async () => {
             try {
-                const response = await fetch("https://lolos-place-backend.onrender.com/table/get-table", {
+                const response = await fetch("http://localhost:10000/table/get-table", {
                     method: "GET",
                     headers: { "Content-Type": "application/json" },
                 });
@@ -296,40 +298,47 @@ function POS() {
                 item.name.toLowerCase().includes(searchTerm.toLowerCase())
             );
             setFilteredProducts(filtered);
-        }, 300);
+        }, 100);
 
         return () => {
             clearTimeout(handler);
         };
     }, [searchTerm, products]);
 
-    const addToOrder = (menu_id, name, price, stocks, quantity) => {
-        setQuantity(quantity);
+    const handleIsOrderClick = () => {
+        setOrderClick(prevState => !prevState);
+    };
+    
 
+    const addToOrder = (menu_id, name, price, stocks, orderQuantity, fromMinus) => {
+
+
+        
         setOrder(prevOrder => {
             const existingOrderItem = prevOrder.find(item => item.menu_id === menu_id);
-
-
-
+    
             if (existingOrderItem) {
                 return prevOrder.map(item =>
                     item.menu_id === menu_id
                         ? {
                             ...item,
-                            quantity: item.quantity + quantity,
-                            total: (item.quantity + quantity) * item.price
+                            quantity: orderQuantity, // Directly use orderQuantity
+                            total: orderQuantity * item.price
                         }
                         : item
                 );
             } else {
                 return [
                     ...prevOrder,
-                    { menu_id, name, price, stocks, quantity, total: price * quantity}
+                    { menu_id, name, price, stocks, quantity: orderQuantity, total: price * orderQuantity }
                 ];
             }
-
         });
+    
+        console.log("pos", order);
     };
+    
+    
     
     const modifyOrder = (menu_id, name, price, stocks, quantity) => {
         setOrder(prevOrder => {
@@ -407,6 +416,9 @@ function POS() {
                             product.menu_id === menu_id ? { ...product, stocks: product.stocks - quantity } : product
                         )
                     );
+
+
+
                 });
     
                 // Wait for all stock updates to complete
@@ -824,13 +836,28 @@ console.log("Added Orders with ID:", data.orderId);
              
         }
     }
+    
+const handleQuantityByOrder = async (id,orderQuantity)=>{
+    if (!id) {
+        console.error("Error: Menu ID is missing.");
+        return;
+    }
 
-    const handleRemoveFromCart = (index) => {
-        setOrder(prevOrder => prevOrder.filter((_, idx) => idx !== index));
-    };
+    setOrder(prevOrder =>
+        prevOrder.map(item =>
+            item.menu_id === id
+                ? { ...item, quantity: orderQuantity-1, total: orderQuantity * item.price }
+                : item
+        )
+    );
+}
+
+const handleRemoveFromCart = (menu_id) => {
+    setOrder(prevOrder => prevOrder.filter(item => item.menu_id !== menu_id));
+};
 
 
-    const handleCancelPayment = () => {
+     const handleCancelPayment = () => {
         setCashDetails(false);
         setGCashtDetails(false);
         setOrderDetails(true);  
@@ -908,7 +935,13 @@ console.log("Added Orders with ID:", data.orderId);
                                     items={product.items}
                                     stock={product.stocks}
                                     onAddToOrder={addToOrder}
+                                    updateStock={setUpdatedStock}
                                     number={quantity}
+                                    order={order}
+                                    setIsOrderClicked={handleIsOrderClick}
+                                    isOrderClicked={OrderClick}
+                                    onRemove={handleRemoveFromCart}
+                                    orders={order}
                                 />
                             ))
                         ) : (
@@ -927,12 +960,16 @@ console.log("Added Orders with ID:", data.orderId);
                                     id={orders.menu_id}
                                     name={orders.name}
                                     price={orders.price}
-                                    stock={orders.stocks}
-                                    order={orders.quantity}
+                                    stock={orders.stocks-orders.quantity}
+                                    order={orders.quantity}    
                                     total={orders.total}
                                     onAddToOrder={modifyOrder}
                                     onRemove={handleRemoveFromCart}
                                     index={index}
+                                    updateStock={setUpdatedStock}
+                                    updatedQuantityByOrder={handleQuantityByOrder}
+                                    isOrderClicked={handleIsOrderClick}
+
                                 />
                             ))
                         ) : (
@@ -991,15 +1028,19 @@ console.log("Added Orders with ID:", data.orderId);
                         </label>
 
                     </div>
-                    <div className={styles.assignTable}>
-                    <select className={styles.selectTableDesign} onChange={handleTableChange} value={tableID}>
-        {table.map((table) => (
-          <option key={table.table_id} value={table.table_id}>
-            {/* {table.table_name} <span className={styles.status}>*<strong>{table.isoccupied === false ? "Available" : "Occupied"}</strong></span> */}
-          </option>
-        ))}
-      </select>
-    </div>
+                    <select 
+  className={styles.selectTableDesign} 
+  onChange={handleTableChange} 
+  value={tableID} 
+  disabled={orderType === 'Take-out'}
+>
+  {table.map((table) => (
+    <option key={table.table_id} value={table.table_id}>
+      {table.table_name}
+    </option>
+  ))}
+</select>
+
                         <div className={styles.navOrderDetailButtons}>
                         <button className={styles.cancelOrderButton} onClick={handleCancelOrder}>
                         Cancel

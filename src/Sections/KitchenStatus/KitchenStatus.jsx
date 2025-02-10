@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
-import styles from './Purchases.module.css';
+import styles from './KitchenStatus.module.css';
 import Successful from './Payment Result/Successful';
 import Failed from './Payment Result/Failed';
+import logoutIcon from '../../assets/logout.png';
 
-const Purchases = () => {
+const KitchenStatus = () => {
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [products, setProducts] = useState([]);
-  const [all, setAll] = useState(0);
-  const [dine, setDine] = useState(0);
-  const [take, setTake] = useState(0);
-  const [deliverr, setDeliverr] = useState(0);
-  const [pay, setPay] = useState(0);
-  const [detailss, setDeatilss] = useState([]);
   const [tables, setTables] = useState([]);
   const [allOrders, setAllOrders] = useState([]);
   const [deliveries, setDeliveries] = useState([]);
@@ -37,6 +33,20 @@ const Purchases = () => {
           mode_of_payment:'',
           order_type:''
       });
+
+      const handleLogout = () => {
+        setIsLogoutOpen(true);
+    };
+
+    const confirmLogout = () => {
+      setIsLogoutOpen(false);
+      navigate("/login");
+  };
+
+
+  const cancelLogout = () => {
+    setIsLogoutOpen(false);
+};
 
   const fetchOrderHistory = async () => {
     try {
@@ -147,12 +157,8 @@ const Purchases = () => {
     setView((prevView) => (prevView === 'orders' ? 'orderHistory' : 'orders'));
   };
 
-
-
-  const handleStatusClick = (orderId, name, numppl, phone, date, time, tableID) => {
+  const handleStatusClick = (orderId) => {
     setSelectedOrderId(orderId);
-    setDeatilss([orderId, name, numppl, phone, date, time, tableID]);
-    console.log(detailss);
     if(orderTypeFilter === "pay-later"){
       setModalOpenPayLater(true);
     }
@@ -399,8 +405,8 @@ const handleGCashPayment = async () => {
     );
   });
   
-
-
+  
+  
   const filteredPreparingOrders = sortedAllOrders.filter((order) => {
     const ordertype = filterOrderType(order) || '';
     const searchQueryLower = searchQuery.toLowerCase();
@@ -410,7 +416,7 @@ const handleGCashPayment = async () => {
     }
   
     return (
-      (order.status === 'preparing' || !order.ispaid) && // Include unpaid orders
+      order.status === 'preparing' &&
       (order.order_id?.toString().toLowerCase().includes(searchQueryLower) ||
         ordertype.toString().toLowerCase().includes(searchQueryLower)) &&
       (orderTypeFilter ? ordertype.includes(orderTypeFilter) : true)
@@ -419,41 +425,6 @@ const handleGCashPayment = async () => {
   
   
   
-  
-  useEffect(() => {
-
-    const alls = sortedAllOrders.filter(order => order.status === 'preparing' ).length;
-    const dineInOrders = new Set([
-      ...sortedAllOrders.filter(order => order.orderType === 'Dine-in' && order.status === 'preparing'),
-      ...sortedAllOrders.filter(order => order.orderType === 'Dine-in' && !order.ispaid)
-    ]).size;
-    
-    const takeOutOrders = new Set([
-      ...sortedAllOrders.filter(order => order.orderType === 'Take-out' && order.status === 'preparing'),
-      ...sortedAllOrders.filter(order => order.orderType === 'Take-out' && !order.ispaid)
-    ]).size;
-    
-    const deliveryOrders = new Set([
-      ...sortedAllOrders.filter(order => order.delivery === true && order.status === 'preparing'),
-      ...sortedAllOrders.filter(order => order.delivery === true && !order.ispaid)
-    ]).size;
-    
-    const payLaterOrders = sortedAllOrders.filter(order => !order.ispaid).length;
-  
-    const forAll = new Set([...sortedAllOrders.filter(order => !order.ispaid), 
-      ...sortedAllOrders.filter(order => order.status === 'preparing')]
-    .map(order => order.order_id)).size;
-
-
-
-      // setAll(alls + payLaterOrders); // Include pay-later orders in "all"
-    setAll(forAll); // Include pay-later orders in "all"
-
-    setDine(dineInOrders);
-    setTake(takeOutOrders);
-    setDeliverr(deliveryOrders);
-    setPay(payLaterOrders);
-  }, [sortedAllOrders]);
   
   
 
@@ -480,6 +451,8 @@ const handleGCashPayment = async () => {
   return (
     <section className={styles.section}>
       <div className={styles.searchContainer}>
+      <h1 className={styles.adminType}>LoLo's Place Kitchen</h1>
+
         <input
           type="text"
           placeholder="Search by Order ID"
@@ -487,12 +460,12 @@ const handleGCashPayment = async () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           className={styles.searchInput}
         />
-        <button onClick={handleSortChange}>
+        {/* <button onClick={handleSortChange}>
           Sort Order {sortOrder === 'asc' ? '▲' : '▼'}
-        </button>
-        <button className={styles.buttonOrderHistory} onClick={toggleView}>
-          {view === 'orders' ? 'View Order History' : 'View Pending Orders'}
-        </button>
+        </button> */}
+                 <button className={styles.sideButton} onClick={handleLogout}>
+                     <img src={logoutIcon} alt="logout" className={styles.buttonIcons} /> Logout
+                 </button>
       </div>
       <div className={styles.navButtons}>
         {view === 'orderHistory' && (
@@ -518,27 +491,15 @@ const handleGCashPayment = async () => {
           <div className={styles.filterContainer}>
             <button onClick={() => setOrderTypeFilter('')} className={styles.filterButton}>
               All
-              <span className={styles.notificationNumber}>{all}</span>
             </button>
             <button onClick={() => setOrderTypeFilter('dine-in')} className={styles.filterButton}>
               Dine In
-              <span className={styles.notificationNumber}>{dine}</span>
-
             </button>
             <button onClick={() => setOrderTypeFilter('take-out')} className={styles.filterButton}>
               Take Out
-              <span className={styles.notificationNumber}>{take}</span>
-
             </button>
             <button onClick={() => setOrderTypeFilter('deliveries')} className={styles.filterButton}>
               Deliveries
-              <span className={styles.notificationNumber}>{deliverr}</span>
-
-            </button>
-            <button onClick={() => setOrderTypeFilter('pay-later')} className={styles.filterButton}>
-              Pay later
-              <span className={styles.notificationNumber}>{pay}</span>
-
             </button>
           </div>
         )}
@@ -550,22 +511,18 @@ const handleGCashPayment = async () => {
           <p className={styles.error}>{error}</p>
         ) : view === 'orders' ? (
           <div className={styles.pendingOrdersContainer}>
-            <h1 className={styles.pendingOrdersHeader}>Pending Orders</h1>
+            <h1 className={styles.pendingOrdersHeaderkitchen}>Pending Orders</h1>
             {filteredPreparingOrders.length > 0 ? (
               <ul className={styles.orderList}>
                 {filteredPreparingOrders.map((order) => {
                   return (
                     <li key={order.order_id} className={styles.orderItem}>
                       <h3>Order #{order.order_id}</h3>
-                      <p>Table: {tables.find((table) => table.table_id === order.tableID) 
-    ? tables.find((table) => table.table_id === order.tableID).table_name 
-    : 'No table applied'}
-</p>
 
 
 
 
-                      <p>Items:</p>
+                      <p>Orders:</p>
                       <ul>
                         {order.items.map((item, index) => (
                           <li key={index}>
@@ -573,8 +530,15 @@ const handleGCashPayment = async () => {
                           </li>
                         ))}
                       </ul>
-                      <p>Total: ₱{order.total_amount}  <strong>{order.ispaid === true ? "PAID" : "NOT PAID"}</strong></p>
-                      <button onClick={() => handleStatusClick(order.order_id,order.customerName, order.numberOfPeople,order.phone,order.date,order.time,order.tableID )}>Details
+                      <button onClick={() => handleStatusClick(order.order_id)}>{
+  orderTypeFilter === "pay-later" 
+    ? "Pay now" 
+    : orderTypeFilter === "deliveries" 
+    ? "Deliver" 
+    : (orderTypeFilter === "Dine-in" || orderTypeFilter === "Take-out") 
+    ? "Serve" 
+    : "Serve"
+}
 </button>
                     </li>
                   );
@@ -620,20 +584,10 @@ const handleGCashPayment = async () => {
         <div className={styles.modalPurchase}>
         <div className={styles.modalOrders}>
           <div className={styles.modalOrder}>
-            <h3>Mark Order as Served</h3>
-            <h3>Order #{detailss[0]}</h3>
-            <p>Name: {detailss[1] !== null ? detailss[1] : `${detailss[1].firstName} ${detailss[1].lastName}`}</p>  
-                    <p>Number of people: {detailss[2] == null ? "1" : detailss[2]}</p>
-                    <p>Contact Number: {detailss[3] == "09682823420" ? "No number inputed" : detailss[3]}</p>
-                    <p>Date: {formatDate(detailss[4])}</p>
-                    <p>Time: {formatTime(detailss[5])}</p>
-                    <p>Table: {tables.find((table) => table.table_id === detailss[6]) 
-    ? tables.find((table) => table.table_id === detailss[6]).table_name 
-    : 'No table applied'}
-</p>
+            <h3>Order is ready to served?</h3>
             <div className={styles.navButtonOrders}>
-            <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Close</button>
-              <button onClick={handleServeOrder} className={styles.orderButtonsHistory}>Served</button>
+            <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Not yet</button>
+              <button onClick={handleServeOrder} className={styles.orderButtonsHistory}>Yes</button>
 
             </div>
 
@@ -644,23 +598,20 @@ const handleGCashPayment = async () => {
       )}
 
 
-{modalOpenPayLater && selectedOrderId && (
-        <div className={styles.modalPurchase}>
-        <div className={styles.modalOrders}>
-          <div className={styles.modalOrder}>
-            <h3>Pay Order Now</h3>
-            <div className={styles.navButtonOrders}>
-            <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Cancel</button>
-            <button onClick={handleGCashPayment} className={styles.orderButtonsHistory}>GCASH Pay</button>
-              <button onClick={handlePayNow} className={styles.orderButtonsHistory}>CASH Pay</button>
-
-            </div>
-
-          </div>
-        </div>
-        </div>
-
-      )}
+  {isLogoutOpen && (
+                    <div className={styles.modalLogout}>
+                        <div className={styles.logoutOverlay}>
+                            <div className={styles.logout}>
+                                <h2>Confirm logout</h2>
+                                <p>Are you sure you want to log out?</p>
+                                <div className={styles.logoutButtons}>
+                                    <button onClick={confirmLogout} className={styles.confirmButton}>Yes</button>
+                                    <button onClick={cancelLogout} className={styles.cancelButton}>No</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
 <Routes>
         <Route path="successful" element={<Successful selectedOrderId/>} />
@@ -671,4 +622,4 @@ const handleGCashPayment = async () => {
   );
 };
 
-export default Purchases;
+export default KitchenStatus;

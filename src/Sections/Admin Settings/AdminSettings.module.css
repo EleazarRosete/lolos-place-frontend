@@ -1,10 +1,10 @@
 /* The section remains unchanged */
 .section {
-    width: 79%;
+    width: 84%;
     height: 100vh;
     position: fixed;
     top: 0;
-    left: 21%;
+    left: 16%;
     background-color: #F4F4F9;
     display: flex;
     flex-direction: column;
@@ -16,8 +16,21 @@
     box-sizing: border-box;
 }
 
-.adminSettings {
+.selectAccount{
+    display: flex;
+    flex-direction: column;
+}
+
+.accountSettingContainer{
     width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+
+}
+
+.accountSetting {
+    width: 90%;
     max-height: 100%;
     background-color: #FEF7E1;
     border-radius: 0.5rem;

@@ -1,0 +1,291 @@
+/* Modal styles */
+.modalPurchase1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(14, 14, 14, 0.5);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalOrders{
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(14, 14, 14, 0.5);
+    z-index: 100;
+}
+
+.modalOrder {
+    background-color: #FEF7E1;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 75%;
+    height: 25%;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.navButtonOrders{
+    display: flex;
+    width:100%;
+    align-items: center;
+    justify-content: space-between;
+    height: 6vh;
+}
+
+.modalContents p {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #212121;
+}
+
+.orderButtonsHistory{
+    background-color: #3e2723;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    margin: 0 4rem;   
+    width: 100%;
+    height: 100%; 
+}
+
+.modalContents .orderButtonsHistory {
+    background-color: #3e2723;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    margin: 0 4rem;   
+    width: 100%;
+    height: 100%; 
+}
+
+.section {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    background-color: #F4F4F9;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    margin: 0;
+    padding: 1rem;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/* Scrollbar styles */
+.section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.section::-webkit-scrollbar-thumb {
+    background-color: #cfcfcf;
+    border-radius: 10px;
+}
+
+.section::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+    border-radius: 10px;
+}
+
+
+.adminType{
+    font-size: 1.125;
+    font-weight: 800;
+
+}
+
+/* Navigation buttons */
+.navButtons {
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.filterContainer {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.filterButton {
+    cursor: pointer;
+    height: 100%;
+    background-color: #3e2723;
+    border: 0;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+    border-radius: 0.3rem;
+    border-top: 1px solid #3e2723;
+    transition: 0.4s ease-in-out;
+    color: #F4F4F9;
+}
+
+/* Search bar */
+.searchContainer {
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+
+.searchInput {
+    width: 50%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    border-radius: 0.4rem;
+    background-color: #FEF7E1;
+    color: #0e0e0e;
+    border: 1px solid #3e2723;
+    padding-left: 1rem;
+    text-align: start;
+    margin: 0;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+
+.buttonOrderHistory {
+    cursor: pointer;
+    height: 100%;
+    background-color: #3e2723;
+    color: #F4F4F9;
+    border: 0;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+    border-radius: 0.3rem;
+    transition: 0.4s ease-in-out;
+    border-top: 1px solid #3e2723;
+}
+
+
+/* Orders Section */
+.orderPurchasesContainer {
+    width: 100%;
+    height: 90vh;
+    margin-top: 2rem;
+    overflow-y: auto;
+    background-color: #FEF7E1;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    scrollbar-width: none; /* For Firefox */
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+
+.orderPurchasesContainer::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Edge */
+}
+
+.pendingOrdersContainer,
+.historyOrdersContainer {
+    width: 100%;
+    padding: 1rem;
+    background-color: transparent;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+    gap: 1rem;
+}
+
+.pendingOrdersHeaderkitchen,
+.historyOrdersHeader {
+    font-size: 1.125rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: #3e2723;
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+
+.orderList,
+.orderList1 {
+    display: flex;
+    min-width: 30%;
+    gap: 1rem;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    background-color: #fff;
+
+}
+
+.orderItem,
+.orderItem1 {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 5px dashed #3e2723;
+    box-sizing: border-box;
+}
+
+.orderItem h3,
+.orderItem1 h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.orderItem p,
+.orderItem1 p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+
+.orderItem button,
+.orderItem1 button {
+    background-color: #3e2723;
+    color: #F4F4F9;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+/* Ensuring consistent height for the orders sections */
+.pendingOrdersContainer,
+.historyOrdersContainer {
+    min-height: 200px; /* Ensures both containers maintain a consistent height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.orderItem,
+.orderItem1 {
+    height: auto;
+    flex-grow: 1;
+}
