@@ -1,121 +1,110 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import { useState, useEffect } from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, Label } from "recharts";
 import styles from './ProductDemandGraph.module.css';
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
-
 const HighestSellingProducts = () => {
-  const today = new Date().toISOString().split('T')[0];
-  const startOfYear = new Date(
-    Date.UTC(new Date().getFullYear(), 0, 1)
-  ).toLocaleDateString('en-CA', { timeZone: 'Asia/Manila' });
+    const today = new Date();
+    
+    const [startDate, setStartDate] = useState(`${today.getFullYear()}-01-01`); // Start of this year
+    const [endDate, setEndDate] = useState(today.toISOString().split("T")[0]); // Today's date
+    const [salesData, setSalesData] = useState([]);
+    const [categories, setCategories] = useState(["All"]);
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const [loading, setLoading] = useState(false);
 
-  const [startDate, setStartDate] = useState(startOfYear);
-  const [endDate, setEndDate] = useState(today);
-  const [productData, setProductData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+    // Fetch sales data based on selected date range
+    const fetchSalesData = async () => {
+        if (!startDate || !endDate) return;
+        setLoading(true);
+        try {
+            const response = await fetch(
+                `http://localhost:10000/graphs/sales-summary?start_date=${startDate}&end_date=${endDate}`
+            );
+            const data = await response.json();
 
-  const fetchProductData = async () => {
-    if (!startDate || !endDate) {
-      setError('Start date and end date are required');
-      return;
-    }
+            if (Array.isArray(data) && data.length > 0) {
+                setSalesData(data);
 
-    setLoading(true);
-    setError('');
+                // Extract unique categories dynamically & add "All"
+                const uniqueCategories = ["All", ...new Set(data.map(item => item.category))];
+                setCategories(uniqueCategories);
+            } else {
+                setSalesData([]);
+                setCategories(["All"]);
+            }
 
-    try {
-      const response = await axios.get('https://lolos-place-backend.onrender.com/graphs/highest-selling-products', {
-        params: { startDate, endDate },
-      });
-      setProductData(response.data);
-    } catch (err) {
-      setError('Error fetching data');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProductData();
-  }, []);
-
-  const getChartData = () => {
-    // Sort products by quantity_sold in descending order and take the top 10
-    const filteredData = productData
-      .filter((product) => product.quantity_sold > 0)
-      .sort((a, b) => b.quantity_sold - a.quantity_sold)
-      .slice(0, 10);
-
-    const productNames = filteredData.map((product) => product.product_name);
-    const quantitiesSold = filteredData.map((product) => product.quantity_sold);
-
-    return {
-      labels: productNames,
-      datasets: [
-        {
-          label: 'Quantity Sold',
-          data: quantitiesSold,
-          backgroundColor: 'rgba(75, 192, 192, 0.6)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1,
-        },
-      ],
+            setSelectedCategory("All");
+        } catch (error) {
+            console.error("Error fetching sales data:", error);
+            setSalesData([]);
+            setCategories(["All"]);
+        }
+        setLoading(false);
     };
-  };
 
-  return (
-    <div className={styles.highestSellingProducts}>
-      <h1>Highest Selling Products</h1>
+    useEffect(() => {
+        fetchSalesData(); // Fetch on mount with default dates
+    }, []);
 
-      <div className={styles.dateInputs}>
-        <label htmlFor="startDate">Start Date:</label>
-        <input
-          type="date"
-          id="startDate"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          max={today}
-        />
+    // Filter data based on selected category (show all if "All" is selected)
+    const filteredData = selectedCategory === "All" ? salesData : salesData.filter(item => item.category === selectedCategory);
 
-        <label htmlFor="endDate">End Date:</label>
-        <input
-          type="date"
-          id="endDate"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          max={today}
-        />
+    return (
+        <div className="p-4">
+            <h2 className="text-xl font-bold mb-4">Sales Data Visualization</h2>
 
-        <button onClick={fetchProductData} disabled={!startDate || !endDate}>
-          Fetch Data
-        </button>
-      </div>
+            {/* Date Selectors */}
+            <div className="mb-4">
+                <label className="mr-2">Start Date:</label>
+                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="border p-1" />
+                
+                <label className="ml-4 mr-2">End Date:</label>
+                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="border p-1" />
+                
+                <button onClick={fetchSalesData} className="ml-4 px-4 py-1 bg-blue-500 text-white rounded">
+                    {loading ? "Loading..." : "Fetch Data"}
+                </button>
+            </div>
 
-      {loading && <p>Loading...</p>}
-      {error && <p className={styles.error}>{error}</p>}
+            {/* Dynamic Category Buttons */}
+            <div className="mb-4 flex flex-wrap gap-2">
+                {categories.map((category) => (
+                    <button
+                        key={category}
+                        onClick={() => setSelectedCategory(category)}
+                        className={`px-4 py-1 rounded ${
+                            selectedCategory === category ? "bg-blue-700 text-white" : "bg-gray-200"
+                        }`}
+                    >
+                        {category}
+                    </button>
+                ))}
+            </div>
 
-      {productData.length > 0 && (
-        <div className={styles.productData}>
-          <Bar
-            data={getChartData()}
-            options={{
-              responsive: true,
-              plugins: {
-                title: {
-                  display: true,
-                  text: `Top 10 Highest Selling Products from ${startDate} to ${endDate}`,
-                },
-              },
-            }}
-          />
+            {/* Bar Chart */}
+            <ResponsiveContainer width="100%" height={400}>
+                {filteredData.length > 0 ? (
+                    <BarChart data={filteredData}>
+                        {/* X-Axis (Bottom) - Menu Item */}
+                        <XAxis dataKey="product_name">
+                            <Label value="Menu Item" offset={-5} position="insideBottom" />
+                        </XAxis>
+
+                        {/* Y-Axis (Left) - Quantity Sold */}
+                        <YAxis>
+                            <Label value="Quantity Sold" angle={-90} position="insideLeft" style={{ textAnchor: 'middle' }} />
+                        </YAxis>
+
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="total_quantity_sold" fill="#8884d8" />
+                    </BarChart>
+                ) : (
+                    <p className="text-center text-gray-500">No data available</p>
+                )}
+            </ResponsiveContainer>
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default HighestSellingProducts;
