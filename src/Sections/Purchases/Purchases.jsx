@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './Purchases.module.css';
-import Successful from './Payment Result/Successful';
-import Failed from './Payment Result/Failed';
+import Successful from './Payment Result/Successful.jsx';
+import Failed from './Payment Result/Failed.jsx';
 
 const Purchases = () => {
   const [products, setProducts] = useState([]);
@@ -42,6 +42,7 @@ const Purchases = () => {
     try {
       const response = await axios.get('https://lolos-place-backend.onrender.com/order/order-history');
       setAllOrders(response.data);
+
     } catch (err) {
       setError('Failed to fetch order history. Please try again later.');
     }
@@ -111,11 +112,11 @@ const Purchases = () => {
       const sortedData = jsonData.sort((a, b) => a.name.localeCompare(b.name));
   
       setProducts(sortedData);
+
     } catch (err) {
       console.error('Error fetching products:', err.message);
     }
   };
-
 
 
     fetchProducts();
@@ -149,9 +150,9 @@ const Purchases = () => {
 
 
 
-  const handleStatusClick = (orderId, name, numppl, phone, date, time, tableID) => {
+  const handleStatusClick = (orderId, name, firstName, lastName, numppl, phone, date, time, tableID, items) => {
     setSelectedOrderId(orderId);
-    setDeatilss([orderId, name, numppl, phone, date, time, tableID]);
+    setDeatilss([orderId, name,firstName, lastName, numppl, phone, date, time, tableID, items]);
     console.log(detailss);
     if(orderTypeFilter === "pay-later"){
       setModalOpenPayLater(true);
@@ -322,67 +323,186 @@ const Purchases = () => {
 
 
 
-
-
-
-
-
-
-
-    
-
-const handleGCashPayment = async () => {
-    const admin = 14;
-    
-
-
-    const selectedOrder = allOrders.find(order => order.order_id === selectedOrderId);
-    const items = selectedOrder ? selectedOrder.items : [];
-    
-
-    try {
-        // Step 1: Create checkout session
-        const response = await fetch("https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                user_id: admin,
-                lineItems: items.map((product) => ({
-                    quantity: product.order_quantity,
-                    name: product.menu_name,
-                    price: ((parseFloat(products.find(p => p.menu_id === product.menu_id)?.price) + parseFloat(products.find(p => p.menu_id === product.menu_id)?.price) * 0.1) || 0).toFixed(2)
-                })),
-            }),
-        });
-         console.log(price);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const responseData = await response.json();
-        const { url } = responseData;
-
-        if (!url) {
-            console.error("No URL received from the API:", responseData);
-            return;
-        }
-
-        window.location.href = url; // Redirect to the GCash payment provider
-
-    } catch (error) {
-        console.error("Error during payment and data addition:", error);
+  const handleGCashPayment = async (items, order_id) => {
+    // Validate that items is defined and is an array (this might be a redundant check
+    // if we are going to fetch the order details anyway, but we'll keep it)
+    if (!items || !Array.isArray(items)) {
+      console.error("Invalid items parameter. Expected an array, but received:", items);
+      return;
     }
-};
+  
+    const admin = 14;
+  
+    try {
+      // Step 1: Create checkout session
+      const checkoutResponse = await fetch(
+        "https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: admin,
+            lineItems: items.map((product) => {
+              const foundProduct = products.find((p) => p.menu_id === product.menu_id);
+              const basePrice = parseFloat(foundProduct?.price) || 0;
+              const priceWithTax = basePrice + basePrice * 0.1;
+              return {
+                quantity: product.order_quantity,
+                name: product.menu_name,
+                price: priceWithTax.toFixed(2),
+              };
+            }),
+          })
+        }
+      );
+  
+      if (!checkoutResponse.ok) {
+        throw new Error(
+          `HTTP error while creating checkout session: ${checkoutResponse.status}`
+        );
+      }
+  
+      const checkoutData = await checkoutResponse.json();
+      const { url } = checkoutData;
+      if (!url) {
+        throw new Error("No URL received from the checkout session API");
+      }
+  
+      // Step 2: Update payment status to 'paid'
+      const updateResponse = await fetch(
+        `http://localhost:10000/order/update-is-paid/${order_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      console.log("ORDER IS PAID");
+      if (!updateResponse.ok) {
+        throw new Error(`Error updating is_paid status: ${updateResponse.status}`);
+      }
+  
+      // Step 3: Fetch order details, order quantities, and products
+      // 3a. Get order details
+      const orderResponse = await fetch(
+        "https://lolos-place-backend.onrender.com/order/get-order",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!orderResponse.ok) {
+        throw new Error(`HTTP error fetching order: ${orderResponse.status}`);
+      }
+      const ordersData = await orderResponse.json();
+      const currentOrder = ordersData.find((order) => order.order_id === order_id);
+      if (!currentOrder) {
+        throw new Error("Order not found");
+      }
+  
+      // 3b. Get order quantities
+      const quantitiesResponse = await fetch(
+        "http://localhost:10000/order/get-order-quantities",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!quantitiesResponse.ok) {
+        throw new Error(`HTTP error fetching order quantities: ${quantitiesResponse.status}`);
+      }
+      const orderQuantities = await quantitiesResponse.json();
+      // Filter quantities for the current order (assuming each record has order_id, menu_id, and quantity)
 
+      const currentOrderQuantities = orderQuantities.filter(q => q.order_id === order_id);
 
+      // 3c. Get products
+      const productResponse = await fetch(
+        "https://lolos-place-backend.onrender.com/menu/get-product",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!productResponse.ok) {
+        throw new Error(`HTTP error fetching products: ${productResponse.status}`);
+      }
+      const productsData = await productResponse.json();
+  
+      // Step 4: Build and post salesData for each order item
+      const salesPromises = currentOrderQuantities.map(async (quantityItem) => {
+        // quantityItem should include order_id, menu_id, and quantity
+        const product = productsData.find(p => p.menu_id === quantityItem.menu_id);
+        if (!product) {
+          console.error(`Product with menu_id ${quantityItem.menu_id} not found.`);
+          return;
+        }
+        const pricePerUnit = parseFloat(product.price) || 0;
+        const qty = parseFloat(quantityItem.order_quantity) || 0;
+        const amount = pricePerUnit * qty;
+        const serviceCharge = amount * 0.1;
+        const grossSales = amount + serviceCharge;
+  
+        // Construct the salesData object
+        const salesData = {
+          amount: parseFloat(amount.toFixed(2)),
+          service_charge: parseFloat(serviceCharge.toFixed(2)),
+          gross_sales: parseFloat(grossSales.toFixed(2)),
+          product_name: product.name,
+          category: product.category,
+          quantity_sold: qty,
+          price_per_unit: parseFloat(pricePerUnit.toFixed(2)),
+          mode_of_payment: currentOrder.mop,        // assuming currentOrder.mop is defined (e.g., "GCash")
+          order_type: currentOrder.order_type         // assuming currentOrder.order_type is defined
+        };
+  
+        console.log(salesData);
 
-
-
-
-
-
+        try {
+          const salesResponse = await fetch("https://lolos-place-backend.onrender.com/sales/add-sales", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(salesData),
+          });
+          if (!salesResponse.ok) {
+            const errorData = await salesResponse.json();
+            throw new Error(`Error adding sales data for product ${product.name}: ${salesResponse.status} ${errorData.message || ""}`);
+          }
+          console.log(`Sales added for product ${product.name}`);
+        } catch (err) {
+          console.error(`Error adding sales data for product ${product.name}:`, err);
+          throw err;
+        }
+      });
+  
+      await Promise.all(salesPromises);
+      console.log("All sales data added successfully");
+  
+      // Step 5: Redirect to the GCash payment provider
+      window.location.href = url;
+    } catch (error) {
+      console.error("Error occurred in handleGCashPayment:", error);
+      // If an error occurs, attempt to update the order as 'not-paid'
+      try {
+        const notPaidResponse = await fetch(
+          `http://localhost:10000/order/update-not-paid/${order_id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        if (!notPaidResponse.ok) {
+          console.error(`Failed to update to not-paid status: ${notPaidResponse.status}`);
+        } else {
+          console.log("Order updated to not-paid status successfully.");
+        }
+      } catch (updateError) {
+        console.error("Error updating not-paid status:", updateError);
+      }
+    }
+  };
+  
 
 
 
@@ -574,7 +694,7 @@ const handleGCashPayment = async () => {
                         ))}
                       </ul>
                       <p>Total: ₱{order.total_amount}  <strong>{order.ispaid === true ? "PAID" : "NOT PAID"}</strong></p>
-                      <button onClick={() => handleStatusClick(order.order_id,order.customerName, order.numberOfPeople,order.phone,order.date,order.time,order.tableID )}>Details
+                      <button onClick={() => handleStatusClick(order.order_id,order.customerName, order.firstName, order.lastName, order.numberOfPeople,order.phone,order.date,order.time,order.tableID, order.items)}>Details
 </button>
                     </li>
                   );
@@ -622,13 +742,13 @@ const handleGCashPayment = async () => {
           <div className={styles.modalOrder}>
             <h3>Mark Order as Served</h3>
             <h3>Order #{detailss[0]}</h3>
-            <p>Name: {detailss[1] !== null ? detailss[1] : `${detailss[1].firstName} ${detailss[1].lastName}`}</p>  
-                    <p>Number of people: {detailss[2] == null ? "1" : detailss[2]}</p>
-                    <p>Contact Number: {detailss[3] == "09682823420" ? "No number inputed" : detailss[3]}</p>
-                    <p>Date: {formatDate(detailss[4])}</p>
-                    <p>Time: {formatTime(detailss[5])}</p>
-                    <p>Table: {tables.find((table) => table.table_id === detailss[6]) 
-    ? tables.find((table) => table.table_id === detailss[6]).table_name 
+            <p>Name: {detailss[1] !== null ? detailss[1] : `${detailss[2]} ${detailss[3]}`}</p>  
+                    <p>Number of people: {detailss[4] == null ? "1" : detailss[4]}</p>
+                    <p>Contact Number: {detailss[5] == "09682823420" ? "No number inputed" : detailss[3]}</p>
+                    <p>Date: {formatDate(detailss[6])}</p>
+                    <p>Time: {formatTime(detailss[7])}</p>
+                    <p>Table: {tables.find((table) => table.table_id === detailss[8]) 
+    ? tables.find((table) => table.table_id === detailss[8]).table_name 
     : 'No table applied'}
 </p>
             <div className={styles.navButtonOrders}>
@@ -649,9 +769,25 @@ const handleGCashPayment = async () => {
         <div className={styles.modalOrders}>
           <div className={styles.modalOrder}>
             <h3>Pay Order Now</h3>
+            <h3>Order #{detailss[0]}</h3>
+            <p>Name: {detailss[1] !== null ? detailss[1] : `${detailss[2]} ${detailss[3]}`}</p>  
+                    <p>Number of people: {detailss[4] == null ? "1" : detailss[4]}</p>
+                    <p>Contact Number: {detailss[5] == "09682823420" ? "No number inputed" : detailss[3]}</p>
+                    <p>Date: {formatDate(detailss[6])}</p>
+                    <p>Time: {formatTime(detailss[7])}</p>
+                    <p>Table: {tables.find((table) => table.table_id === detailss[8]) 
+    ? tables.find((table) => table.table_id === detailss[8]).table_name 
+    : 'No table applied'}
+</p>
             <div className={styles.navButtonOrders}>
             <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Cancel</button>
-            <button onClick={handleGCashPayment} className={styles.orderButtonsHistory}>GCASH Pay</button>
+            <button 
+  onClick={() => handleGCashPayment(detailss[9], detailss[0])} 
+  className={styles.orderButtonsHistory}
+>
+  GCASH Pay
+</button>
+
               <button onClick={handlePayNow} className={styles.orderButtonsHistory}>CASH Pay</button>
 
             </div>
@@ -662,9 +798,9 @@ const handleGCashPayment = async () => {
 
       )}
 
-<Routes>
-        <Route path="successful" element={<Successful selectedOrderId/>} />
-        <Route path="failed" element={<Failed selectedOrderId/>} />
+      <Routes>
+        <Route path="/successful" element={<Successful/>} />
+        <Route path="/failed" element={<Failed />} />
       </Routes>
 
     </section>

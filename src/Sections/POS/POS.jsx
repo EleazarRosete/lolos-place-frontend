@@ -608,41 +608,6 @@ console.log("Added Orders with ID:", data.orderId);
             };
         
 
-
-            const tempDataResponse = await fetch("https://lolos-place-backend.onrender.com/order/add-temp-data", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    order: order, // Send the order data as text[]
-                    salesdata: [JSON.stringify(updatedSalesData)], // Send sales data as text[]
-                    paidorder: [
-                        JSON.stringify({
-                            orderID: orderID,
-                            mop: paymentMethod,
-                            
-                            total_amount: amount,
-                            delivery: ifDelivery === "true",
-                            reservation_id: reservationID,
-                            order_type: orderType,
-                            items: order,
-                            customer_name: name,
-                            number_of_people: numberOfPeople,
-                            ispaid: true,
-                        }),
-                    ], // Send paid order as text[]
-                }),
-                
-            });
-            if (!tempDataResponse.ok) {
-                throw new Error(`Error adding temp data! status: ${tempDataResponse.status}`);
-            }
-    
-            const tempDataResponseData = await tempDataResponse.json();
-            console.log("Temporary data added successfully:", tempDataResponseData);
-    
-
             // Reset order-related states
             setAmount(0);
             setIfDelivery('false');
@@ -675,140 +640,115 @@ console.log("Added Orders with ID:", data.orderId);
     
     const handleGCashPayment = async () => {
         const admin = 14;
-    
-
-        const paidOrder = {
-            mop: paymentMethod,
-            total_amount: amount,
-            delivery: ifDelivery === 'true',
-            reservation_id: reservationID,
-            order_type: orderType,
-            items: order,
-            customer_name: name,
-            number_of_people: numberOfPeople,
-            ispaid: true,
-            table_id:tableID,
-        };
-
-
-        const response = await fetch(`https://lolos-place-backend.onrender.com/order/add-order`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(paidOrder),
-        });
-        
-        console.log("Response Status:", response.status);  // Check the response status
-        
-        if (!response.ok) {
-            const errorText = await response.text(); // Get the response text to debug
-            console.log("Error response:", errorText);  // Log the raw response body
-            throw new Error(`Error adding order: ${response.statusText}`);
-        }
-        
-        const data = await response.json(); // Parse the response body
-        console.log("Response Data:", data);  // Log the parsed response
-        
-setOrderID(data.orderId);
-console.log("Added Orders with ID:", data.orderId);
-        
-
+      
+        // Removed the add order call; assume orderID is already defined
+        // const paidOrder = { ... } and add order API call removed
+      
         const orderedItem = order[0];
         if (!orderedItem) {
-            console.error("No ordered item found.");
-            return;
+          console.error("No ordered item found.");
+          return;
         }
-    
+      
         const product = products.find((p) => p.menu_id === orderedItem.menu_id);
         if (!product) {
-            console.error("No product found for menu_id:", orderedItem.menu_id);
-            return;
+          console.error("No product found for menu_id:", orderedItem.menu_id);
+          return;
         }
-    
+      
         const price = parseFloat(product?.price) || 0; // Ensure price is a valid number
         const updatedSalesData = {
-            amount: parseFloat((orderedItem.quantity * price).toFixed(2)),
-            service_charge: parseFloat((price * 0.1).toFixed(2)),
-            gross_sales: parseFloat((price + price * 0.1) * orderedItem.quantity),
-            product_name: product.name,
-            category: product.category,
-            quantity_sold: orderedItem.quantity,
-            price_per_unit: parseFloat(price.toFixed(2)),
-            mode_of_payment: paymentMethod,
-            order_type: orderType,
-
+          amount: parseFloat((orderedItem.quantity * price).toFixed(2)),
+          service_charge: parseFloat((price * 0.1).toFixed(2)),
+          gross_sales: parseFloat(((price + price * 0.1) * orderedItem.quantity).toFixed(2)),
+          product_name: product.name,
+          category: product.category,
+          quantity_sold: orderedItem.quantity,
+          price_per_unit: parseFloat(price.toFixed(2)),
+          mode_of_payment: paymentMethod,
+          order_type: orderType,
         };
-        
+      
         try {
-            // Step 1: Create checkout session
-            const response = await fetch("https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    user_id: admin,
-                    lineItems: order.map((product) => ({
-                        quantity: product.quantity,
-                        name: product.name,
-                        price: ((parseFloat(product.price) + parseFloat(product.price) * 0.1) || 0).toFixed(2),
-                    })),
-                    orderId:orderID,
-                }),
-            });
-    
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+          // Step 1: Create checkout session
+          const checkoutResponse = await fetch(
+            "https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: admin,
+                lineItems: order.map((product) => ({
+                  quantity: product.quantity,
+                  name: product.name,
+                  price: (
+                    parseFloat(product.price) +
+                    parseFloat(product.price) * 0.1
+                  ).toFixed(2),
+                })),
+                orderId: orderID, // Assumes orderID is already available
+                from: "pos",
+              }),
             }
-    
-            const responseData = await response.json();
-            const { url } = responseData;
-    
-            if (!url) {
-                console.error("No URL received from the API:", responseData);
-                return;
+          );
+      
+          if (!checkoutResponse.ok) {
+            throw new Error(`HTTP error! status: ${checkoutResponse.status}`);
+          }
+      
+          const checkoutData = await checkoutResponse.json();
+          const { url } = checkoutData;
+      
+          if (!url) {
+            console.error("No URL received from the API:", checkoutData);
+            return;
+          }
+      
+          // Step 2: Add data to temp_data table
+          const tempDataResponse = await fetch(
+            "https://lolos-place-backend.onrender.com/order/add-temp-data",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                order: order, // Send the order data as text[]
+                salesdata: [JSON.stringify(updatedSalesData)], // Send sales data as text[]
+                paidorder: [
+                  JSON.stringify({
+                    orderID: orderID,
+                    mop: paymentMethod,
+                    total_amount: amount,
+                    delivery: ifDelivery === "true",
+                    reservation_id: reservationID,
+                    order_type: orderType,
+                    items: order,
+                    customer_name: name,
+                    number_of_people: numberOfPeople,
+                    ispaid: true,
+                  }),
+                ], // Send paid order as text[]
+              }),
             }
-    
-            // Step 2: Add data to temp_data table
-            const tempDataResponse = await fetch("https://lolos-place-backend.onrender.com/order/add-temp-data", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    order: order, // Send the order data as text[]
-                    salesdata: [JSON.stringify(updatedSalesData)], // Send sales data as text[]
-                    paidorder: [
-                        JSON.stringify({
-                            orderID: orderID,
-                            mop: paymentMethod,
-                            total_amount: amount,
-                            delivery: ifDelivery === "true",
-                            reservation_id: reservationID,
-                            order_type: orderType,
-                            items: order,
-                            customer_name: name,
-                            number_of_people: numberOfPeople,
-                            ispaid: true,
-                        }),
-                    ], // Send paid order as text[]
-                }),
-                
-            });
-            if (!tempDataResponse.ok) {
-                throw new Error(`Error adding temp data! status: ${tempDataResponse.status}`);
-            }
-    
-            const tempDataResponseData = await tempDataResponse.json();
-            console.log("Temporary data added successfully:", tempDataResponseData);
-    
-            // Step 3: Redirect to the payment provider
-            window.location.href = url; // Redirect to the GCash payment provider
-    
+          );
+      
+          if (!tempDataResponse.ok) {
+            throw new Error(`Error adding temp data! status: ${tempDataResponse.status}`);
+          }
+      
+          const tempDataResponseData = await tempDataResponse.json();
+          console.log("Temporary data added successfully:", tempDataResponseData);
+      
+          // Step 3: Redirect to the payment provider
+          window.location.href = url; // Redirect to the GCash payment provider
         } catch (error) {
-            console.error("Error during payment and data addition:", error);
+          console.error("Error during payment and data addition:", error);
         }
-    };
-
+      };
+      
 
     const processOrder = () => {
         const serviceCharge = order.reduce((total, item) =>(total + item.total) * 0.1, 0);
@@ -827,6 +767,9 @@ console.log("Added Orders with ID:", data.orderId);
 
                 if(paymentMethod == "GCash"){
                     setHandleAddNameAndNumberOfPeople(true);
+                }
+                else if(paymentMethod == "Paylater"){
+                    handleOpenModalPayLater();
                 }
                 else{
                     setGCashtDetails(false);
@@ -1014,8 +957,12 @@ const handleRemoveFromCart = (menu_id) => {
                             <input type="radio" name="payment" value="Cash" checked={paymentMethod === 'Cash'}
                     onClick={selectPaymentMethod}/> Cash
                         </label>
+                        <label>
+                            <input type="radio" name="payment" value="Paylater" checked={paymentMethod === 'Paylater'}
+                    onClick={selectPaymentMethod}/> Pay later
+                        </label>
                     </div>
-
+                    
 
                     <div className={styles.additionalOptions}>
                     <label>
@@ -1129,13 +1076,6 @@ const handleRemoveFromCart = (menu_id) => {
 
                     <div className={styles.navButton}>
                         <button className={styles.cancelPaymentButton} onClick={handleCancelPayment}>CANCEL</button>
-                        <button 
-                            onClick={handleOpenModalPayLater} 
-                            className={styles.cancelPaymentButton}
-                            disabled={!name || !numberOfPeople} // Disable the button if either name or numPeople is empty
-                        >
-                            Pay later
-                        </button>
                         <button 
                             onClick={handleOpenModal} 
                             className={styles.cancelPaymentButton}

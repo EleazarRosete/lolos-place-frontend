@@ -75,6 +75,29 @@ const SalesForecastGraph = () => {
     fetchSalesData();
   }, [selectedYear]);
 
+  // Calculate dynamic Y-axis domain and ticks based on salesData
+  const getYAxisConfig = () => {
+    if (salesData.length === 0) return { domain: [0, 400000], ticks: [0, 100000, 200000, 300000, 400000] };
+
+    const salesValues = salesData.map(item => item.total_sales);
+    const minSales = Math.min(...salesValues);
+    const maxSales = Math.max(...salesValues);
+
+    // Calculate the range, and adjust it to make the graph more readable
+    const domainMin = Math.floor(minSales / 50000) * 50000; // Round down to the nearest 50,000
+    const domainMax = Math.ceil(maxSales / 50000) * 50000; // Round up to the nearest 50,000
+
+    // Create ticks based on the domain range
+    const ticks = [];
+    for (let i = domainMin; i <= domainMax; i += 50000) {
+      ticks.push(i);
+    }
+
+    return { domain: [domainMin, domainMax], ticks };
+  };
+
+  const { domain, ticks } = getYAxisConfig();
+
   return (
     <div style={{ width: "100%", height: 400, padding: 20 }}>
       <select
@@ -97,6 +120,8 @@ const SalesForecastGraph = () => {
           <YAxis 
             tickFormatter={formatNumber} 
             label={{ value: "Total Sales", angle: -90, position: "insideLeft" }} 
+            domain={domain} 
+            ticks={ticks}
           />
           <Tooltip formatter={(value) => formatNumber(value)} />
           <Legend />

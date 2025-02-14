@@ -2,63 +2,46 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Failed.module.css";
 
-function Failed({ order_id }) {
-    const navigate = useNavigate();
+function Failed() {
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchDataAndDelete = async () => {
-            try {
-                // Fetch the temp data
-                const response = await fetch("https://lolos-place-backend.onrender.com/order/get-temp-data");
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch temp data. Status: ${response.status}`);
-                }
-                const data = await response.json();
-                console.log(data.purchases_id);
+  useEffect(() => {
+    const deleteTempData = async () => {
+      try {
+        const response = await fetch("http://localhost:10000/order/delete-temp-data", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-                // Check if data exists and has the needed property
-                if (data && data.paidOrder && data.paidOrder.length > 0) {
-                    // Iterate through the paidOrder array and find the matching order_id
-                    const matchingOrder = data.paidOrder.find(order => order.order_id === order_id);
-                    
-                    if (matchingOrder) {
-                        // If matching order found, delete the corresponding temp data
-                        const deleteResponse = await fetch(`https://lolos-place-backend.onrender.com/order/delete-temp-data/${matchingOrder.purchases_id}`, {
-                            method: 'DELETE',
-                            headers: { 'Content-Type': 'application/json' },
-                        });
+        if (!response.ok) {
+          throw new Error(`Failed to delete temp data. Status: ${response.status}`);
+        }
 
-                        if (!deleteResponse.ok) {
-                            throw new Error(`Failed to delete temp data. Status: ${deleteResponse.status}`);
-                        }
-                    } else {
-                        throw new Error('Order ID not found in paid orders');
-                    }
-                } else {
-                    throw new Error('No paid orders found in temp data');
-                }
+        console.log("Temp data deleted successfully");
 
-                // Navigate after 1 second
-                const timer = setTimeout(() => {
-                    navigate("/admin/pos");
-                }, 1000);
+        // Navigate after 1 second
+        const timer = setTimeout(() => {
+          navigate("/admin/pos");
+        }, 1000);
 
-                return () => clearTimeout(timer); // Cleanup the timer on unmount
-            } catch (error) {
-                console.error(error);
-            }
-        };
+        return () => clearTimeout(timer);
+      } catch (error) {
+        console.error("Error deleting temp data:", error);
+      }
+    };
 
-        fetchDataAndDelete();
-    }, [navigate, order_id]);
+    deleteTempData();
+  }, [navigate]);
 
-    return (
-        <section className={styles.modalPOS}>
-            <div className={styles.orderReceipt}>
-                <h1>Failed!</h1>
-            </div>
-        </section>
-    );
+  return (
+    <section className={styles.modalPOS}>
+      <div className={styles.orderReceipt}>
+        <h1>Failed!</h1>
+      </div>
+    </section>
+  );
 }
 
 export default Failed;

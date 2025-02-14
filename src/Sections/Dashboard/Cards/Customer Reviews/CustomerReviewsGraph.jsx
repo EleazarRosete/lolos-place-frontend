@@ -1,116 +1,180 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Pie } from 'react-chartjs-2'; // Import Pie chart from react-chartjs-2
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'; // Import necessary components from chart.js
-import styles from './CustomerReviewsGraph.module.css';
+import React, { useState, useEffect } from "react";
+import {
+  PieChart,
+  Pie,
+  Sector,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
-// Register Chart.js components
-ChartJS.register(ArcElement, Tooltip, Legend);
+const COLORS = ["#4CAF50", "#F44336", "#FFC107"];
+
+// Custom active shape for the hovered slice
+const renderActiveShape = (props) => {
+  const RADIAN = Math.PI / 180;
+  const {
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    startAngle,
+    endAngle,
+    fill,
+    payload,
+    percent,
+  } = props;
+  const sin = Math.sin(-RADIAN * midAngle);
+  const cos = Math.cos(-RADIAN * midAngle);
+  const sx = cx + (outerRadius + 10) * cos;
+  const sy = cy + (outerRadius + 10) * sin;
+  const mx = cx + (outerRadius + 30) * cos;
+  const my = cy + (outerRadius + 30) * sin;
+  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+  const ey = my;
+  
+  return (
+    <g>
+      <text
+        x={cx}
+        y={cy}
+        dy={8}
+        textAnchor="middle"
+        fill={fill}
+        style={{ fontWeight: "bold" }}
+      >
+        {payload.name}
+      </text>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+      <Sector
+        cx={cx}
+        cy={cy}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        innerRadius={outerRadius + 6}
+        outerRadius={outerRadius + 10}
+        fill={fill}
+      />
+      <path
+        d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
+        stroke={fill}
+        fill="none"
+      />
+      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+      <text
+        x={ex + (cos >= 0 ? 1 : -1) * 12}
+        y={ey}
+        textAnchor={cos >= 0 ? "start" : "end"}
+        fill="#333"
+      >
+        {(percent * 100).toFixed(1)}%
+      </text>
+    </g>
+  );
+};
 
 const CustomerReviewsGraph = () => {
-  const [graphImage, setGraphImage] = useState(null);
-  const [feedbackStats, setFeedbackStats] = useState(null);
-  const [error, setError] = useState(null);
+  const [feedbackData, setFeedbackData] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchGraphData = async () => {
-      try {
-        setLoading(true);
-
-        // Fetch the graph image (not used in the pie chart version)
-        const graphResponse = await axios.get(
-          'https://lolos-place-backend.onrender.com/graphs/call-feedback-graph',
-          { responseType: 'blob' }
-        );
-
-        // Check if the response is of the correct type
-        if (graphResponse.data instanceof Blob) {
-          const imageUrl = URL.createObjectURL(graphResponse.data);
-          setGraphImage(imageUrl);
-        } else {
-          throw new Error('Invalid response format for graph image');
-        }
-
-        // Fetch the feedback statistics
-        const statsResponse = await axios.get('https://lolos-place-backend.onrender.com/graphs/call-feedback-stats');
-        setFeedbackStats(statsResponse.data);
-
+    fetch("http://localhost:10000/graphs/feedback-stats")
+      .then((response) => response.json())
+      .then((data) => {
+        // Convert string counts to numbers
+        data.positive_count = Number(data.positive_count);
+        data.negative_count = Number(data.negative_count);
+        data.neutral_count = Number(data.neutral_count);
+        setFeedbackData(data);
         setLoading(false);
-      } catch (err) {
-        setError('Error fetching data or graph');
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setError(error);
         setLoading(false);
-        console.error(err);
-      }
-    };
-
-    fetchGraphData();
+      });
   }, []);
 
-  const generateDynamicInsight = () => {
-    if (!feedbackStats) return 'Loading insights...';
+  if (loading) return <p>Loading feedback data...</p>;
+  if (error) return <p>Error loading data. Please try again later.</p>;
+  if (!feedbackData) return <p>No feedback data available.</p>;
 
-    const { total, positive, negative, neutral } = feedbackStats;
-    const positivePercent = ((positive / total) * 100).toFixed(1);
-    const negativePercent = ((negative / total) * 100).toFixed(1);
-    const neutralPercent = ((neutral / total) * 100).toFixed(1);
+  const { positive_count, negative_count, neutral_count } = feedbackData;
+  const totalFeedbacks = positive_count + negative_count + neutral_count;
 
-    if (positive > negative && positive > neutral) {
-      return `The majority of feedback (${positivePercent}%) is positive, reflecting strong customer satisfaction.`;
-    } else if (negative > positive && negative > neutral) {
-      return `The majority of feedback (${negativePercent}%) is negative, indicating areas for improvement in customer satisfaction.`;
-    } else if (neutral > positive && neutral > negative) {
-      return `Most feedback (${neutralPercent}%) is neutral, suggesting mixed customer experiences.`;
-    } else {
-      return `Feedback sentiment is evenly distributed: Positive (${positivePercent}%), Negative (${negativePercent}%), Neutral (${neutralPercent}%).`;
-    }
-  };
+  const chartData = [
+    { name: "Positive", value: positive_count },
+    { name: "Negative", value: negative_count },
+    { name: "Neutral", value: neutral_count },
+  ];
 
-  const pieChartData = () => {
-    if (!feedbackStats) return null;
-
-    const { positive, negative, neutral } = feedbackStats;
-    const total = positive + negative + neutral;
-
-    return {
-      labels: ['Positive', 'Negative', 'Neutral'],
-      datasets: [
-        {
-          data: [
-            (positive / total) * 100,
-            (negative / total) * 100,
-            (neutral / total) * 100,
-          ],
-          backgroundColor: ['#4caf50', '#f44336', '#9e9e9e'],
-          hoverBackgroundColor: ['#388e3c', '#d32f2f', '#616161'],
-        },
-      ],
-    };
-  };
-
-  if (loading) {
-    return <div className={styles.loading}>Loading data...</div>;
+  // Generate dynamic report based on feedback distribution
+  let reportMessage = "";
+  if (positive_count > negative_count && positive_count > neutral_count) {
+    reportMessage =
+      "Most of the feedback is positive, indicating high customer satisfaction. We should continue to improve and reward loyal customers.";
+  } else if (negative_count > positive_count && negative_count > neutral_count) {
+    reportMessage =
+      "There is a high percentage of negative feedback, suggesting potential issues that need urgent attention. Analyzing customer concerns and addressing them should be a priority.";
+  } else if (neutral_count > positive_count && neutral_count > negative_count) {
+    reportMessage =
+      "A significant portion of the feedback is neutral, meaning customers are not fully engaged. Improvements in customer experience may be necessary to boost satisfaction.";
+  } else {
+    reportMessage =
+      "Feedback is fairly balanced. Continuous monitoring and improvements are essential to maintain customer satisfaction.";
   }
 
-  if (error) {
-    return <div className={styles.error}>{error}</div>;
-  }
+  const onPieEnter = (data, index) => {
+    setActiveIndex(index);
+  };
 
   return (
-    <section className={styles.section}>
-            <h1>Customer Reviews</h1>
-      <div className={styles.graphContainer}>
-        {feedbackStats ? (
-          <>
-            <div className={styles.pieChart}>
-              <Pie data={pieChartData()} />
-            </div>
-          </>
-        ) : (
-          <p className={styles.loading}>Loading graph...</p>
-        )}
+    <div style={{ textAlign: "center" }}>
+      <h2>Customer Feedback</h2>
+      <div style={{ margin: "0 auto", width: 400 }}>
+        <ResponsiveContainer width={400} height={300}>
+          <PieChart>
+            <Pie
+              activeIndex={activeIndex}
+              activeShape={renderActiveShape}
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={100}
+              fill="#8884d8"
+              dataKey="value"
+              onMouseEnter={onPieEnter}
+            >
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+            {/* Updated Tooltip: shows the count value instead of NaN% */}
+            <Tooltip formatter={(value, name) => [value, name]} />
+            <Legend verticalAlign="bottom" align="center" />
+          </PieChart>
+        </ResponsiveContainer>
       </div>
-    </section>
+      <h3>Total Feedbacks: {totalFeedbacks}</h3>
+      <h4>Report:</h4>
+      <p>{reportMessage}</p>
+    </div>
   );
 };
 
