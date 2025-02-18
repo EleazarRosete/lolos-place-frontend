@@ -86,6 +86,7 @@ function Inventory() {
     };
 
     const handleEditItem = (id) => {
+
         const itemToEdit = product.find(item => item.menu_id === id);
         setEditingItem(itemToEdit);
         setIsModalOpen(true);
@@ -160,10 +161,6 @@ function Inventory() {
                                 <th>Name</th>
                                 <th>Category</th>
                                 <th>Price</th>
-                                <th>Image</th>
-                                <th>Description</th>
-                                <th>Items</th>
-                                <th>Stocks</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

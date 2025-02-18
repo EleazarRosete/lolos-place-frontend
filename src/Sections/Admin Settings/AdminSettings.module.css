@@ -118,3 +118,11 @@ button {
         font-size: 0.875rem;
     }
 }
+
+@media (max-width: 1220px) {
+    .section {
+        width: 100%;
+        padding: 1rem;
+        left: 0;
+    }
+}

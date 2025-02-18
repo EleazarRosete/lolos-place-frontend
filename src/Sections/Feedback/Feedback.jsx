@@ -10,7 +10,7 @@ function Feedback() {
 
     const getComments = async () => {
         try {
-            const response = await fetch("https://lolos-place-backend.onrender.com/feedback/get-comment", {
+            const response = await fetch("http://localhost:10000/feedback/get-comment", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -39,7 +39,7 @@ function Feedback() {
         if (sentiment === "all") {
             setFilteredComments(comments);
         } else {
-            const filtered = comments.filter((c) => c.sentiment === sentiment);
+            const filtered = comments.filter((c) => c.result.toLowerCase() === sentiment.toLowerCase());
             setFilteredComments(filtered);
         }
         setFilterSentiment(sentiment);
@@ -51,7 +51,7 @@ function Feedback() {
                 <h1 className={styles.textStyle1}>List of All Feedbacks</h1>
                 <div className={styles.controls}>
                     <button className={styles.sort} onClick={sortById}>
-                        Sort by ID ({sortOrder === "desc" ? "Newest First" : "Oldest First"})
+                        Sort ({sortOrder === "desc" ? "Newest First" : "Oldest First"})
                     </button>
                     <select
                         className={styles.filter}
@@ -73,7 +73,8 @@ function Feedback() {
                             username={c.name}
                             comment={c.comment}
                             date={c.date}
-                            sentiment={c.sentiment}
+                            sentiment={c.result} // Update sentiment prop to use 'result'
+                            ratings={c.ratings}
                         />
                     ))
                 ) : (

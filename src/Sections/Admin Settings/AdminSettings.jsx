@@ -4,6 +4,8 @@ import styles from "./AdminSettings.module.css";
 import axios from "axios";
 
 function Admin() {
+    const [selectedRole, setSelectedRole] = useState("admin");
+
     const [adminData, setAdminData] = useState({
         firstName: "",
         lastName: "",
@@ -17,6 +19,18 @@ function Admin() {
     });
 
     const [cashierData, setCashierData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        address: "",
+        password: "",
+        oldPassword: "",
+        newPassword: "",  
+        confirmPassword: ""  
+    });
+
+    const [kitchenData, setKitchenData] = useState({
         firstName: "",
         lastName: "",
         email: "",
@@ -64,6 +78,23 @@ function Admin() {
                 });
             })
             .catch(error => console.error("Error fetching cashier data:", error));
+
+                    // Fetch Kitchen Data
+        fetch('http://localhost:10000/user/get-user?id=55')
+        .then(response => response.json())
+        .then(data => {
+            setKitchenData({
+                firstName: data.first_name || "",
+                lastName: data.last_name || "",
+                email: data.email || "",
+                phone: data.phone || "",
+                address: data.address || "",
+                password: data.password || "",
+                newPassword: "",  // This should remain empty initially until the user enters a new password
+                confirmPassword: "" // This should remain empty initially until the user enters a new password
+            });
+        })
+        .catch(error => console.error("Error fetching admin data:", error));
     }, []);
     
     
@@ -86,12 +117,14 @@ function Admin() {
     
     const handleSave = async () => {
         let passwordsMatch = true; // Flag to track password mismatch
-        console.log("OLD PASS", adminData.oldPassword);
-        console.log("OLD PASS", cashierData.oldPassword);
+        console.log("OLD PASS A", adminData.oldPassword);
+        console.log("OLD PASS C", cashierData.oldPassword);
+        console.log("OLD PASS K", kitchenData.oldPassword);
+
 
         // Check if passwords match
-        if (adminData.newPassword && cashierData.newPassword) {
-            if (adminData.newPassword !== adminData.confirmPassword || cashierData.newPassword !== cashierData.confirmPassword) {
+        if (adminData.newPassword || cashierData.newPassword || kitchenData.newPassword) {
+            if (adminData.newPassword !== adminData.confirmPassword || cashierData.newPassword !== cashierData.confirmPassword || kitchenData.newPassword !== kitchenData.confirmPassword) {
                 alert("New password and confirm password do not match.");
                 passwordsMatch = false; // Set flag to false
             }
@@ -182,6 +215,16 @@ function Admin() {
                 user_id: 13
             };
 
+            const updatedKitchenData = {
+                address: cashierData.address,
+                email: cashierData.email,
+                first_name: cashierData.firstName,
+                last_name: cashierData.lastName,
+                password: cashierData.newPassword || cashierData.password, // Only include password if it's updated
+                phone: cashierData.phone,
+                user_id: 55
+            };
+
             // Update user data if fields are not empty
             if (adminData.firstName !== "" || adminData.email !== "" || adminData.phone !== "" || adminData.address !== "") {
                 const responseAdmin = await fetch('http://localhost:10000/user/update-user', {
@@ -205,6 +248,20 @@ function Admin() {
                 } else {
                     alert("Failed to update user data.");
                 }
+
+                const responseKitchen = await fetch('http://localhost:10000/user/update-user', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedKitchenData)
+                });
+    
+                if (responseAdmin.ok && responseCashier.ok && responseKitchen.ok) {
+                    navigate('/admin');
+                } else {
+                    alert("Failed to update user data.");
+                }
             }
         } catch (error) {
             console.error("Error updating user data:", error);
@@ -216,126 +273,81 @@ function Admin() {
         navigate('/admin');
     };
 
+
+    const roleData = {
+        admin: adminData,
+        cashier: cashierData,
+        kitchen: kitchenData,
+    };
+
+
+
     return (
         <section className={styles.section}>
             <h2>Account Settings</h2>
             <div className={styles.accountSettingContainer}>
-            <div className={styles.selectAccount}>
-                <button>Admin Setting</button>
-                <button>Cashier Setting</button>
-                <button>Kitchen Setting</button>
-
-            </div>
-            <div className={styles.accountSetting}>
-                <h3>Admin Settings</h3>
-                <label>First Name:</label>
-                <input 
-                    type="text" 
-                    name="firstName" 
-                    value={adminData.firstName} 
-                    onChange={(e) => handleChange(e, "admin")} 
-                />
-                <label>Last Name:</label>
-                <input 
-                    type="text" 
-                    name="lastName" 
-                    value={adminData.lastName} 
-                    onChange={(e) => handleChange(e, "admin")} 
-                />
-                <label>Change Email:</label>
-                <input 
-                    type="email" 
-                    name="email" 
-                    value={adminData.email} 
-                    onChange={(e) => handleChange(e, "admin")} 
-                />
-                <label>Change Phone:</label>
-                <input 
-                    type="tel" 
-                    name="phone" 
-                    value={adminData.phone} 
-                    onChange={(e) => handleChange(e, "admin")} 
-                />
-                                <label>Old Password:</label>
-                <input 
-                    type="password" 
-                    name="oldPassword" 
-                    value={adminData.oldPassword} 
-                    onChange={(e) => handleChange(e, "admin")} 
-                />
-                <label>New Password:</label>
-                <input 
-                    type="password" 
-                    name="newPassword" 
-                    value={adminData.newPassword} 
-                    onChange={(e) => handleChange(e, "admin")} 
-                />
-                <label>Confirm New Password:</label>
-                <input 
-                    type="password" 
-                    name="confirmPassword" 
-                    value={adminData.confirmPassword} 
-                    onChange={(e) => handleChange(e, "admin")} 
-                />
-                
-                <h3>Cashier Settings</h3>
-                <label>First Name:</label>
-                <input 
-                    type="text" 
-                    name="firstName" 
-                    value={cashierData.firstName} 
-                    onChange={(e) => handleChange(e, "cashier")} 
-                />
-                <label>Last Name:</label>
-                <input 
-                    type="text" 
-                    name="lastName" 
-                    value={cashierData.lastName} 
-                    onChange={(e) => handleChange(e, "cashier")} 
-                />
-                <label>Change Email:</label>
-                <input 
-                    type="email" 
-                    name="email" 
-                    value={cashierData.email} 
-                    onChange={(e) => handleChange(e, "cashier")} 
-                />
-                <label>Change Phone:</label>
-                <input 
-                    type="tel" 
-                    name="phone" 
-                    value={cashierData.phone} 
-                    onChange={(e) => handleChange(e, "cashier")} 
-                />
-<label>Old Password:</label>
-<input
-    type="password"
-    name="oldPassword"
-    value={cashierData.oldPassword}
-    onChange={(e) => handleChange(e, "cashier")}
-/>
-
-                <label>New Password:</label>
-                <input 
-                    type="password" 
-                    name="newPassword" 
-                    value={cashierData.newPassword} 
-                    onChange={(e) => handleChange(e, "cashier")} 
-                />
-                <label>Confirm New Password:</label>
-                <input 
-                    type="password" 
-                    name="confirmPassword" 
-                    value={cashierData.confirmPassword} 
-                    onChange={(e) => handleChange(e, "cashier")} 
-                />
-                <div className={styles.buttons}>
-                    <button className={styles.cancelBtn} onClick={handleCancel}>Cancel</button>
-                    <button className={styles.saveBtn} onClick={handleSave}>Save</button>
+                <div className={styles.selectAccount}>
+                    <button onClick={() => setSelectedRole("admin")}>Admin Setting</button>
+                    <button onClick={() => setSelectedRole("cashier")}>Cashier Setting</button>
+                    <button onClick={() => setSelectedRole("kitchen")}>Kitchen Setting</button>
+                </div>
+                <div className={styles.accountSetting}>
+                    <h3>{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} Settings</h3>
+                    <label>First Name:</label>
+                    <input 
+                        type="text" 
+                        name="firstName" 
+                        value={roleData[selectedRole].firstName} 
+                        onChange={(e) => handleChange(e, selectedRole)} 
+                    />
+                    <label>Last Name:</label>
+                    <input 
+                        type="text" 
+                        name="lastName" 
+                        value={roleData[selectedRole].lastName} 
+                        onChange={(e) => handleChange(e, selectedRole)} 
+                    />
+                    <label>Change Email:</label>
+                    <input 
+                        type="email" 
+                        name="email" 
+                        value={roleData[selectedRole].email} 
+                        onChange={(e) => handleChange(e, selectedRole)} 
+                    />
+                    <label>Change Phone:</label>
+                    <input 
+                        type="tel" 
+                        name="phone" 
+                        value={roleData[selectedRole].phone} 
+                        onChange={(e) => handleChange(e, selectedRole)} 
+                    />
+                    <label>Old Password:</label>
+                    <input 
+                        type="password" 
+                        name="oldPassword" 
+                        value={roleData[selectedRole].oldPassword} 
+                        onChange={(e) => handleChange(e, selectedRole)} 
+                    />
+                    <label>New Password:</label>
+                    <input 
+                        type="password" 
+                        name="newPassword" 
+                        value={roleData[selectedRole].newPassword} 
+                        onChange={(e) => handleChange(e, selectedRole)} 
+                    />
+                    <label>Confirm New Password:</label>
+                    <input 
+                        type="password" 
+                        name="confirmPassword" 
+                        value={roleData[selectedRole].confirmPassword} 
+                        onChange={(e) => handleChange(e, selectedRole)} 
+                    />
+                    <div className={styles.buttons}>
+                        <button className={styles.cancelBtn} onClick={handleCancel}>Cancel</button>
+                        <button className={styles.saveBtn} onClick={handleSave}>Save</button>
+                    </div>
                 </div>
             </div>
-            </div>
-          
         </section>
     );
 }

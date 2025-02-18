@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom"; 
 import styles from './AddItemModal.module.css';
 
 function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -10,6 +12,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
         items: [''],
         img: '',
         stocks: '',
+        main_category:'',
     });
 
     useEffect(() => {
@@ -32,6 +35,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
             items: [''],
             img: '',
             stocks: '',
+            main_category:'',
         });
     };
 
@@ -88,7 +92,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
         const filteredItems = formData.items.filter(item => item.trim() !== '');
 
         const updatedFormData = { ...formData, items: filteredItems };
-
+        console.log("DATAAA", updatedFormData);
         try {
             if (item) {
                 await handleUpdateItem(updatedFormData);
@@ -105,7 +109,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
 
     const handleUpdateItem = async (updatedItem) => {
         try {
-            const response = await fetch(`https://lolos-place-backend.onrender.com/menu/edit-product/${updatedItem.id}`, {
+            const response = await fetch(`http://localhost:10000/menu/edit-product/${updatedItem.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -123,7 +127,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
 
     const handleAddItem = async (newItem) => {
         try {
-            const response = await fetch('https://lolos-place-backend.onrender.com/menu/add-product', {
+            const response = await fetch('http://localhost:10000/menu/add-product', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -136,7 +140,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
             }
 
             const addedProduct = await response.json();
-            return addedProduct;
+            navigate("/admin");
         } catch (err) {
             console.error('Error adding item:', err.message);
         }
@@ -155,6 +159,16 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
                             className={styles.modalInput}
                             placeholder="Product Name"
                             value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                        <label>Main Category:</label>
+                        <input
+                            type="text"
+                            name="main_category"
+                            className={styles.modalInput}
+                            placeholder="Main Category"
+                            value={formData.main_category}
                             onChange={handleChange}
                             required
                         />

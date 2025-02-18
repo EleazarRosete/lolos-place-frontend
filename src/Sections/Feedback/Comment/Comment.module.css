@@ -1,27 +1,33 @@
 .commentContainer {
     width: 100%;
-    max-width: 95%;
+    max-width: 96%;
     height: auto;
     padding: 1rem;
-    background-color: #FEF7E1; /* Set background color to FEF7E1 */
+    background-color: #FEF7E1;
     border-radius: 0.4rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     cursor: pointer;
-    gap: 0.5rem;
-    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
-    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
-    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    box-shadow: 0px 8px 8px 0px rgba(62, 39, 35, 1);
     border-top: 1px solid #3e2723;
+    transition: transform 0.2s ease-in-out;
+    margin-bottom: 1rem;
+}
+
+/* Hover Effect */
+.commentContainer:hover {
+    transform: scale(1.02);
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    flex-wrap: wrap;
     background-color: transparent;
+    margin-bottom: 0.5rem;
 }
 
 .txtBox {
@@ -30,37 +36,129 @@
     justify-content: flex-start;
     align-items: center;
     background-color: transparent;
+    word-wrap: break-word;
+    margin-bottom: 0.5rem;
 }
 
+/* Text Styles */
 .txtStyle {
-    font-size: 1.2rem;
+    font-size: 1rem;
     line-height: 1.6;
-    background-color: transparent;
-    word-wrap: break-word;
-    color: #3e2723; /* Set text color to F2F2F7 */
+    color: #3e2723;
     font-family: 'Arial', sans-serif;
     text-align: start;
+    word-wrap: break-word;
+}
+
+/* Responsive Text Adjustments */
+@media (max-width: 768px) {
+    .commentContainer{
+        width: 100%;
+        }
+    
+    .txtStyle {
+        font-size: 0.9rem;
+    }
 }
 
 .dateStyle {
-    font-size: 0.9rem;
-    color: #3e2723; /* Set text color to F2F2F7 */
+    font-size: 0.95rem;
+    color: #3e2723;
     font-family: 'Arial', sans-serif;
-    background-color: transparent;
+    font-style: italic;
+    margin-top: 0.2rem;
+}
+
+/* Responsive Date Adjustments */
+@media (max-width: 768px) {
+    .commentContainer{
+        width: 100%;
+        }
+    
+    .dateStyle {
+        font-size: 0.85rem;
+    }
 }
 
 .usernameStyle {
-    font-size: 1.5rem; /* Increased font size for username */
-    font-weight: 600; /* Slightly bold */
-    color: #3e2723; /* Set text color to F2F2F7 */
-    background-color: transparent;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #3e2723;
+    margin-bottom: 0.2rem;
 }
 
+/* Responsive Username */
+@media (max-width: 768px) {
+    .commentContainer{
+        width: 100%;
+        }
+    
+    .usernameStyle {
+        font-size: 1rem;
+    }
+}
+
+/* Sentiment Styling */
 .sentimentStyle {
-    font-size: 1rem;
-    font-weight: 500; /* Medium weight */
-    margin-top: 0.5rem;
-    opacity: 0.9; /* Slightly faded for softer appearance */
+    font-size: 1.125rem;
+    font-weight: 500;
+    opacity: 0.9;
     background-color: transparent;
-    color: #F2F2F7; /* Set text color to F2F2F7 */
+    margin-top: 0.5rem;
+}
+
+/* Star Rating Styles */
+.ratings {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.ratings div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.3rem;
+}
+
+.filledStar {
+    color: gold;
+    font-size: 1.2rem;
+}
+
+.emptyStar {
+    color: #ccc;
+    font-size: 1.2rem;
+}
+
+.ratings strong {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Mobile-friendly Layout */
+@media (max-width: 480px) {
+    
+
+    .commentContainer{
+    width: 100%;
+    }
+
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .txtBox {
+        text-align: left;
+    }
+
+    .commentContainer {
+        padding: 0.8rem;
+    }
+
+    .ratings {
+        margin-top: 0.5rem;
+    }
 }

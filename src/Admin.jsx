@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import styles from './Admin.module.css';
 import Dashboard from './Sections/Dashboard/Dashboard.jsx';
@@ -17,10 +17,34 @@ import feedbackIcon from './assets/feedback.png';
 import analyticsIcon from './assets/analytics.png';
 import logoutIcon from './assets/logout.png';
 
+
+
+
+
+
+
+const useMediaQuery = (query) => {
+    const [matches, setMatches] = useState(window.matchMedia(query).matches);
+  
+    useEffect(() => {
+      const media = window.matchMedia(query);
+      const listener = () => setMatches(media.matches);
+      
+      media.addEventListener("change", listener);
+      
+      return () => media.removeEventListener("change", listener);
+    }, [query]);
+  
+    return matches;
+  };
+
+
+
 const Admin = () => {
     const navigate = useNavigate();
     const [isLogoutOpen, setIsLogoutOpen] = useState(false);
     const [isAsideVisible, setIsAsideVisible] = useState(true);
+    const isLargeScreen = useMediaQuery("(min-width: 1221px)");
 
     const handleLogout = () => {
         setIsLogoutOpen(true);
@@ -41,11 +65,12 @@ const Admin = () => {
 
     const toggleAside = () => {
         setIsAsideVisible(prevState => !prevState);
+        console.log(isAsideVisible);
     };
 
     return (
         <section className={styles.MainSection}>
-            <aside className={`${styles.aside} ${!isAsideVisible ? styles.hidden : ''}`}>
+            <aside className={`${styles.aside} ${!isAsideVisible ? styles.hidden : styles.show} `}>
                 <div className={styles.logoContainer}>
                     <img src={user} alt="user" className={styles.userIcon} />
                     <h1 className={styles.lolosplaceuser}>LoLo's Place Admin</h1>
@@ -71,9 +96,6 @@ const Admin = () => {
                 <button className={styles.sideButton} onClick={() => navigateToSection('adminSettings')}>
                     <img src={analyticsIcon} alt="adminSettings" className={styles.buttonIcons} /> Admin
                 </button>
-                </div>
-
-                <div className={styles.navgroup2}>
                 <button className={styles.sideButton} onClick={handleLogout}>
                     <img src={logoutIcon} alt="logout" className={styles.buttonIcons} /> Logout
                 </button>
@@ -81,20 +103,7 @@ const Admin = () => {
                 </div>
                 
 
-                {isLogoutOpen && (
-                    <div className={styles.modalLogout}>
-                        <div className={styles.logoutOverlay}>
-                            <div className={styles.logout}>
-                                <h2>Confirm logout</h2>
-                                <p>Are you sure you want to log out?</p>
-                                <div className={styles.logoutButtons}>
-                                    <button onClick={confirmLogout} className={styles.confirmButton}>Yes</button>
-                                    <button onClick={cancelLogout} className={styles.cancelButton}>No</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+  
             </aside>
 
             <div className={styles.mainContent}>
@@ -112,6 +121,24 @@ const Admin = () => {
             <button className={styles.burgerButton} onClick={toggleAside}>
                 ☰
             </button>
+
+            {isLogoutOpen && (
+                    <div className={styles.logoutModal}>
+                            <div className={styles.logoutOverlay}>
+                            <div className={styles.logout}>
+                                <h2>Confirm logout</h2>
+                                <p>Are you sure you want to log out?</p>
+                                <div className={styles.logoutButtons}>
+                                    <button onClick={confirmLogout} className={styles.confirmButton}>Yes</button>
+                                    <button onClick={cancelLogout} className={styles.cancelButton}>No</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                )}
+
+
         </section>
     );
 };
