@@ -12,11 +12,6 @@ import Feedback from './Customer/Feedback/Feedback'
 import { CustomerProvider } from './api/CustomerProvider';
 import SuccessPage from './Customer/SuccessPage/SuccessPage';
 import OrderHistory from './Customer/OrderHistory/OrderHistory';
-import Admin from './Admin';
-import Cashier from './Cashier';
-import Kitchen from './Kitchen';
-
-
 
 
 
@@ -38,11 +33,6 @@ function App() {
         <Route path='/feedback' element={<Feedback/>}/>
         <Route path='/successpage' element={<SuccessPage/>}/>
         <Route path='/order-history' element={<OrderHistory/>}/>
-        <Route path="/admin/*" element={<Admin />} />
-        <Route path="/cashier/*" element={<Cashier />} />
-        <Route path="/kitchen/*" element={<Kitchen />} />
-
-
       </Routes>
     </Router>
     </CustomerProvider>

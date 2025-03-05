@@ -12,6 +12,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import cartImage from '../../assets/cart.png';
+import { format } from 'date-fns';
 
 const Reservation = () => {
   const { customer, menuData, cartReservations, setCartReservations, formData, setFormData, isAdvanceOrder, setIsAdvanceOrder, initialFormData } = useCustomer();
@@ -23,12 +24,35 @@ const Reservation = () => {
   const [scrollPos, setScrollPos] = useState(window.scrollY);
   const [formValid, setFormValid] = useState(false);
   const navigate = useNavigate();
+  const [mainFilter, setMainFilter] = useState('all');
+  const [subFilter, setSubFilter] = useState(null);
+  const [availableSlots, setAvailableSlots] = useState(100); // State for available slots
+
+  const groupedCategories = menuData.reduce((acc, item) => {
+    const mainCategory = item.main_category;
+    if (!acc[mainCategory]) {
+      acc[mainCategory] = new Set();
+    }
+    acc[mainCategory].add(item.category);
+    return acc;
+  }, {});
+  
+  const mainCategories = Object.keys(groupedCategories);
 
   const validateForm = () => {
     const { name, date, time, guests, contact } = formData;
-    const isValid = name.trim() && date.trim() && time.trim() && !isNaN(guests) && guests > 0 && contact.trim();
+    const isValid = name.trim() && date.trim() && time.trim() && !isNaN(guests) && guests >= 2 && guests <= 100 && contact.trim(); // Updated to 100
     setFormValid(isValid);
     return isValid;
+  };
+
+  const handleMainFilterClick = (selectedFilter) => {
+    setMainFilter(selectedFilter);
+    setSubFilter(null); // Reset subFilter when selecting a new main category
+  };
+  
+  const handleSubFilterClick = (selectedSubFilter) => {
+    setSubFilter(selectedSubFilter);
   };
 
   const [showCart, setShowCart] = useState(false);
@@ -89,9 +113,14 @@ const Reservation = () => {
   };
 
   const getFilteredMenu = () => {
-    return filter === 'all'
-      ? menuData
-      : menuData.filter((menuItem) => menuItem.category.toLowerCase() === filter.toLowerCase());
+    if (mainFilter === 'all') {
+      return menuData;
+    }
+    return menuData.filter(
+      (menuItem) =>
+        menuItem.main_category === mainFilter &&
+        (!subFilter || menuItem.category === subFilter)
+    );
   };
 
   const handleFilterClick = (selectedFilter) => {
@@ -133,16 +162,21 @@ const Reservation = () => {
   const handleReserve = (event) => {
     event.preventDefault(); // Prevent page reload
     setShowCart(false);
-    if (!customer || customer === '') {
-      setPopupVisibleLogin(true);
-      window.scrollTo(0, 0);
-    } else if (!validateForm()) {
-      setPopupVisible(true);
-    }else if (isAdvanceOrder && cartReservations.length === 0) {
-      setPopupVisible(true);
-    }else {
-      setConfirmationPopupVisible(true);
-    }
+
+     if (!customer || customer === '') {
+    setPopupVisibleLogin(true);
+    window.scrollTo(0, 0);
+  } else if (!validateForm()) {
+    setPopupVisible(true);
+  } else if (availableSlots <= 0) {
+    alert("No available slots for the selected date. Please choose another date.");
+  } else if (formData.guests > availableSlots) {
+    alert(`Only ${availableSlots} slots are available. Please reduce the number of guests or choos another date.`);
+  } else if (isAdvanceOrder && cartReservations.length === 0) {
+    setPopupVisible(true);
+  } else {
+    setConfirmationPopupVisible(true);
+  }
   };
 
   const closePopup = () => {
@@ -166,41 +200,47 @@ const Reservation = () => {
   };
 
   const handleConfirmOrder = async () => {
-
-    const orderDetails = {
-        cart: cartReservations.map(item => ({
-            menu_id: item.menu_id,
-            quantity: item.quantity,
-        })), // Cart items to send to the server
-        guestNumber: formData.guests, // Number of guests from formData
-        userId: customer.id,           // Customer ID
-        reservationDate: formData.date, // Date selected in the form
-        reservationTime: formData.time, // Time selected in the form
-        advanceOrder: isAdvanceOrder,   // Advance order boolean
-        totalAmount: getTotalAmount(),  // Total amount of the order
-    };
-
-
-    try {
-        const response = await axios.post('https://lolos-place-backend.onrender.com/api/reservations', orderDetails);
-
-        if (response.status === 201) {
-            setConfirmationPopupVisible(false);
-            setFormData(initialFormData);
-            setIsAdvanceOrder(false);
-        } else {
-            console.error('Failed to save reservation and order');
-        }
-    } catch (error) {
-        console.error('Error:', error);
+    if (availableSlots <= 0) {
+      alert("No available slots for the selected date. Please choose another date.");
+      return;
     }
+
+    if (formData.guests > availableSlots) {
+      alert(`Only ${availableSlots} slots are available. Please reduce the number of guests.`);
+      return;
+    }
+  
+
+     const orderDetails = {
+    cart: cartReservations.map(item => ({
+      menu_id: item.menu_id,
+      quantity: item.quantity,
+    })),
+    guestNumber: formData.guests,
+    userId: customer.id,
+    reservationDate: formData.date,
+    reservationTime: formData.time,
+    advanceOrder: isAdvanceOrder,
+    totalAmount: getTotalAmount(),
+  };
+    
+  
+  try {
+    const response = await axios.post('http://localhost:5000/api/reservations', orderDetails);
+
+    if (response.status === 201) {
+      setConfirmationPopupVisible(false);
+      setFormData(initialFormData);
+      setIsAdvanceOrder(false);
+      setCartReservations([]); // Clear the cart after successful reservation
+    } else {
+      console.error('Failed to save reservation and order');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Failed to confirm reservation. Please check your input and try again.');
+  }
 };
-
-
-
-  
-  
-  
 
   const closeQrCodePopup = () => {
     setQrCodePopupVisible(false);
@@ -228,75 +268,44 @@ const Reservation = () => {
     return `${year}-${month}-${day}`;
   };
 ////////////////////////////////////////////////////////////////////////////////
-const handleInputChange = (e) => {
+const handleInputChange = async (e) => {
   const { id, value } = e.target;
 
-  // Handle 'guests' input
-  if (id === 'guests') {
-    const guestNumber = parseInt(value, 10);
-    // If value is not a number or empty, don't validate yet
-    if (isNaN(guestNumber) || value === '') {
-      setFormData((prevData) => ({
-        ...prevData,
-        [id]: value,
-      }));
-      return;
-    }
-    // Otherwise, update state
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: guestNumber,
-    }));
-  }
-
-  // Handle 'date' input with validation
-  else if (id === 'date') {
+  if (id === 'date') {
     const inputDate = new Date(value);
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Ensure the time is set to 00:00:00 for today's date
+    today.setHours(0, 0, 0, 0);
     const oneYearLaterDate = new Date(today);
     oneYearLaterDate.setFullYear(today.getFullYear() + 1);
 
-    // If the date is not valid or is out of range, don't update the state
     if (inputDate < today || inputDate > oneYearLaterDate || isNaN(inputDate)) {
       setFormValid(false);
-      return; // Don't update the state if invalid
+      return;
     }
 
-    // Otherwise, update the state with the valid date
-    setFormValid(true);  // Reset form validity flag
+    try {
+      const response = await axios.get(`http://localhost:5000/api/total-guests/${value}`);
+      const totalGuests = response.data.totalGuests || 0;
+      const slotsLeft = 100 - totalGuests; // Calculate available slots
+      setAvailableSlots(slotsLeft); // Update available slots
+    } catch (error) {
+      console.error('Error fetching total guests:', error);
+      setAvailableSlots(100); // Fallback to 100 slots if there's an error
+    }
+
+    setFormValid(true);
     setFormData((prevData) => ({
       ...prevData,
       [id]: value,
     }));
-  }
-
-  // Handle 'time' input with validation
-  else if (id === 'time') {
-    // Define the allowed range for time
-    const minTime = "11:00";
-    const maxTime = "20:00";
-
-    // If the time is within the allowed range, update the state
-    if (value >= minTime && value <= maxTime) {
-      setFormData((prevData) => ({
-        ...prevData,
-        [id]: value,
-      }));
-    } else {
-      // Optionally show an alert or log for invalid time
-      alert("Please select a time between 11:00 AM and 8:00 PM.");
-    }
-  }
-
-  // Handle other inputs (if any)
-  else {
+  } else {
     setFormData((prevData) => ({
       ...prevData,
       [id]: value,
     }));
   }
 };
+
 
 
 
@@ -316,8 +325,8 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
     // Validate guest number on blur
     if (id === 'guests') {
       const guestNumber = parseInt(value, 10);
-      if (guestNumber < 2 || guestNumber > 60) {
-        alert("Number of guests must be between 2 and 60.");
+      if (guestNumber < 2 || guestNumber > 100) { // Updated from 60 to 100
+        alert("Number of guests must be between 2 and 100."); // Updated error message
         setFormData((prevData) => ({
           ...prevData,
           [id]: '',
@@ -325,6 +334,38 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
       }
     }
   };
+  
+  // In the form input field
+<div className="form-group">
+  <label htmlFor="guests">Number of Guests:</label>
+  <input
+    type="number"
+    id="guests"
+    required
+    placeholder="Number of guests"
+    value={formData.guests}
+    onChange={handleInputChange}
+    onBlur={handleInputBlur}
+    min="2"
+    max="100"
+    disabled={!customer} // Disable if no customer is logged in
+  />
+  {(formData.guests < 2 || formData.guests > 100) && (
+    <small className="error-message">Guests must be between 2 and 100.</small>
+  )}
+  {formData.guests > availableSlots && (
+    <small className="error-message">
+      Only {availableSlots} slots are available. Please reduce the number of guests.
+    </small>
+  )}
+  <small className="slots-message">
+    {formData.date
+      ? availableSlots >= 0
+        ? `${availableSlots} slots left for ${format(new Date(formData.date), 'MMM-dd-yyyy')}`
+        : "Unable to fetch available slots."
+      : "Select a date to see available slots."}
+  </small>
+</div>
   
   
 
@@ -343,7 +384,7 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
     };
 
     try {
-        const response = await axios.post('https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session', body);
+        const response = await axios.post('http://localhost:5000/api/create-gcash-checkout-session', body);
 
         const { url } = response.data;
 
@@ -354,7 +395,7 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
 }
 
   return (
-        <MainLayout>
+    <MainLayout>
       <section>
     <div className="reservation">
       <main>
@@ -362,21 +403,60 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
           <h2>Make a Reservation</h2>
 
           <form noValidate onSubmit={handleReserve}>
-            <div className="form-group">
-              <label htmlFor="name">Name:</label>
-              <input type="text" id="name" required placeholder="Please Login to autofill" value={formData.name} onChange={handleInputChange} disabled/>
-              {!formValid && <small className="error-message"></small>}
-            </div>
+  <div className="form-group">
+    <label htmlFor="name">Name:</label>
+    <input
+      type="text"
+      id="name"
+      required
+      placeholder="Please Login to autofill"
+      value={formData.name}
+      onChange={handleInputChange}
+      disabled={!customer} // Disable if no customer is logged in
+    />
+    {!formValid && <small className="error-message"></small>}
+  </div>
 
+  {/* Two-column layout for these fields */}
+  <div className="form-columns">
+    <div className="form-group">
+      <label htmlFor="contact">Contact Number:</label>
+      <input
+        type="tel"
+        id="contact"
+        required
+        placeholder="Please Login to autofill"
+        value={formData.contact}
+        onChange={handleInputChange}
+        disabled={!customer} // Disable if no customer is logged in
+      />
+      {!formValid && <small className="error-message"></small>}
+    </div>
 
-            <div className="form-group">
-              <label htmlFor="contact">Contact Number:</label>
-              <input type="tel" id="contact" required placeholder="Please Login to autofill" value={formData.contact} onChange={handleInputChange} disabled/>
-              {!formValid && <small className="error-message"></small>}
-            </div>
+        
 
+    <div className="form-group">
+      <label htmlFor="date">Reservation Date:</label>
+      <input
+        type="date"
+        id="date"
+        name="date"
+        required
+        value={formData.date}
+        onChange={handleInputChange}
+        min={formatDate(today)}
+        max={formatDate(oneYearLaterDate)}
+        onKeyDown={(e) => e.preventDefault()}
+        disabled={!customer} // Disable if no customer is logged in
+      />
+      {!formValid && (
+        <small className="error-message">
+          Please select a valid date within the allowed range.
+        </small>
+      )}
+    </div>
 
-            <div className="form-group">
+    <div className="form-group">
   <label htmlFor="guests">Number of Guests:</label>
   <input
     type="number"
@@ -387,79 +467,100 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
     onChange={handleInputChange}
     onBlur={handleInputBlur}
     min="2"
-    max="60"
+    max="100"
+    disabled={!customer} // Disable if no customer is logged in
   />
-  {(formData.guests < 2 || formData.guests > 60) && (
-    <small className="error-message">Guests must be between 2 and 60.</small>
+  {(formData.guests < 2 || formData.guests > 100) && (
+    <small className="error-message">Guests must be between 2 and 100.</small>
   )}
+  <small className="slots-message">
+  {formData.date
+    ? availableSlots > 0
+      ? `${availableSlots} slots left for ${format(new Date(formData.date), 'MMM-dd-yyyy')}`
+      : "No slots available for the selected date."
+    : "Select a date to see available slots."}
+</small>
 </div>
 
+    <div className="form-group">
+      <label htmlFor="time">Reservation Time:</label>
+      <input
+        type="time"
+        id="time"
+        name="time"
+        value={formData.time || ''}
+        onChange={handleInputChange}
+        min="11:00"
+        max="20:00"
+        required
+        disabled={!customer} // Disable if no customer is logged in
+      />
+    </div>
+  </div>
 
+  {/* Rest of the form */}
+  <div className="form-group">
+    <label htmlFor="toggle" className="toggle-label">Advance Order</label>
+    <label className="reservation-switch">
+      <input
+        type="checkbox"
+        checked={isAdvanceOrder}
+        onChange={handleToggleChange}
+        disabled={!customer} // Disable if no customer is logged in
+      />
+      <span className="reservation-slider"></span>
+    </label>
+  </div>
 
-<div className="form-group">
-  <label htmlFor="date">Reservation Date:</label>
-  <p className="note">Please press the calendar icon to pick a date.</p>
-  <input
-    type="date"
-    id="date"
-    name="date"
-    required
-    value={formData.date}
-    onChange={handleInputChange}
-    min={formatDate(today)} // Set today's date
-    max={formatDate(oneYearLaterDate)} // Set one year later as max
-    onKeyDown={(e) => e.preventDefault()} // Prevent manual typing
-  />
-  {!formValid && (
-    <small className="error-message">
-      Please select a valid date within the allowed range.
-    </small>
+  {!isAdvanceOrder && (
+   <button
+   type="submit"
+   className="reserve-button"
+   disabled={!customer || !formValid || availableSlots <= 0}
+ >
+   {availableSlots <= 0 ? "No Slots Available" : "Reserve Now"}
+ </button>
   )}
-</div>
-
-
-
-
-<div className="form-group">
-  <label htmlFor="time">Reservation Time:</label>
-  <input
-    type="time"
-    id="time"
-    name="time"
-    value={formData.time || ''}
-    onChange={handleInputChange}
-    min="11:00"
-    max="20:00"
-    required
-  />
-</div>
-
-            {/* Toggle Slider */}
-            <div className="form-group">
-              <label htmlFor="toggle" className="toggle-label">Advance Order</label>
-              <label className="reservation-switch">
-                <input type="checkbox" checked={isAdvanceOrder} onChange={handleToggleChange} />
-                <span className="reservation-slider"></span>
-              </label>
-            </div>
-
-            {/* Reserve Now button that only shows when isAdvanceOrder is false */}
-            {!isAdvanceOrder && (
-              <button type="submit" className="reserve-button">Reserve Now</button>
-            )}
-          </form>
+</form>
           <div className='whitey'></div>
 
           {/* Conditional rendering of menu when isAdvanceOrder is true */}
           {isAdvanceOrder && (
             <>
-              <div className="filter-buttons">
-                {getUniqueCategories().map((category, index) => (
-                  <button key={index} onClick={() => handleFilterClick(category)}>
-                    {category.charAt(0).toUpperCase() + category.slice(1)}
-                  </button>
-                ))}
-              </div>
+              <div className="menu-buttons">
+  <button
+    data-filter="all"
+    className={`filter-button ${mainFilter === 'all' ? 'active' : ''}`}
+    onClick={() => handleMainFilterClick('all')}
+  >
+    All Food
+  </button>
+  {mainCategories.map((mainCategory, index) => (
+    <button
+      key={index}
+      data-filter={mainCategory}
+      className={`filter-button ${mainFilter === mainCategory ? 'active' : ''}`}
+      onClick={() => handleMainFilterClick(mainCategory)}
+    >
+      {mainCategory}
+    </button>
+  ))}
+</div>
+
+{mainFilter !== 'all' && groupedCategories[mainFilter] && (
+  <div className="subcategory-buttons">
+    {[...groupedCategories[mainFilter]].map((subcategory, index) => (
+      <button
+        key={index}
+        data-filter={subcategory}
+        className={`filter-button ${subFilter === subcategory ? 'active' : ''}`}
+        onClick={() => handleSubFilterClick(subcategory)}
+      >
+        {subcategory}
+      </button>
+    ))}
+  </div>
+)}
 
               <div className="menu">
   <h3>Our Menu</h3>
@@ -541,9 +642,6 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
         </div>
       )}
     </>
-
-              {/* Reserve with Advance Order button */}
-              <button type="submit" className="reserve-button" onClick={handleReserve}>Reserve with Advance Order</button>
             </>
           )}
 
@@ -587,65 +685,80 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
 
       {confirmationPopupVisible && (
         <div className="confirmation-popup">
-          <div className="popup-content receipt">
-            {isAdvanceOrder ? (
-              <>
-                <h3>Reservation with Advance Ordering</h3>
-                <div className="receipt-header">
-                  <h1>Lolo's Place</h1>
-                  <p>Thank you for your reservation!</p>
-                </div>
-                <div className="receipt-details">
-                  <p><strong>Name:</strong> {formData.name}</p>
-                  <p><strong>Reservation Date:</strong> {formData.date}</p>
-                  <p><strong>Reservation Time:</strong> {formData.time}</p>
-                  <p><strong>Number of Guests:</strong> {formData.guests}</p>
-                  <p><strong>Contact Number:</strong> {formData.contact}</p>
-                </div>
-                <h4>Items Ordered:</h4>
-                <ul className="receipt-items">
-                  {cartReservations.map((item, index) => (
-                    <li key={index}>
-                      {item.name} (x{item.quantity}) - ₱{item.price * item.quantity}
-                    </li>
-                  ))}
-                </ul>
-                <h4 className="total">Total: ₱{getTotalAmount()}</h4>
-                <div className="receipt-footer">
-              <button className="confirm-btn" onClick={makePaymentGCash}>
-                Confirm
-              </button>
-              <button className="close-btn" onClick={closeConfirmationPopup}>
-                Close
-              </button>
+        <div className="popup-content receipt">
+          {/* Add warning message here */}
+          {formData.guests > availableSlots && (
+            <div className="warning-message">
+              <p>⚠️ Only {availableSlots} slots are available. Please reduce the number of guests.</p>
             </div>
-              </>
-            ) : (
-              <>
-                <h3>Reservation Confirmation</h3>
-                <div className="receipt-header">
-                  <h1>Lolo's Place</h1>
-                  <p>Thank you for your reservation!</p>
-                </div>
-                <div className="receipt-details">
-                  <p><strong>Name:</strong> {formData.name}</p>
-                  <p><strong>Reservation Date:</strong> {formData.date}</p>
-                  <p><strong>Reservation Time:</strong> {formData.time}</p>
-                  <p><strong>Number of Guests:</strong> {formData.guests}</p>
-                  <p><strong>Contact Number:</strong> {formData.contact}</p>
-                </div>
-                <div className="receipt-footer">
-              <button className="confirm-btn" onClick={handleConfirmOrder}>
-                Confirm
-              </button>
-              <button className="close-btn" onClick={closeConfirmationPopup}>
-                Close
-              </button>
-            </div>
-              </>
-            )}
-          </div>
+          )}
+      
+          {isAdvanceOrder ? (
+            <>
+              <h3>Reservation with Advance Ordering</h3>
+              <div className="receipt-header">
+                <h1>Lolo's Place</h1>
+                <p>Thank you for your reservation!</p>
+              </div>
+              <div className="receipt-details">
+                <p><strong>Name:</strong> {formData.name}</p>
+                <p><strong>Reservation Date:</strong> {formData.date}</p>
+                <p><strong>Reservation Time:</strong> {formData.time}</p>
+                <p><strong>Number of Guests:</strong> {formData.guests}</p>
+                <p><strong>Contact Number:</strong> {formData.contact}</p>
+              </div>
+              <h4>Items Ordered:</h4>
+              <ul className="receipt-items">
+                {cartReservations.map((item, index) => (
+                  <li key={index}>
+                    {item.name} (x{item.quantity}) - ₱{item.price * item.quantity}
+                  </li>
+                ))}
+              </ul>
+              <h4 className="total">Total: ₱{getTotalAmount()}</h4>
+              <div className="receipt-footer">
+                <button
+                  className="confirm-btn"
+                  onClick={makePaymentGCash}
+                  disabled={formData.guests > availableSlots} // Disable button if guests exceed slots
+                >
+                  Confirm
+                </button>
+                <button className="close-btn" onClick={closeConfirmationPopup}>
+                  Close
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3>Reservation Confirmation</h3>
+              <div className="receipt-header">
+                <h1>Lolo's Place</h1>
+                <p>Thank you for your reservation!</p>
+              </div>
+              <div className="receipt-details">
+                <p><strong>Name:</strong> {formData.name}</p>
+                <p><strong>Reservation Date:</strong> {formData.date}</p>
+                <p><strong>Reservation Time:</strong> {formData.time}</p>
+                <p><strong>Number of Guests:</strong> {formData.guests}</p>
+                <p><strong>Contact Number:</strong> {formData.contact}</p>
+              </div>
+              <div className="receipt-footer">
+                <button
+                  className="confirm-btn"
+                  onClick={handleConfirmOrder}
+                  disabled={formData.guests > availableSlots} // Disable button if guests exceed slots
+                >
+                  Confirm
+                </button>
+                <button className="close-btn" onClick={closeConfirmationPopup}>
+                  Close
+                </button>
+              </div>
+            </>
+          )}
         </div>
+      </div>
       )}
     </div>
     </section>

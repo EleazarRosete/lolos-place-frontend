@@ -1,58 +1,48 @@
+
 .landing-page {
   font-family: 'Arial, sans-serif';
   color: #333;
   line-height: 1.6;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   display: flex;
   flex-direction: column; /* Stack sections vertically */
 }
 
-.section {
-  display: flex;
-  align-items: center; /* Vertically align content */
-  justify-content: space-between; /* Space out text and image */
-  background-color: white;
-  padding: 50px;
-  max-width: 1200px;
-  margin: 0 auto;
-  height: 100vh; /* Set height to full viewport height */
-}
-
-.intro-section {
-  background-color: white;
+.landing-page .intro-section {
+  background-color: #DFD6C7;
   display: flex;
   align-items: center; /* Vertically align content */
   justify-content: space-between; /* Space out text and image */
   padding: 50px;
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
 }
 
-.text-content {
+.landing-page .text-content {
   max-width: 50%; /* Restrict the text content width */
 }
 
-.text-content h1 {
+.landing-page .text-content h1 {
   font-family: 'Tangerine', cursive; /* Ensure the correct font */
   font-size: 4em; /* Adjust as needed */
   font-weight: bold;
-  color: #1a202c;
-  margin-top: -3em;
+  color: #000000;
+  margin-top: -5em;
 }
 
-.text-content p {
+.landing-page .text-content p {
   font-size: 1.2em;
-  color: #4a5568;
+  color: #000000;
   line-height: 1.6; /* Improve text readability */
   margin-bottom: 2em;
 }
 
-.order-now-button {
+.landing-page .order-now-button {
   display: inline-block;
   padding: 10px 20px;
   font-size: 1em;
-  color: #a08f62;
-  background-color: #FFE49B;
+  color: #ffffff;
+  background-color: #493628;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -61,30 +51,30 @@
   transition: background-color 0.3s ease;
 }
 
-.order-now-button:hover {
-  background-color: #a08f62; /* Darker red on hover */
-  color: #FFE49B;
+.landing-page .order-now-button:hover {
+  background-color: #A0764B; /* Darker red on hover */
+  color: #ffffff;
 }
 
-.image-right {
+.landing-page .image-right {
   max-width: 45%; /* Adjust width relative to text */
   height: auto; /* Maintain image aspect ratio */
   border-radius: 10px; /* Optional rounded corners */
 }
 
 /* All sections have same height as .intro-section */
-.best-sellers-section,
+.landing-page .best-sellers-section,
 .about-section,
 .order-now-section {
   padding: 50px 20px;
   height: 100vh; /* Set each section to same height as intro-section */
 }
 
-.best-sellers-section {
+.landing-page .best-sellers-section {
   background-color: #ffffff;
 }
 
-.best-sellers-section h1 {
+.landing-page .best-sellers-section h1 {
   font-family: tangerine;
   font-size: 6em;
   color: #000000;
@@ -92,22 +82,22 @@
   margin-bottom: 10px;
 }
 
-.best-sellers-section p {
+.landing-page .best-sellers-section p {
   font-size: 1.2em;
   color: #000000;
   text-align: center;
   margin-bottom: 30px;
 }
 
-.best-sellers {
+.landing-page .best-sellers {
   display: flex;
   gap: 20px;
   justify-content: center;
   flex-wrap: wrap;
 }
 
-.best-seller-card {
-  background-color: #FFE49B;
+.landing-page .best-seller-card {
+  background-color: #A0764B;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -117,38 +107,38 @@
   height: 5em;
 }
 
-.best-seller-card:hover {
+.landing-page .best-seller-card:hover {
   transform: scale(1.05); /* Slightly enlarge the card on hover */
-  background-color: #a08f62; /* Darker color on hover */
-  color: #FFE49B;
+  background-color: #6e4924; /* Darker color on hover */
+  color: #ffffff;
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Enhance the shadow on hover */
 }
 
-.best-seller-card h3 {
+.landing-page .best-seller-card h3 {
   font-size: 1.2em;
-  color: #61573b; /* Default color for h3 */
+  color: #ffffff; /* Default color for h3 */
   transition: color 0.3s ease; /* Smooth color transition */
 }
 
-.best-seller-card:hover h3 {
+.landing-page .best-seller-card:hover h3 {
   color: #FFE49B; /* Change text color on hover */
 }
 
-.about-section {
+.landing-page .about-section {
   display: flex;
   align-items: center; /* Vertically align content */
   justify-content: space-between; /* Space out text and image */
   padding: 50px;
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
-  background-color: #fff;
+  background-color: #CDA678;
 }
 
-.about-section .text-content {
+.landing-page .about-section .text-content {
   max-width: 50%; /* Restrict the text content width */
 }
 
-.about-section h2 {
+.landing-page .about-section h2 {
   font-family: 'Tangerine', cursive;
   font-size: 5em;
   font-weight: bold;
@@ -156,25 +146,25 @@
   margin-bottom: 20px;
 }
 
-.about-section p {
+.landing-page .about-section p {
   font-size: 1.2em;
   color: #4a5568;
   line-height: 1.6;
   margin-bottom: 20px;
 }
 
-.image-right {
+.landing-page .image-right {
   max-width: 50%; /* Restrict image size relative to text */
   height: auto; /* Maintain aspect ratio */
   border-radius: 10px; /* Optional rounded edges */
 }
 
-.about-button {
+.landing-page .about-button {
   display: inline-block;
   padding: 10px 20px;
   font-size: 1em;
-  color: #a08f62;
-  background-color: #FFE49B;
+  color: #ffffff;
+  background-color: #A0764B;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -184,12 +174,12 @@
   text-decoration: none; /* Remove underline */
 }
 
-.about-button:hover {
-  background-color: #a08f62; /* Darker red on hover */
-  color: #FFE49B;
+.landing-page .about-button:hover {
+  background-color: #6e4924; /* Darker red on hover */
+  color: #ffffff;
 }
 
-.order-now-section {
+.landing-page .order-now-section {
   display: flex;
   flex-direction: column; /* Stack content vertically */
   align-items: center; /* Center content horizontally */
@@ -202,11 +192,11 @@
   background-color: #fff; /* Optional background color */
 }
 
-.order-now-section .text-content {
+.landing-page .order-now-section .text-content {
   max-width: 600px; /* Limit text content width */
 }
 
-.order-now-section h2 {
+.landing-page .order-now-section h2 {
   font-family: 'Tangerine', cursive;
   font-size: 5em;
   font-weight: bold;
@@ -214,19 +204,19 @@
   margin-bottom: 20px;
 }
 
-.order-now-section p {
+.landing-page .order-now-section p {
   font-size: 1.2em;
   color: #4a5568;
   line-height: 1.6; /* Improve readability */
   margin-bottom: 30px;
 }
 
-.order-button {
+.landing-page .order-button {
   display: inline-block;
   padding: 10px 20px;
   font-size: 1em;
-  color: #a08f62;
-  background-color: #FFE49B;
+  color: #ffffff;
+  background-color: #A0764B;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -236,16 +226,40 @@
   text-decoration: none; /* Remove underline */
 }
 
-.order-button:hover {
-  background-color: #a08f62; /* Darker red on hover */
-  color: #FFE49B;
+.landing-page .order-button:hover {
+  background-color: #6e4924; /* Darker red on hover */
+  color: #fafafa;
 }
+
+.button-container {
+  display: flex;
+  justify-content: center; /* Centers the button horizontally */
+  margin-top: 6em; /* Adds some space above the button */
+}
+
+.menu-button {
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #A0764B; /* Adjust the color as needed */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.menu-button:hover {
+  background-color: #6e4924; /* Lighter color on hover */
+}
+
 
 
 /* Base styles remain unchanged, responsive adjustments below */
 
 @media (max-width: 768px) { /* For tablets and small screens */
-  .section,
+  .landing-page .section,
   .intro-section,
   .best-sellers-section,
   .about-section,
@@ -258,68 +272,68 @@
 
 
 
-  .text-content {
+  .landing-page .text-content {
     max-width: 100%; /* Allow text to take full width */
     margin-bottom: 20px; /* Add space between text and image */
   }
-    .text-content h1,
+  .landing-page .text-content h1,
   .text-content h2 {
     font-size: 4em; /* Further reduce heading size */
     margin-top: 1em;
   }
 
-  .image-right,
-  .image-left {
+  .landing-page .image-right,
+  .landing-page .image-left {
     max-width: 90%; /* Reduce image size */
     margin: 0 auto; /* Center the image */
   }
 
-  .order-now-section .text-content h2,
-  .about-section h2 {
-    font-size: 6em; /* Scale down heading size */
+  .landing-page .order-now-section .text-content h2,
+  .landing-page .about-section h2 {
+    font-size: 4em; /* Scale down heading size */
   }
 
-  .text-content p {
+  .landing-page .text-content p {
     font-size: 1em; /* Adjust paragraph font size */
   }
 
-  .order-button,
-  .about-button {
+  .landing-page .order-button,
+  .landing-page .about-button {
     width: 80%; /* Expand button width */
     margin: 0 auto; /* Center the button */
   }
 }
 
 @media (max-width: 480px) { /* For small phones like iPhone SE */
-  .section,
-  .intro-section,
-  .best-sellers-section,
-  .about-section,
-  .order-now-section {
+  .landing-page .section,
+  .landing-page .intro-section,
+  .landing-page .best-sellers-section,
+  .landing-page .about-section,
+  .landing-page .order-now-section {
     padding: 20px 10px; /* Reduce padding further */
   }
-  .best-sellers-section h1 {
+  .landing-page .best-sellers-section h1 {
     font-size: 6em;
 }
-  .text-content h1,
-  .text-content h2,
-  .best-sellers-section h1 {
+.landing-page .text-content h1,
+.landing-page .text-content h2,
+.landing-page .best-sellers-section h1 {
     font-size: 4em; /* Further reduce heading size */
     margin-top: 1em;
   }
 
-  .text-content p {
+  .landing-page .text-content p {
     font-size: 0.9em; /* Adjust font size for readability */
   }
 
-  .order-button,
-  .about-button {
+  .landing-page.order-button,
+  .landing-page .about-button {
     padding: 10px; /* Adjust padding for smaller buttons */
     font-size: 0.9em; /* Reduce font size */
   }
 
-  .image-right,
-  .image-left {
+  .landing-page .image-right,
+  .landing-page .image-left {
     max-width: 100%; /* Ensure images fit within the viewport */
   }
 }

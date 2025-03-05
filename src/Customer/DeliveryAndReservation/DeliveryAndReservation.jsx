@@ -10,7 +10,7 @@ const DeliveryAndReservation = () => {
   };
 
   return (
-       <MainLayout>
+    <MainLayout>
       <div className="delivery-reservation-page">
         <section className="orderOptions">
           <h2>Order Now</h2>
