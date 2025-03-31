@@ -641,6 +641,13 @@ option {
     background-color: #ccc;
 }
 
+@media (max-width: 1220px) {
+    .section {
+        width: 100%;
+        padding: 1rem;
+        left: 0;
+    }
+}
 
 .details{
     width: 100%;
@@ -825,7 +832,19 @@ input[type="radio"] {
     cursor: pointer;
  }
 
+ @media (max-width: 480px) {
+    .section {
+        padding: 1rem;
+        left: 0;
+    }
+}
+
+
  @media (max-width: 768px) {
+    .section {
+        padding: 1rem;
+        left: 0;
+    }
     .posContainer {
         grid-template-columns: 1fr; /* Single column for mobile */
     }

@@ -284,70 +284,105 @@ function Admin() {
 
     return (
         <section className={styles.section}>
-            <h2>Account Settings</h2>
-            <div className={styles.accountSettingContainer}>
+            <div className={styles.sectionContainer}>
+            <h2 className={styles.adminSettingH2}>Account Settings</h2>
+            <div className={styles.accountSettingButtonContainer}>
                 <div className={styles.selectAccount}>
-                    <button onClick={() => setSelectedRole("admin")}>Admin Setting</button>
-                    <button onClick={() => setSelectedRole("cashier")}>Cashier Setting</button>
-                    <button onClick={() => setSelectedRole("kitchen")}>Kitchen Setting</button>
+                    <button className={styles.selectAccountButton} onClick={() => setSelectedRole("admin")}>Admin Setting</button>
+                    <button className={styles.selectAccountButton} onClick={() => setSelectedRole("cashier")}>Cashier Setting</button>
+                    <button className={styles.selectAccountButton} onClick={() => setSelectedRole("kitchen")}>Kitchen Setting</button>
                 </div>
-                <div className={styles.accountSetting}>
-                    <h3>{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} Settings</h3>
-                    <label>First Name:</label>
+            </div>
+            <div className={styles.accountSetting}>
+                    <h3  className={styles.adminSettingAccountSettingH3} >{selectedRole.charAt(0).toUpperCase() + selectedRole.slice(1)} Settings</h3>
+                    <div className={styles.AccountSettingForms}>
+                    <div className={styles.AccountSettingFormsFields}>
+                    <label>First Name: </label>
                     <input 
                         type="text" 
                         name="firstName" 
                         value={roleData[selectedRole].firstName} 
                         onChange={(e) => handleChange(e, selectedRole)} 
                     />
-                    <label>Last Name:</label>
+                    </div>
+                    <div className={styles.AccountSettingFormsFields}>
+                    <label>Last Name:                    </label>
+
                     <input 
                         type="text" 
                         name="lastName" 
                         value={roleData[selectedRole].lastName} 
                         onChange={(e) => handleChange(e, selectedRole)} 
                     />
-                    <label>Change Email:</label>
+                    </div>
+
+                    <div className={styles.AccountSettingFormsFields}>
+                    <label>Change Email:                    </label>
+
                     <input 
                         type="email" 
                         name="email" 
                         value={roleData[selectedRole].email} 
                         onChange={(e) => handleChange(e, selectedRole)} 
                     />
-                    <label>Change Phone:</label>
+                    </div>
+
+                    <div className={styles.AccountSettingFormsFields}>
+                    <label>Change Phone:                    </label>
+
                     <input 
                         type="tel" 
                         name="phone" 
                         value={roleData[selectedRole].phone} 
                         onChange={(e) => handleChange(e, selectedRole)} 
                     />
-                    <label>Old Password:</label>
-                    <input 
-                        type="password" 
-                        name="oldPassword" 
-                        value={roleData[selectedRole].oldPassword} 
-                        onChange={(e) => handleChange(e, selectedRole)} 
-                    />
-                    <label>New Password:</label>
-                    <input 
-                        type="password" 
-                        name="newPassword" 
-                        value={roleData[selectedRole].newPassword} 
-                        onChange={(e) => handleChange(e, selectedRole)} 
-                    />
-                    <label>Confirm New Password:</label>
-                    <input 
-                        type="password" 
-                        name="confirmPassword" 
-                        value={roleData[selectedRole].confirmPassword} 
-                        onChange={(e) => handleChange(e, selectedRole)} 
-                    />
+</div>
+
+<div className={styles.AccountSettingFormsFields}>
+<label>Old Password:                    </label>
+
+<input 
+    type="password" 
+    name="oldPassword" 
+    value={roleData[selectedRole].oldPassword} 
+    onChange={(e) => handleChange(e, selectedRole)} 
+/>
+</div>  
+
+<div className={styles.AccountSettingFormsFields}>
+<label>New Password:                    </label>
+
+<input 
+    type="password" 
+    name="newPassword" 
+    value={roleData[selectedRole].newPassword} 
+    onChange={(e) => handleChange(e, selectedRole)} 
+/>
+</div>
+
+<div className={styles.AccountSettingFormsFields}>
+<label>Confirm New Password:                    </label>
+
+<input 
+    name="confirmPassword" 
+    value={roleData[selectedRole].confirmPassword} 
+    onChange={(e) => handleChange(e, selectedRole)} 
+/>
+</div>
+
+
+
+
+  
+
                     <div className={styles.buttons}>
                         <button className={styles.cancelBtn} onClick={handleCancel}>Cancel</button>
                         <button className={styles.saveBtn} onClick={handleSave}>Save</button>
                     </div>
+                    </div>
+
                 </div>
-            </div>
+                </div>
         </section>
     );
 }
