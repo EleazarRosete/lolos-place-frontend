@@ -17,11 +17,15 @@
 }
 
 .selectAccountButton{
-    background-color: #f9e6c9;
+    background-color: #A5957B;
     font-size: 1rem;
     font-weight: 500;
     border-radius: 0.5rem;
     padding: 0.5rem 1rem;
+}
+
+.selectAccountButton:hover{
+    background-color: #A0764B;
 }
 
 .sectionContainer{

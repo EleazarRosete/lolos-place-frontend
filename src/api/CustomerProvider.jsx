@@ -31,7 +31,7 @@ export function CustomerProvider({ children }) {
     useEffect(() => {
         const fetchMenuData = async () => {
             try {
-                const response = await fetch('https://lolos-place-backend.onrender.com/api/menu'); // Adjust API URL as needed
+                const response = await fetch('http://localhost:5000/api/menu'); // Adjust API URL as needed
                 const data = await response.json();
                 setMenuData(data);
 

@@ -91,6 +91,8 @@
     color: #3e2723;
 }
 
+
+
 .itemTable th, 
 .itemTable td {
     padding: 0.8rem; /* Add padding to table cells */
@@ -99,6 +101,10 @@
     text-align: left; /* Align text to the left */
     border-bottom: 1px solid #3e2723;
     font-size: 0.825rem;
+    font-weight: 500;
+}
+
+.itemTable th{
     font-weight: 600;
 }
 

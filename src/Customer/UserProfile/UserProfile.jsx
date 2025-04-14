@@ -56,7 +56,7 @@ const UserProfile = () => {
     }
 
     try {
-        const response = await axios.post('https://lolos-place-backend.onrender.com/api/changeCustomerPassword', {
+        const response = await axios.post('http://localhost:5000/api/changeCustomerPassword', {
           id, 
           oldPassword, 
           newPassword, 
@@ -95,7 +95,7 @@ const handleSaveDetails = async () => {
   }
 
   try {
-      const response = await axios.post('https://lolos-place-backend.onrender.com/api/changeCustomerDetails', {
+      const response = await axios.post('http://localhost:5000/api/changeCustomerDetails', {
         id, 
         email, 
         phone, 
@@ -143,7 +143,7 @@ const handleSaveDetails = async () => {
   };
 
   return (
-   <MainLayout>
+<MainLayout>
   <section className="profile-page">
     <div className="container">
       <div className="sidebar">
@@ -242,6 +242,7 @@ const handleSaveDetails = async () => {
     </div>
   </section>
 </MainLayout>
+
   );
 };
 

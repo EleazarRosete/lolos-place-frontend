@@ -25,6 +25,9 @@ const LandingPage = () => {
       setDropdownActive(false);
     }
   };
+  const scrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
 
   useEffect(() => {
     window.addEventListener('click', handleOutsideClick);
@@ -42,7 +45,7 @@ const LandingPage = () => {
   useEffect(() => {
     const fetchTopSellers = async () => {
       try {
-        const response = await fetch('https://lolos-place-backend.onrender.com/api/top-best-sellers');
+        const response = await fetch('http://localhost:5000/api/top-best-sellers');
         const data = await response.json();
         
         if (response.ok) {
@@ -97,7 +100,15 @@ const LandingPage = () => {
               ))}
             </div>
           )}
+
+          {/* Menu Button */}
+          <div className="button-container">
+            <Link to="/menu" onClick={scrollToTop}>
+              <button className="menu-button">Explore Our Menu</button>
+            </Link>
+          </div>
         </section>
+
 
         {/* About Section */}
         <section className="about-section">

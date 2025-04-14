@@ -69,6 +69,11 @@
     font-weight: 500;
 }
 
+.showDetailsButton{
+    font-size: 0.825rem;
+    font-weight: 500;
+}
+
 .actionGroup .editButton {
     background-color: #A5957B; /* Green for edit */
     color: #F4F4F9;
