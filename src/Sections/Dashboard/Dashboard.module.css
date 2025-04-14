@@ -18,12 +18,12 @@
 
     .cardContainer {
         width: 100%;
-        height: auto; /* Allow height to adjust based on content */
+        height: 100%; /* Allow height to adjust based on content */
         position: relative;
         left: -1%;
-        display: grid;
-        grid-template-columns: 33% 33% 33%;
-        grid-template-rows: 20% 80%;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
         background-color: transparent;
         margin: 0;
         padding: 0;

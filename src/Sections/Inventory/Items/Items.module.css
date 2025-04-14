@@ -17,7 +17,7 @@
 .itemTable th {
     background-color: #F2E6CE; /* Softer header background for contrast */
     color: #333; /* Darker text color for better readability */
-    font-weight: bold; /* Emphasize headers */
+    font-weight: 500; /* Emphasize headers */
     text-transform: uppercase; /* Consistent header style */
 }
 
@@ -63,14 +63,14 @@
     border: none; /* Remove default border */
     border-radius: 5px; /* Rounded corners for buttons */
     transition: background-color 0.3s, transform 0.2s;
-    font-size: 0.9rem; /* Adjust font size for better readability */
+    font-size: 0.825rem; /* Adjust font size for better readability */
     cursor: pointer; /* Indicate interactivity */
     min-width: 80px; /* Consistent minimum width */
-    font-weight: 900;
+    font-weight: 500;
 }
 
 .actionGroup .editButton {
-    background-color: #3e2723; /* Green for edit */
+    background-color: #A5957B; /* Green for edit */
     color: #F4F4F9;
 }
 
@@ -79,9 +79,14 @@
     transform: scale(1.05); /* Slight zoom effect */
 }
 
+.actionGroup .removeButton:hover, .editButton:hover{
+    background-color: #A0764B;   
+}
+
 .actionGroup .removeButton {
-    background-color: #3e2723; /* Red for remove */
+    background-color: #A5957B; /* Red for remove */
     color: #F4F4F9;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 .actionGroup {
@@ -93,7 +98,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .itemTable td, .itemTable th {
-        font-size: 0.85rem; /* Smaller font for smaller screens */
+        font-size: 0.825rem; /* Smaller font for smaller screens */
         padding: 8px; /* Adjust padding */
     }
 

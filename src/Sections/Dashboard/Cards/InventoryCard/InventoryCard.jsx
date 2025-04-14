@@ -32,8 +32,8 @@ function InventoryCard() {
     }, []); // Fetch products when component mounts
 
     return (
-        <div className={styles.card}>
-            <h1 className={styles.cardHeaderTxt}>Stock Levels:</h1>
+        <div className={styles.InventoryCard}>
+            <h1 className={styles.InventoryCardHeaderTxt}>Stock Levels:</h1>
             <button 
                 className={`${styles.stockIndicator} ${product.length === 0 ? styles.highStocks : styles.lowStocks}`}
                 onClick={toggleModal} // Show modal on button click

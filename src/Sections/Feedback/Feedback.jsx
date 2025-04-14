@@ -48,8 +48,8 @@ function Feedback() {
     return (
         <section className={styles.section}>
             <header className={styles.feedback}>
-                <h1 className={styles.textStyle1}>List of All Feedbacks</h1>
-                <div className={styles.controls}>
+                <h1 className={styles.feedbackTextStyle1}>List of All Feedbacks</h1>
+                <div className={styles.feedbackControls}>
                     <button className={styles.sort} onClick={sortById}>
                         Sort ({sortOrder === "desc" ? "Newest First" : "Oldest First"})
                     </button>
@@ -78,7 +78,7 @@ function Feedback() {
                         />
                     ))
                 ) : (
-                    <p className={styles.textStyle1}>No comments available.</p>
+                    <p className={styles.NoCommentTextStyle1}>No comments available.</p>
                 )}
             </div>
         </section>

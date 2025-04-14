@@ -22,21 +22,23 @@
     width: 100%;
     height: 100%;
     background-color: rgba(14, 14, 14, 0.5);
-    z-index: 100;
+    z-index: 1000;
 }
 
 .modalOrder {
+    
     background-color: #FEF7E1;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    width: 75%;
-    height: 25%;
+    width: 60%;
+    max-height: 50%;
     padding: 20px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    overflow-y: auto;
 }
 
 .navButtonOrders{
@@ -44,7 +46,8 @@
     width:100%;
     align-items: center;
     justify-content: space-between;
-    height: 6vh;
+    height: 5vh;
+    margin: 0;
 }
 
 .modalContents p {
@@ -54,8 +57,8 @@
 }
 
 .orderButtonsHistory{
-    background-color: #3e2723;
-    color: white;
+    background-color: #A5957B;
+    color: black;
     border: none;
     border-radius: 0.25rem;
     padding: 0.5rem 1rem;
@@ -115,7 +118,7 @@
     height: 5vh;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin: 0;
 }
 
 .filterContainer {
@@ -127,25 +130,37 @@
 .filterButton {
     cursor: pointer;
     height: 100%;
-    background-color: #3e2723;
+    background-color: #A5957B;
     border: 0;
     font-weight: 500;
     padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    font-size: 0.825rem;
     margin-left: 0.5rem;
     border-radius: 0.3rem;
-    border-top: 1px solid #3e2723;
     transition: 0.4s ease-in-out;
-    color: #F4F4F9;
+    color: black;
+    position: relative;
 }
 
+.notificationNumber {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(50%, -50%);
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
 /* Search bar */
-.searchContainer {
+.OrdersSearchContainer {
     width: 100%;
     height: 5vh;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .noOrdersTxt{
@@ -159,6 +174,13 @@
     text-align: center;
 }
 
+.OrdersSortButton{
+    background-color: #A5957B;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+
 .searchInput {
     width: 70%;
     padding: 0.5rem;
@@ -168,24 +190,19 @@
     background-color: #FEF7E1;
     color: #0e0e0e;
     border: 1px solid #3e2723;
-    padding-left: 1rem;
     text-align: start;
     margin: 0;
-    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
-    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
-    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
-    border-top: 1px solid #3e2723;
 }
 
 .buttonOrderHistory {
     cursor: pointer;
     height: 100%;
-    background-color: #3e2723;
-    color: #F4F4F9;
+    background-color: #A5957B;
+    color: black;
     border: 0;
     font-weight: 500;
     padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     margin-left: 0.5rem;
     border-radius: 0.3rem;
     transition: 0.4s ease-in-out;
@@ -219,41 +236,49 @@
     padding: 1rem;
     background-color: transparent;
     border-radius: 8px;
-    margin-bottom: 1rem;
     box-sizing: border-box;
-    gap: 1rem;
+    margin: 0;
 }
 
 .pendingOrdersHeader,
 .historyOrdersHeader {
     font-size: 1.5rem;
-    margin-bottom: 1rem;
-    color: #3e2723;
-    font-size: 2.5rem;
+    font-weight: 600;
+    color: black;
     margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.noOrders{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .orderList,
 .orderList1 {
     list-style: none;
     padding: 0;
     background-color: #fff;
-
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .orderItem,
 .orderItem1 {
+    width: 49%;
+    max-width: 49%;
     padding: 1rem;
-    margin-bottom: 1rem;
-    border-bottom: 5px dashed #3e2723;
+    border: 1px solid;
     box-sizing: border-box;
-}
-
-.orderItem h3,
-.orderItem1 h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+    
 }
 
 .orderItem p,
@@ -272,6 +297,12 @@
     cursor: pointer;
 }
 
+.ordersH3{
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+}
 
 /* Ensuring consistent height for the orders sections */
 .pendingOrdersContainer,

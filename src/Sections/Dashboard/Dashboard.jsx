@@ -17,15 +17,19 @@ function Dashboard() {
                 <FeedbackCard/>
                 <InventoryCard/>
                 <SalesTodayCard/>
+                <SoldProducts/>
                 <ReservationCard/>
                 <UpcomingReservation/>
-                <SoldProducts/>
-            </div>
-            <div className={styles.analyticsContainer}>
                 <ProductDemand/>
                 <CustomerPeakHours/>
                 <SalesForecast/>
                 <CustomerReviews/>
+            </div>
+            <div className={styles.analyticsContainer}>
+                {/* <ProductDemand/>
+                <CustomerPeakHours/>
+                <SalesForecast/>
+                <CustomerReviews/> */}
             </div>
         </section>
     );

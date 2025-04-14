@@ -40,7 +40,7 @@ const Purchases = () => {
 
   const fetchOrderHistory = async () => {
     try {
-      const response = await axios.get('https://lolos-place-backend.onrender.com/order/order-history');
+      const response = await axios.get('http://localhost:10000/order/order-history');
       setAllOrders(response.data);
 
     } catch (err) {
@@ -50,7 +50,7 @@ const Purchases = () => {
 
   const fetchDeliveries = async () => {
     try {
-      const response = await fetch('https://lolos-place-backend.onrender.com/order/get-delivery', {
+      const response = await fetch('http://localhost:10000/order/get-delivery', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -63,7 +63,7 @@ const Purchases = () => {
 
   const fetchTables = async () => {
     try {
-      const response = await fetch("https://lolos-place-backend.onrender.com/table/get-table", {
+      const response = await fetch("http://localhost:10000/table/get-table", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
       });
@@ -97,7 +97,7 @@ const Purchases = () => {
     };
     const fetchProducts = async () =>{
       try {
-      const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-product", {
+      const response = await fetch("http://localhost:10000/menu/get-product", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -178,7 +178,7 @@ const Purchases = () => {
 
     if (matchedDelivery) {
         try {
-            const response = await fetch(`https://lolos-place-backend.onrender.com/order/update-delivery/${matchedDelivery.delivery_id}`, {
+            const response = await fetch(`http://localhost:10000/order/update-delivery/${matchedDelivery.delivery_id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status: "Delivered" }),
@@ -197,7 +197,7 @@ const Purchases = () => {
     }
 
     try {
-        const response = await axios.put(`https://lolos-place-backend.onrender.com/order/order-served/${selectedOrderId}`);
+        const response = await axios.put(`http://localhost:10000/order/order-served/${selectedOrderId}`);
         if (response.status === 200) {
             await fetchOrderHistory();
             handleCloseModal();
@@ -211,7 +211,7 @@ const Purchases = () => {
 
   const handlePayNow = async () => {
       try {
-      const response = await fetch("https://lolos-place-backend.onrender.com/order/get-order", {
+      const response = await fetch("http://localhost:10000/order/get-order", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -264,7 +264,7 @@ const Purchases = () => {
   
       
       try {
-        const response = await fetch('https://lolos-place-backend.onrender.com/sales/add-sales', {
+        const response = await fetch('http://localhost:10000/sales/add-sales', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedSalesData),
@@ -291,7 +291,7 @@ const Purchases = () => {
         throw new Error("Selected order ID is not defined.");
       }
     
-      const response = await fetch(`https://lolos-place-backend.onrender.com/order/update-is-paid/${selectedOrderId}`, {
+      const response = await fetch(`http://localhost:10000/order/update-is-paid/${selectedOrderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -336,7 +336,7 @@ const Purchases = () => {
     try {
       // Step 1: Create checkout session
       const checkoutResponse = await fetch(
-        "https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session",
+        "http://localhost:10000/api/create-gcash-checkout-session",
         {
           method: "POST",
           headers: {
@@ -386,7 +386,7 @@ const Purchases = () => {
       // Step 3: Fetch order details, order quantities, and products
       // 3a. Get order details
       const orderResponse = await fetch(
-        "https://lolos-place-backend.onrender.com/order/get-order",
+        "http://localhost:10000/order/get-order",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -419,7 +419,7 @@ const Purchases = () => {
 
       // 3c. Get products
       const productResponse = await fetch(
-        "https://lolos-place-backend.onrender.com/menu/get-product",
+        "http://localhost:10000/menu/get-product",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -460,7 +460,7 @@ const Purchases = () => {
         console.log(salesData);
 
         try {
-          const salesResponse = await fetch("https://lolos-place-backend.onrender.com/sales/add-sales", {
+          const salesResponse = await fetch("http://localhost:10000/sales/add-sales", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(salesData),
@@ -599,7 +599,7 @@ const Purchases = () => {
 
   return (
     <section className={styles.section}>
-      <div className={styles.searchContainer}>
+      <div className={styles.OrdersSearchContainer}>
         <input
           type="text"
           placeholder="Search by Order ID"
@@ -607,7 +607,8 @@ const Purchases = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           className={styles.searchInput}
         />
-        <button onClick={handleSortChange}>
+        <button onClick={handleSortChange}
+        className={styles.OrdersSortButton}>
           Sort Order {sortOrder === 'asc' ? '▲' : '▼'}
         </button>
         <button className={styles.buttonOrderHistory} onClick={toggleView}>
@@ -636,31 +637,28 @@ const Purchases = () => {
         )}
         {view === 'orders' && (
           <div className={styles.filterContainer}>
-            <button onClick={() => setOrderTypeFilter('')} className={styles.filterButton}>
-              All
-              <span className={styles.notificationNumber}>{all}</span>
-            </button>
-            <button onClick={() => setOrderTypeFilter('dine-in')} className={styles.filterButton}>
-              Dine In
-              <span className={styles.notificationNumber}>{dine}</span>
+  <button onClick={() => setOrderTypeFilter('')} className={styles.filterButton}>
+    All
+    {all > 0 && <span className={styles.notificationNumber}>{all}</span>}
+  </button>
+  <button onClick={() => setOrderTypeFilter('dine-in')} className={styles.filterButton}>
+    Dine In
+    {dine > 0 && <span className={styles.notificationNumber}>{dine}</span>}
+  </button>
+  <button onClick={() => setOrderTypeFilter('take-out')} className={styles.filterButton}>
+    Take Out
+    {take > 0 && <span className={styles.notificationNumber}>{take}</span>}
+  </button>
+  <button onClick={() => setOrderTypeFilter('deliveries')} className={styles.filterButton}>
+    Deliveries
+    {deliverr > 0 && <span className={styles.notificationNumber}>{deliverr}</span>}
+  </button>
+  <button onClick={() => setOrderTypeFilter('pay-later')} className={styles.filterButton}>
+    Pay later
+    {pay > 0 && <span className={styles.notificationNumber}>{pay}</span>}
+  </button>
+</div>
 
-            </button>
-            <button onClick={() => setOrderTypeFilter('take-out')} className={styles.filterButton}>
-              Take Out
-              <span className={styles.notificationNumber}>{take}</span>
-
-            </button>
-            <button onClick={() => setOrderTypeFilter('deliveries')} className={styles.filterButton}>
-              Deliveries
-              <span className={styles.notificationNumber}>{deliverr}</span>
-
-            </button>
-            <button onClick={() => setOrderTypeFilter('pay-later')} className={styles.filterButton}>
-              Pay later
-              <span className={styles.notificationNumber}>{pay}</span>
-
-            </button>
-          </div>
         )}
       </div>
       <div className={styles.orderPurchasesContainer}>
@@ -676,7 +674,7 @@ const Purchases = () => {
                 {filteredPreparingOrders.map((order) => {
                   return (
                     <li key={order.order_id} className={styles.orderItem}>
-                      <h3>Order #{order.order_id}</h3>
+                      <h3 className={styles.ordersH3}>Order #{order.order_id}</h3>
                       <p>Table: {tables.find((table) => table.table_id === order.tableID) 
     ? tables.find((table) => table.table_id === order.tableID).table_name 
     : 'No table applied'}
@@ -701,7 +699,7 @@ const Purchases = () => {
                 })}
               </ul>
             ) : (
-              <p>No pending orders available.</p>
+              <p className={styles.noOrders}>No pending orders available.</p>
             )}
           </div>
         ) : (
@@ -711,7 +709,7 @@ const Purchases = () => {
               <ul className={styles.orderList}>
                 {filteredAllOrders.map((order) => (
                   <li key={order.order_id} className={styles.orderItem}>
-                    <h3>Order #{order.order_id}</h3>
+                    <h3 className={styles.ordersH3}>Order #{order.order_id}</h3>
                     <p>Name: {order.customerName !== null ? order.customerName : `${order.firstName} ${order.lastName}`}</p>  
                     <p>Number of people: {order.numberOfPeople == null ? "1" : order.numberOfPeople}</p>
                     <p>Contact Number: {order.phone == "09682823420" ? "N/A" : order.phone}</p>
@@ -731,7 +729,7 @@ const Purchases = () => {
                 ))}
               </ul>
             ) : (
-              <p>No order history available.</p>
+              <p className={styles.noOrders}>No order history available.</p>
             )}
           </div>
         )}

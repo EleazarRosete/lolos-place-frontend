@@ -1,26 +1,23 @@
 .section {
-    width: 88%;
-    height: 70vh;
-    max-width: 100%;
+    width: 21%;
+    max-width: 21%; 
+    height: 15vh;
     background-color: #FEF7E1;
     border: 0;
     border-radius: 10px;
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding-top: 0;
-    margin-top: 0.9rem;
-    overflow-y: auto;
-    scrollbar-color: #FCF6E6 transparent;
-    scrollbar-width: thin;
-    transition: scrollbar-color 0.3s ease-in-out;
+    align-items: start;
+    justify-content: center;
+    margin: 10px;
+    margin: 0;
+    border-radius: 5px;
+    color: #313132;
     box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
     border-top: 1px solid #3e2723;
-    position: relative;
-    right: -3%;
 }
 
 .title {

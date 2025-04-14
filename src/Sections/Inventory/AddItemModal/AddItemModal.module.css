@@ -80,7 +80,7 @@ textarea {
 .buttonSubmit,
 .buttonCancel {
     padding: 12px;
-    background-color: #3e2723;
+    background-color: #A5957B;
     color: white;
     border: none;
     border-radius: 4px;
@@ -92,7 +92,7 @@ textarea {
 
 .buttonSubmit:hover,
 .buttonCancel:hover {
-    opacity: 0.8;
+    background-color: #A0764B;
 }
 
 @media (max-width: 768px) {

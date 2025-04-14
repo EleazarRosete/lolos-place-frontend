@@ -8,7 +8,7 @@ function Product({ menu_id, name, price, stock, onAddToOrder, order, onRemove, o
     // Fetch products function
     const getProducts = async () => {
         try {
-            const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-product", {
+            const response = await fetch("http://localhost:10000/menu/get-product", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });

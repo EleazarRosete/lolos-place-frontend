@@ -72,15 +72,16 @@ function SalesTodayCard() {
     }, []);
 
     return (
-        <div className={styles.card}>
-            <h1 className={styles.cardHeaderTxt}>Sales</h1>
+        <div className={styles.salesTodayCard}>
+            <h1 className={styles.salesTodayCardHeaderTxt}>Sales</h1>
             
             <div className={styles.dateFilter}>
-                <label htmlFor="dateFilter">Select Date: </label>
+                <label htmlFor="dateFilter" className={styles.SalesSelectDateLabel}>Select Date: </label>
                 <input 
     type="date" 
     id="dateFilter" 
     value={selectedDate} 
+    className={styles.SalesSelectedDate}
     onChange={handleDateChange} 
     max={new Date().toISOString().split('T')[0]} // Sets the maximum date to today
 />

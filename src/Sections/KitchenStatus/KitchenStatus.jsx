@@ -50,7 +50,7 @@ const KitchenStatus = () => {
 
   const fetchOrderHistory = async () => {
     try {
-      const response = await axios.get('https://lolos-place-backend.onrender.com/order/order-history');
+      const response = await axios.get('http://localhost:10000/order/order-history');
       setAllOrders(response.data);
     } catch (err) {
       setError('Failed to fetch order history. Please try again later.');
@@ -59,7 +59,7 @@ const KitchenStatus = () => {
 
   const fetchDeliveries = async () => {
     try {
-      const response = await fetch('https://lolos-place-backend.onrender.com/order/get-delivery', {
+      const response = await fetch('http://localhost:10000/order/get-delivery', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -72,7 +72,7 @@ const KitchenStatus = () => {
 
   const fetchTables = async () => {
     try {
-      const response = await fetch("https://lolos-place-backend.onrender.com/table/get-table", {
+      const response = await fetch("http://localhost:10000/table/get-table", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
       });
@@ -106,7 +106,7 @@ const KitchenStatus = () => {
     };
     const fetchProducts = async () =>{
       try {
-      const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-product", {
+      const response = await fetch("http://localhost:10000/menu/get-product", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -183,7 +183,7 @@ const KitchenStatus = () => {
 
     if (matchedDelivery) {
         try {
-            const response = await fetch(`https://lolos-place-backend.onrender.com/order/update-delivery/${matchedDelivery.delivery_id}`, {
+            const response = await fetch(`http://localhost:10000/order/update-delivery/${matchedDelivery.delivery_id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status: "Delivered" }),
@@ -202,7 +202,7 @@ const KitchenStatus = () => {
     }
 
     try {
-        const response = await axios.put(`https://lolos-place-backend.onrender.com/order/order-served/${selectedOrderId}`);
+        const response = await axios.put(`http://localhost:10000/order/order-served/${selectedOrderId}`);
         if (response.status === 200) {
             await fetchOrderHistory();
             handleCloseModal();
@@ -216,7 +216,7 @@ const KitchenStatus = () => {
 
   const handlePayNow = async () => {
       try {
-      const response = await fetch("https://lolos-place-backend.onrender.com/order/get-order", {
+      const response = await fetch("http://localhost:10000/order/get-order", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -269,7 +269,7 @@ const KitchenStatus = () => {
   
       
       try {
-        const response = await fetch('https://lolos-place-backend.onrender.com/sales/add-sales', {
+        const response = await fetch('http://localhost:10000/sales/add-sales', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedSalesData),
@@ -296,7 +296,7 @@ const KitchenStatus = () => {
         throw new Error("Selected order ID is not defined.");
       }
     
-      const response = await fetch(`https://lolos-place-backend.onrender.com/order/update-is-paid/${selectedOrderId}`, {
+      const response = await fetch(`http://localhost:10000/order/update-is-paid/${selectedOrderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -348,7 +348,7 @@ const handleGCashPayment = async () => {
 
     try {
         // Step 1: Create checkout session
-        const response = await fetch("https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session", {
+        const response = await fetch("http://localhost:10000/api/create-gcash-checkout-session", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

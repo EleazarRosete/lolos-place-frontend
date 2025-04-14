@@ -9,7 +9,7 @@ function Failed(order_id) {
         const fetchDataAndDelete = async () => {
             try {
                 // Fetch the temp data
-                const response = await fetch("https://lolos-place-backend.onrender.com/order/get-temp-data");
+                const response = await fetch("http://localhost:10000/order/get-temp-data");
                 if (!response.ok) {
                     throw new Error(`Failed to fetch temp data. Status: ${response.status}`);
                 }
@@ -20,7 +20,7 @@ function Failed(order_id) {
                 if (data && data.length > 0) {
                     // Iterate through the data array
                     for (let i = 0; i < data.length; i++) {
-                        const deleteResponse = await fetch(`https://lolos-place-backend.onrender.com/order/delete-temp-data/${data[i].purchases_id}`, {
+                        const deleteResponse = await fetch(`http://localhost:10000/order/delete-temp-data/${data[i].purchases_id}`, {
                             method: 'DELETE',
                             headers: { 'Content-Type': 'application/json' },
                         });

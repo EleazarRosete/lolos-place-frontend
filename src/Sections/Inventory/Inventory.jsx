@@ -18,7 +18,7 @@ function Inventory() {
 
     const getProduct = async () => {
         try {
-            const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-product", {
+            const response = await fetch("http://localhost:10000/menu/get-product", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -68,7 +68,7 @@ function Inventory() {
 
     const handleRemoveItem = async (id) => {
         try {
-            await fetch(`https://lolos-place-backend.onrender.com/menu/delete-product/${id}`, {
+            await fetch(`http://localhost:10000/menu/delete-product/${id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
@@ -125,7 +125,7 @@ function Inventory() {
     return (
         <section className={styles.inventorySection}>
             <div className={styles.inventoryContainer}>
-                <h2 className={styles.h2}>Inventory Management</h2>
+                <h2 className={styles.InventoryH2}>Inventory Management</h2>
                 <div className={styles.actions}>
                     <div className={styles.searchBar}>
                         <input
@@ -138,19 +138,19 @@ function Inventory() {
                         />
                     </div>
                     <div className={styles.topButtons}>
-                        <button className={styles.buttons} onClick={handleSortByName}>Sort by Name</button>
-                        <button className={styles.buttons} onClick={handleSortByQuantity}>Sort by Quantity</button>
+                        <button className={styles.inventoryButtons} onClick={handleSortByName}>Sort by Name</button>
+                        <button className={styles.inventoryButtons} onClick={handleSortByQuantity}>Sort by Quantity</button>
                         <select
-                            className={styles.category}
+                            className={styles.InventoryCategory}
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
                         >
-                            <option value="All">All</option>
+                            <option value="All" >All</option>
                             {categories.map((category, index) => (
                                 <option key={index} value={category}>{category}</option>
                             ))}
                         </select>
-                        <button className={styles.addButton} onClick={() => setIsModalOpen(true)}>Add Item</button>
+                        <button className={styles.inventoryButtons} onClick={() => setIsModalOpen(true)}>Add Item</button>
                     </div>
                 </div>
 

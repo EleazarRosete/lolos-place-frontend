@@ -68,7 +68,7 @@ function AddItemModal({ item, onAddItem, onUpdateItem, onClose }) {
             uploadFormData.append('file', file);
 
             try {
-                const response = await fetch('https://lolos-place-backend.onrender.com/upload', {
+                const response = await fetch('http://localhost:10000/upload', {
                     method: 'POST',
                     body: uploadFormData,
                 });

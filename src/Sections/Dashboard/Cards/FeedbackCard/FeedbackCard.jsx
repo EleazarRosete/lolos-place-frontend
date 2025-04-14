@@ -55,8 +55,8 @@ function FeedbackCard() {
     };
 
     return (
-        <div className={styles.card}>
-            <h1 className={styles.cardHeaderTxt}>Latest Feedback:</h1>
+        <div className={styles.FeedbackCard}>
+            <h1 className={styles.FeedbackCardHeaderTxt}>Latest Feedback:</h1>
             <div className={`${styles.commentBox} ${getSentimentClass()}`}>
                 {latestComment || "No comments available."}
             </div>

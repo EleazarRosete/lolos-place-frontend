@@ -50,9 +50,6 @@ function Comment({ username, comment, date, sentiment, ratings }) {
                     <strong>Service:</strong> {renderStars(ratings.service)}
                 </div>
             </div>
-            <p className={styles.sentimentStyle} style={{ color: sentimentColor() }}>
-                {sentiment}
-            </p>
         </div>
     );
 }

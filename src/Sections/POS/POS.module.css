@@ -42,26 +42,26 @@
 .posContainer {
     background-color: transparent;
     position: relative;
-    right: 1%;
+    padding: 0.5rem;
     width: 100%;
     height: 100%;
     display: grid;
     grid-template-columns: 72% 25%;
-    grid-template-rows: 10% 90%;
+    grid-template-rows: 5% 93%;
     grid-template-areas:
-        "navbar navbar"
+        "navbar order"
         "menu order";
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
-.navbar, .forms, .searchContainer, .find, .filterContainer, select, .menuContainer, .orderContainer, .placeOrder, .receipt, .individualProductsContainer, .bundleContainer {
+.navbar, .forms, .searchContainer, .find, .POSFilterContainer, select, .menuContainer, .orderContainer, .placeOrder, .receipt, .individualProductsContainer, .bundleContainer {
     background-color: transparent;
 }
 
 .navbar {
     grid-area: navbar;
     margin-left: 0.5rem;
-    width: 70%;
+    width: 95%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,27 +76,25 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 2rem;
 }
 
 .searchContainer {
-    width: 70%;
-    height: 5vh;
+    width: 75%;
+    height: 100%;
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
 }
 
 .searchBar {
-    width: 100rem;
-    height: 2rem;
+    width: 100%;
+    height: 100%;
     border-radius: 0.4rem;
     background-color: #FEF7E1;
     color: #0e0e0e;
     border: 1px solid #3e2723;
-    padding-left: 1rem;
     text-align: start;
     margin: 0;
+    padding: 0 0 0 1rem;
     box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
@@ -126,12 +124,10 @@
     background-color: transparent;
 }
 
-.filterContainer {
+.POSFilterContainer {
     width: 20%;
-    height: 5vh;
+    height: 100%;
     border-radius: 0.4rem;
-    margin-bottom: 0.5rem;
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -142,9 +138,13 @@
     color: #F4F4F9;
     border: 1px solid #3e2723;
     transition: 0.3s ease-in-out;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
 }
 
-.filterContainer:hover{
+.POSFilterContainer:hover{
     box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
@@ -204,7 +204,7 @@ option {
 
 .pText {
     opacity: 0.5;
-    font-size: larger;
+    font-size: 1rem;
     background-color: transparent;
 }
 
@@ -234,16 +234,14 @@ option {
 
 .orderContainer {
     grid-area: order;
-    width: 115%;
-    max-height: 100%;
+    width: 100%;
+    max-height: 95%;
     display: flex;
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
     border-radius: 1rem;
     position: relative;
-    top: -10%;
-    left: -5%;
     background-color: #FEF7E1;
     overflow: auto;
     box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
@@ -254,9 +252,9 @@ option {
 
 .orderTxt {
     margin-top: 1rem;
-    font-size: 2rem;
-    font-weight: 600;
-    letter-spacing: 0.1rem;
+    font-size: 1.125rem;
+    font-weight: 900;
+    letter-spacing: 0.15rem;
     background-color: transparent;
 }
 
@@ -295,7 +293,7 @@ option {
     border: 0.1rem solid #0e0e0e;
     border-radius: 0.5rem;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin-top: 0.5rem;
     margin-bottom: 1rem;
     background-color: #3e2723;
@@ -311,7 +309,7 @@ option {
 .orderCategoryTitle{
     background-color: #0e0e0e;
     font-weight: 600;
-    font-size: large;
+    font-size: 1rem;
     padding: 0.5rem;
     border-radius: 0.3rem;
 }
@@ -331,7 +329,7 @@ option {
     width: 100%;
     text-align: center;
     color: #fff;
-    font-size: 1.5rem;
+    font-size: 1rem;
     background-color: #0e0e0e;
     margin-bottom: 1rem;
     padding-left: 1rem;
@@ -461,13 +459,13 @@ option {
 
 .headerPayment{
     position: relative;
-    font-size: 1.5rem;
+    font-size: 1rem;
     margin: 0.5rem 0 0 0 ;
     padding: 0;
 }
 
 .cashHeader{
-    font-size: 2rem;
+    font-size: 1.125rem;
     position: relative;
     margin: 0;
 }
@@ -486,7 +484,7 @@ option {
 }
 
 .totalAmount {
-    font-size: 1.2em;
+    font-size: 1rem;
     font-weight: bold;
     text-align: right;
     margin: 20px 0;
@@ -502,7 +500,7 @@ option {
 
 .paymentOptions label,
 .additionalOptions label {
-    font-size: 0.9em;
+    font-size: 0.825rem;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -523,7 +521,7 @@ option {
 .confirmOrderButton, .cancelOrderButton {
     width: 30%;
     padding: 10px;
-    font-size: 1em;
+    font-size: 1rem;
     font-weight: bold;
     color: white;
     background-color: #3e2723;
@@ -590,7 +588,7 @@ option {
 .inputData {
     width: 80%;
     padding: 10px;
-    font-size: 1.5rem;
+    font-size: 1rem;
     border: 1px solid #272626;
     border-radius: 5px;
     text-align: right;
@@ -625,7 +623,7 @@ option {
 
 .calcButton {
     padding: 20px;
-    font-size: 18px;
+    font-size: 1rem;
     background-color: #6d4c41;
     border: 1px solid #272626;
     border-radius: 5px;
@@ -859,7 +857,7 @@ input[type="radio"] {
     color: white;
     border: none;
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 1rem;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -883,16 +881,6 @@ input[type="radio"] {
     width: 70%;
 }
 
-.assignTable{
-    font-size: 0.9em;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    position: relative;
-    align-items: start;
-    justify-content: center;
-    margin-bottom: 0.5rem;
-}
 
 .selectTableDesign{
     border: 1px solid;
