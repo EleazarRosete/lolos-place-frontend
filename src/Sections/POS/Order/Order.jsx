@@ -57,16 +57,8 @@ function Order({ id, name, price, stock, order, total, onAddToOrder, onRemove, i
         <div className={styles.orderItem}>
             <div className={styles.orderItemDetails}>
                 <div className={styles.productDetails1}>
-                    <h4>{name}</h4>
-                    <p>Price: ₱{price}</p>
-                </div>
-                
-                <div className={styles.orderItemActions}>
-                    <div className={styles.quantityControl}>
-                
-                        <span className={styles.orderItemQuantity}>{order}</span>
-
-                    </div>
+                    <h4 className={styles.productDetails1H4}>{name}</h4>
+                    <span className={styles.orderItemQuantity}>{order}</span>
                 </div>
             </div>
         </div>

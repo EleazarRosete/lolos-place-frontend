@@ -17,26 +17,26 @@
 
 /* Custom scrollbar styles for webkit browsers */
 .posContainer::-webkit-scrollbar {
-    width: 8px; /* Width of the scrollbar */
+    width: 1px; /* Width of the scrollbar */
 }
 
 .posContainer::-webkit-scrollbar-track {
-    background: #0e0e0e; /* Background of the scrollbar track */
+    background: transparent; /* Background of the scrollbar track */
 }
 
 .posContainer::-webkit-scrollbar-thumb {
-    background: #3a3a3a; /* Color of the scrollbar thumb */
+    background: #A0764B; /* Color of the scrollbar thumb */
     border-radius: 4px; /* Rounded corners for the scrollbar thumb */
 }
 
 .posContainer::-webkit-scrollbar-thumb:hover {
-    background: #5a5a5a; /* Darker shade on hover */
+    background: #A5957B; /* Darker shade on hover */
 }
 
 /* For Firefox */
 .posContainer {
     scrollbar-width: thin; /* Thin scrollbar */
-    scrollbar-color: #3a3a3a #0e0e0e; /* Thumb color and track color */
+    scrollbar-color:  #A5957B; /* Thumb color and track color */
 }
 
 .posContainer {
@@ -134,52 +134,42 @@
     cursor: pointer;
     border: none;
     gap: 0.4rem;
-    background-color: #3e2723;
-    color: #F4F4F9;
-    border: 1px solid #3e2723;
+    background-color: #A5957B;
+    color: black;
+    border: 1px solid #A5957B;
     transition: 0.3s ease-in-out;
     box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
-    border-top: 1px solid #3e2723;
+    border-top: 1px solid #A5957B;
 }
 
 .POSFilterContainer:hover{
-    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
-    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
-    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
-    border-top: 1px solid #3e2723;
+    background-color: #A0764B;
 }
 
 select {
     border: 0;
     width: 70%;
     cursor: pointer;
-    color: #F4F4F9;
+    color: black;
 }
 
 option {
-    background-color: #3e2723;
+    background-color: #A5957B;
     cursor: pointer;
+    font-size: 0.825rem;
     font-weight: 500;
-    color: #F4F4F9;
+    color: black;
     cursor: pointer;
+
 }
+
 
 
 .menuContainer {
     grid-area: menu;
     width: 100%;
-    height: auto; /* Allow dynamic height based on content */
-    padding: 1rem; /* Unified padding */
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping to the next line */
-    justify-content: center; /* Start items from the left */
-    align-items: flex-start; /* Align items at the start for consistency */
-    overflow-x: auto; /* Allow horizontal scrolling if needed */
-    gap: 1rem; /* Space between product cards */
-    position: relative;
-    left: -1%;
     
     /* Hide scrollbar for most browsers */
     scrollbar-width: none; /* Firefox */
@@ -192,17 +182,19 @@ option {
 
 
 .productContainer{
-    width: 95%;
+    width: 100%;
+    height: 100%;
     background-color: transparent;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    overflow-x: hidden;
-    flex-wrap: wrap;
-    gap: 1rem;
+    justify-content: flex-start;
+    overflow-y: auto;
+    gap: 0.5rem;
 }
 
 .pText {
+    color: #000;
     opacity: 0.5;
     font-size: 1rem;
     background-color: transparent;
@@ -214,22 +206,22 @@ option {
 }
 
 .orderContainer::-webkit-scrollbar-track {
-    background: #0e0e0e; /* Background of the scrollbar track */
+    background: #A0764B; /* Background of the scrollbar track */
 }
 
 .orderContainer::-webkit-scrollbar-thumb {
-    background: #3a3a3a; /* Color of the scrollbar thumb */
+    background: #A5957B; /* Color of the scrollbar thumb */
     border-radius: 4px; /* Rounded corners for the scrollbar thumb */
 }
 
 .orderContainer::-webkit-scrollbar-thumb:hover {
-    background: #5a5a5a; /* Darker shade on hover */
+    background: #A0764B; /* Darker shade on hover */
 }
 
 /* For Firefox */
 .orderContainer {
     scrollbar-width: thin; /* Thin scrollbar */
-    scrollbar-color: #3a3a3a #0e0e0e; /* Thumb color and track color */
+    scrollbar-color: #A5957B #A0764B; /* Thumb color and track color */
 }
 
 .orderContainer {
@@ -247,7 +239,6 @@ option {
     box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
     -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
-    border-top: 1px solid #3e2723;
 }
 
 .orderTxt {
@@ -264,6 +255,8 @@ option {
     text-align: center;
     background-color: transparent;
     overflow: auto; /* Ensure scrolling works */
+    border-top: 1px solid;
+    border-bottom: 1px solid    ;
   }
   
   /* Custom scrollbar styles for WebKit browsers (Chrome, Edge, Safari) */
@@ -290,14 +283,13 @@ option {
 .placeOrder {
     width: 90%;
     padding: 0.5rem 1rem;
-    border: 0.1rem solid #0e0e0e;
     border-radius: 0.5rem;
     cursor: pointer;
     font-size: 1rem;
     margin-top: 0.5rem;
     margin-bottom: 1rem;
-    background-color: #3e2723;
-    color: #F4F4F9;
+    background-color: #A5957B;
+    color: black;
 }
 
 .receipt {
@@ -325,10 +317,16 @@ option {
     margin-bottom: 2rem;
 }
 
+.category{
+    color: black;
+    font-size: 0.825rem;
+    font-weight: 600;
+}
+
 .categoryTitle {
     width: 100%;
     text-align: center;
-    color: #fff;
+    color: black;
     font-size: 1rem;
     background-color: #0e0e0e;
     margin-bottom: 1rem;
@@ -406,13 +404,18 @@ option {
     max-width: 600px;
     padding: 20px;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .orderDetailsHeader {
-    font-size: 1.5em;
-    font-weight: bold;
+    font-size: 1.125rem;
+    font-weight: 900;
     margin-bottom: 10px;
     text-align: center;
+    margin: 0;
 }
 
 .orderItems {
@@ -420,7 +423,9 @@ option {
     max-height: 10rem;
     overflow-y: auto;
     padding: 0rem 1rem;
-    border-bottom: 1px solid #3e2723;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+
   }
   
   /* Custom scrollbar styles for WebKit browsers (Chrome, Edge, Safari) */
@@ -446,15 +451,15 @@ option {
 
 .orderItem, .orderItemReceipt {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px dashed #3e2723;
+    border-bottom: 1px dashed black;
 }
 
 .orderItem p {
     margin: 0;
-    font-size: 0.9em;
+    font-size: 0.825rem;
 }
 
 .headerPayment{
@@ -462,6 +467,7 @@ option {
     font-size: 1rem;
     margin: 0.5rem 0 0 0 ;
     padding: 0;
+    margin: 0;
 }
 
 .cashHeader{
@@ -485,25 +491,32 @@ option {
 
 .totalAmount {
     font-size: 1rem;
-    font-weight: bold;
+    font-weight: 600;
     text-align: right;
-    margin: 20px 0;
+    margin: 0;
+    align-self: flex-end;
 }
 
 .paymentOptions,
 .additionalOptions {
+    width: 50%;
     display: flex;
+    align-items: center;
     gap: 15px;
     margin: 10px 0;
     justify-content: center;
+    margin: 0;
 }
 
 .paymentOptions label,
 .additionalOptions label {
     font-size: 0.825rem;
+    font-weight: 500;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
     cursor: pointer;
+    margin: 0;
 }
 
 .navOrderDetailButtons{
@@ -521,10 +534,10 @@ option {
 .confirmOrderButton, .cancelOrderButton {
     width: 30%;
     padding: 10px;
-    font-size: 1rem;
+    font-size: 0.825rem;
     font-weight: bold;
-    color: white;
-    background-color: #3e2723;
+    color: black;
+    background-color: #A5957B;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -545,10 +558,13 @@ option {
     border-radius: 8px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     width: 80%;
-    height: 90%;
+    height: 80%;
     max-width: 600px;
     padding: 20px;
     z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 
@@ -596,10 +612,14 @@ option {
 }
 
 .contentContainer{
-    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
     height: 100%;
     background-color: transparent;
+    border-top: 1px solid;
+    padding-top: 0.5rem;
 }
 
 .calcButtons {
@@ -610,7 +630,7 @@ option {
 }
 
 .cancelPaymentButton{
-    background-color: #6d4c41;
+    background-color: #A5957B;
     width: 25%;
     height: 100%;
     display: flex;
@@ -619,6 +639,10 @@ option {
     padding: 0.5rem 3rem;
     border-radius: 0.2rem;
     cursor: pointer;
+}
+
+.cancelPaymentButton:hover{
+    background-color: #A0764B;
 }
 
 .calcButton {
@@ -666,21 +690,30 @@ option {
 
 .paymentInfo{
     width: 100%;
-    height: 85%;
+    height: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .paymentAmount{
-    width: 100%;
-    padding: 0.3rem 0 0.3rem 0.5rem;
+    width: 50%;
     margin: 0;
+    margin-left: 0.3rem;
 }
 
-.sum{
+.sum, .sum1{
     color: #3e2723;
     font-size: 1rem;
+    font-weight: 500;
     text-align: right;
+    margin: 0;
+    margin-bottom: 0.3rem;
+}
+
+.sum1{
+    font-weight: 600;
 }
 
 .orderReceipt{
@@ -792,7 +825,7 @@ input[type="radio"] {
     border-radius: 8px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     width: 30%;
-    height: 20%;
+    height: 25%;
     max-width: 600px;
     padding: 20px;
     z-index: 1000;  
@@ -807,7 +840,7 @@ input[type="radio"] {
     border-radius: 8px; 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     width: 30%;
-    height: 20%;
+    height: 30%;
     max-width: 600px;
     padding: 20px;
     z-index: 1000;  
@@ -824,7 +857,7 @@ input[type="radio"] {
  }   
  
  .cancelModalConfirmation{
-    background-color: #6d4c41;
+    background-color: #A5957B;
     padding: 0.5rem 1rem;
     border-radius: 0.2rem;
     cursor: pointer;
@@ -866,23 +899,47 @@ input[type="radio"] {
 
 
 .customerDetails{
-    height: 20%;
+    height: 10%;
     display: flex;  
     max-width: 100%;
     flex-direction: row;
-    align-items: start;
+    align-items: center;
     justify-content: space-between;
     margin: 0;
     padding: 0;
 
 }
 
-.inputBox{
-    width: 70%;
+.customerDetails label{
+    width: 50%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.customerDetails input{
+    width: 50%;
+
+    border-radius: 0.3rem;
+    margin: 0;
+    margin-left: 0.3rem;
+}
+
+.inputBoxx{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
 }
 
 
 .selectTableDesign{
     border: 1px solid;
     color: #000;
+    width: 30%;
+    padding: 0.5rem 0.2rem;
+    border-radius: 0.4rem;
+    margin: 1rem 0;
 }

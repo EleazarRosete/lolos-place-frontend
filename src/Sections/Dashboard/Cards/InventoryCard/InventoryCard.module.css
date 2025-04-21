@@ -1,8 +1,8 @@
 /* Card Styles */
 .InventoryCard {
-    width: 21%;
-    max-width: 21%; 
-    height: 15vh;
+    width: 28%;
+    max-width: 28%; 
+    height: 10vh;
     background-color: #FEF7E1;
     border: 0;
     border-radius: 10px;
@@ -23,17 +23,18 @@
 .InventoryCardHeaderTxt{
     font-size: 1rem;
     font-weight: 600;
+    margin: 0;
 }
 
 
 /* Stock Indicator */
 .card .stockIndicator {
     color: #0e0e0e;
+    
     letter-spacing: 0.15em;
     width: 95%;
     height: 10vh;
     padding: 0.5rem;
-    font-weight: 700;
     font-size: 0.8rem;
     border-radius: 5px;
     display: flex;
@@ -48,13 +49,15 @@
 
 /* High and Low Stocks Background Colors */
 .highStocks {
-    background-color: #4CAF50; /* Olive green for high stocks */
-    color: #FFFFFF; /* Text color for high stocks */
+    color: red; /* Olive green for high stocks */
+    font-weight: 900;
+
 }
 
 .lowStocks {
-    background-color: rgba(178, 34, 34, 0.9); /* Firebrick red for low stocks */
-    color: #0E0E0E; /* Text color for low stocks */
+    color: red; /* Firebrick red for low stocks */
+    font-weight: 900;
+
 }
 
 /* Modal Styles */
@@ -76,11 +79,42 @@
     background-color: #FEF7E1;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    width: 30%;
-    height: 20%;
+    width: 25%;
+    height: 70%;
     max-width: 600px;
     padding: 20px;
     z-index: 1000;
+}
+
+.inventoryCardDetailsHeader{
+    color: black;
+}
+
+.InventoryCardDetailsStock{
+    width: 100%;
+    height: 85%;
+    max-height: 85%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    overflow-y: auto;
+}
+
+.InventoryCardDetailsStock::-webkit-scrollbar {
+    display: none; 
+  }
+
+.noLowStocks{
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-size: 1rem;
+    font-style: italic;
 }
 
 /* Modal Close Button */

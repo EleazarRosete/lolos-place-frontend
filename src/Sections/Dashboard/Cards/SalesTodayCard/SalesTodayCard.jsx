@@ -73,13 +73,13 @@ function SalesTodayCard() {
 
     return (
         <div className={styles.salesTodayCard}>
-            <h1 className={styles.salesTodayCardHeaderTxt}>Sales</h1>
-            
-            <div className={styles.dateFilter}>
+                        <div className={styles.salesText}>
+                            Sales: {formatCurrency(filteredSales)}
+            </div>
+            <div className={styles.dateFilterSale}>
                 <label htmlFor="dateFilter" className={styles.SalesSelectDateLabel}>Select Date: </label>
                 <input 
     type="date" 
-    id="dateFilter" 
     value={selectedDate} 
     className={styles.SalesSelectedDate}
     onChange={handleDateChange} 
@@ -88,9 +88,7 @@ function SalesTodayCard() {
 
             </div>
             
-            <div className={styles.salesText}>
-                {formatCurrency(filteredSales)}
-            </div>
+
         </div>
     );
 }

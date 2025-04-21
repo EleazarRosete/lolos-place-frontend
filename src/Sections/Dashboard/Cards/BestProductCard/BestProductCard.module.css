@@ -1,7 +1,6 @@
 .section {
-    width: 21%;
-    max-width: 21%; 
-    height: 15vh;
+    width: 88%;
+    height: 65vh;
     background-color: #FEF7E1;
     border: 0;
     border-radius: 10px;
@@ -9,7 +8,7 @@
     display: flex;
     flex-direction: column;
     align-items: start;
-    justify-content: center;
+    justify-content: flex-start;
     margin: 10px;
     margin: 0;
     border-radius: 5px;
@@ -19,6 +18,42 @@
     -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
     border-top: 1px solid #3e2723;
 }
+
+.filterSection{
+    width: 100%;
+    display: flex;
+    padding-bottom: 2%;
+    margin-bottom: 2%;
+    border-bottom: 1px solid ;
+}
+
+h1{
+    margin: 0;
+}
+
+.filterSection label{
+    width: 30%;
+    margin: 0;
+}
+
+.filterSection input{
+    width: 45%;
+    margin: 0;
+}
+
+.productSoldContainer{
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    padding: 0;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.productSoldContainer p {
+    margin: 0;
+}
+
 
 .title {
     font-size: 1.5rem;

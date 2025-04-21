@@ -750,8 +750,9 @@ const Purchases = () => {
     : 'No table applied'}
 </p>
             <div className={styles.navButtonOrders}>
-            <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Close</button>
+
               <button onClick={handleServeOrder} className={styles.orderButtonsHistory}>Served</button>
+              <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Close</button>
 
             </div>
 
@@ -778,7 +779,7 @@ const Purchases = () => {
     : 'No table applied'}
 </p>
             <div className={styles.navButtonOrders}>
-            <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Cancel</button>
+            <button onClick={handlePayNow} className={styles.orderButtonsHistory}>CASH Pay</button>
             <button 
   onClick={() => handleGCashPayment(detailss[9], detailss[0])} 
   className={styles.orderButtonsHistory}
@@ -786,7 +787,8 @@ const Purchases = () => {
   GCASH Pay
 </button>
 
-              <button onClick={handlePayNow} className={styles.orderButtonsHistory}>CASH Pay</button>
+
+              <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Cancel</button>
 
             </div>
 

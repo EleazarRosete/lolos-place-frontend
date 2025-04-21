@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import styles from './FeedbackCard.module.css';
+import Feedback from '../../../Feedback/Feedback';
 
 function FeedbackCard() { 
+    const navigate = useNavigate();
     const [latestComment, setLatestComment] = useState("");
     const [sentiment, setCommentSentiment] = useState("");
 
@@ -57,10 +60,14 @@ function FeedbackCard() {
     return (
         <div className={styles.FeedbackCard}>
             <h1 className={styles.FeedbackCardHeaderTxt}>Latest Feedback:</h1>
-            <div className={`${styles.commentBox} ${getSentimentClass()}`}>
+            <button className={`${styles.commentBox} ${getSentimentClass()}`}            onClick={() => navigate('/admin/feedback')} >
                 {latestComment || "No comments available."}
-            </div>
+            </button>
+            <Routes>
+                    <Route path="/admin/feedback" element={<Feedback />} />
+                </Routes>
         </div>
+        
     );
 }
 

@@ -7,7 +7,7 @@ function InventoryCard() {
 
     const getProduct = async () => {
         try {
-            const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-low-stocks", {
+            const response = await fetch("http://localhost:10000/menu/get-low-stocks", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -46,8 +46,8 @@ function InventoryCard() {
                 <div className={styles.modalOverlay}>
                     <div className={styles.modalContent}>
                         <button className={styles.closeModalButton} onClick={toggleModal}>X</button>
-                        <h2>Low Stock Products</h2>
-                        <ul>
+                        <h2 className={styles.inventoryCardDetailsHeader}>Low Stock Products</h2>
+                        <ul className={styles.InventoryCardDetailsStock}>
                             {product.length > 0 ? (
                                 product.map((item) => (
                                     <li key={item.menu_id}>
@@ -55,7 +55,7 @@ function InventoryCard() {
                                     </li>
                                 ))
                             ) : (
-                                <li>No low stock items available.</li>
+                                <li className={styles.noLowStocks}>No low stock items available.</li>
                             )}
                         </ul>
                     </div>

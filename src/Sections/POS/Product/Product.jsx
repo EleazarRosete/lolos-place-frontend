@@ -97,13 +97,13 @@ function Product({ menu_id, name, price, stock, onAddToOrder, order, onRemove, o
         <div className={styles.productCard}>
             <div className={styles.productDetails}>
                 <h3 className={styles.productText1}>{name}</h3>
-                <p className={styles.productText1}>₱{price}</p>
-                <p className={styles.productText1}>
+                <p className={styles.productText2}>₱{price}</p>
+                <p className={styles.productText2}>
                     Stock: {products.find(product => product.menu_id === menu_id)?.stocks ?? stock}
                 </p>
-                
+                <div className={styles.posButtonAddtoOrder}>
                 <button onClick={handleAddToOrder} className={styles.addToOrderBtn1}>
-                    Add to Order
+                   +
                 </button>
                 <button
     className={styles.quantityButton}
@@ -119,6 +119,9 @@ function Product({ menu_id, name, price, stock, onAddToOrder, order, onRemove, o
 >
     -
 </button>
+
+                </div>
+
 
 
             </div>

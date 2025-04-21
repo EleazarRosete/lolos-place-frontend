@@ -74,7 +74,7 @@ function BestProductCard() {
             </div>
             
             {Object.keys(productSummary).length > 0 ? (
-                <ul>
+                <ul className={styles.productSoldContainer}>
                     {/* Sort the products by quantity in descending order */}
                     {Object.entries(productSummary)
                         .sort((a, b) => b[1] - a[1]) // Sort by the second element (quantity)

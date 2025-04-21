@@ -1,8 +1,8 @@
 /* Card Styles */
 .FeedbackCard {
-    width: 21%;
-    max-width: 21%; 
-    height: 15vh;
+    width: 28%;
+    max-width: 28%; 
+    height: 10vh;
     background-color: #FEF7E1;
     border: 0;
     border-radius: 10px;
@@ -15,16 +15,17 @@
     margin: 0;
     border-radius: 5px;
     color: #313132;
-    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
-    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
-    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
-    border-top: 1px solid #3e2723;
+        box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+        -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+        -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+        border-top: 1px solid #3e2723;
 }
 
 .FeedbackCardHeaderTxt {
     font-size: 1rem;
     font-weight: 700;
     color: #313132;
+    margin: 0;
 }
 
 /* Comment Box */

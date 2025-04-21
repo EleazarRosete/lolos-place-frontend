@@ -1035,7 +1035,7 @@ const handleRemoveFromCart = (menu_id) => {
                         />
                         </label>
                         </div>
-                        <label className={styles.inputBox}
+                        <label className={styles.inputBoxx}
                         >Enter Amount:
                         <input
                             type="number"
@@ -1066,12 +1066,12 @@ const handleRemoveFromCart = (menu_id) => {
                         <h3 className={styles.sum}>
                             Service charge(10%): ₱{serviceCharge}
                         </h3>
-                        <h3 className={styles.sum}>
+                        <h3 className={styles.sum1}>
                             Total Amount: ₱{
                                 (order.reduce((total, item) => total + item.total, 0) + parseFloat(serviceCharge)).toFixed(2)
                             }
                         </h3>
-                        <h3 className={styles.sum}>Change: ₱{change}</h3>
+                        <h3 className={styles.sum1}>Change: ₱{change}</h3>
                     </div>
 
                     <div className={styles.navButton}>

@@ -122,19 +122,21 @@ const CustomerReviewsGraph = () => {
 
   // Generate dynamic report based on feedback distribution
   let reportMessage = "";
+
   if (positive_count > negative_count && positive_count > neutral_count) {
     reportMessage =
-      "Most of the feedback is positive, indicating high customer satisfaction. We should continue to improve and reward loyal customers.";
+      "The feedback is overwhelmingly positive, reflecting strong customer satisfaction. To maintain this momentum, it's crucial to continue rewarding loyal customers, enhance successful aspects, and look for further opportunities to delight them.";
   } else if (negative_count > positive_count && negative_count > neutral_count) {
     reportMessage =
-      "There is a high percentage of negative feedback, suggesting potential issues that need urgent attention. Analyzing customer concerns and addressing them should be a priority.";
+      "A significant proportion of feedback is negative, signaling areas of concern that require immediate attention. Identifying recurring issues and addressing them swiftly will be key to improving customer relations and preventing churn. Consider reviewing product/service quality, response times, or communication strategies.";
   } else if (neutral_count > positive_count && neutral_count > negative_count) {
     reportMessage =
-      "A significant portion of the feedback is neutral, meaning customers are not fully engaged. Improvements in customer experience may be necessary to boost satisfaction.";
+      "Neutral feedback indicates a lack of strong engagement. This suggests opportunities for improving customer experience to foster stronger connections. Focusing on personalization, clearer value propositions, and addressing minor pain points may drive greater satisfaction.";
   } else {
     reportMessage =
-      "Feedback is fairly balanced. Continuous monitoring and improvements are essential to maintain customer satisfaction.";
+      "Feedback is balanced, suggesting a mix of positive, neutral, and negative sentiments. It's important to keep a close watch on trends and act proactively. Regular follow-ups with customers, targeted improvements, and clear communication can strengthen loyalty and mitigate any dissatisfaction.";
   }
+  
 
   const onPieEnter = (data, index) => {
     setActiveIndex(index);
@@ -142,9 +144,9 @@ const CustomerReviewsGraph = () => {
 
   return (
     <div style={{ textAlign: "center" }}>
-      <h2>Customer Feedback</h2>
-      <div style={{ margin: "0 auto", width: 400 }}>
-        <ResponsiveContainer width={400} height={300}>
+      <h2 style={{fontSize:"1rem", margin:"0"}}>Customer Feedback</h2>
+      <div style={{ margin: "0 auto", width: 800, display:"flex" }}>
+        <ResponsiveContainer width={800} height={300}>
           <PieChart>
             <Pie
               activeIndex={activeIndex}
@@ -171,9 +173,12 @@ const CustomerReviewsGraph = () => {
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <h3>Total Feedbacks: {totalFeedbacks}</h3>
-      <h4>Report:</h4>
-      <p>{reportMessage}</p>
+      <h3 style={{margin:0, fontSize:"1rem"}}>Total Feedbacks: {totalFeedbacks}</h3>
+
+      <div style={{display:"flex", flexDirection:"column", marginTop:"3%"}}>
+      <p style={{marginTop:"1%", fontSize:"0.825rem"}}>{reportMessage}</p>
+      </div>
+
     </div>
   );
 };

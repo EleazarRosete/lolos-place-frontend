@@ -62,17 +62,17 @@
 
 /* Card Styling */
 .salesTodayCard {
-    width: 21%;
-    max-width: 21%; 
-    height: 15vh;
+    width: 28%;
+    max-width: 28%; 
+    height: 10vh;
     background-color: #FEF7E1;
     border: 0;
     border-radius: 10px;
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: space-between;
     margin: 10px;
     margin: 0;
     border-radius: 5px;
@@ -92,41 +92,45 @@
     padding:0;
 }
 
-.dateFilter{
+.dateFilterSale{
     width: 100%;
-    height: 100%;
+    margin: 0;
+    height: 4vh;
+    display: flex;
 }
 
 .SalesSelectDateLabel{
     width: 100%;
     font-size: 0.825;
     font-weight: 500;
-
+    margin: 0;
 }
 
 .SalesSelectedDate{
     width: 90%;
     font-size: 0.825rem;
     font-weight: 600;
+    margin: 0;
 }
 
 /* Button Styling */
-.salesButton:hover {
-    background-color: #6d4c41;
+.salesText:hover {
+    background-color: #A0764B;
  /* Lighter brown when hovering */
 }
 
 /* Sales Text Styling */
 .salesText {
     width: 95%;
-    padding: 0.5rem;
-    background-color: #3e2723; /* Dark brown background for text */
+    padding: 0.1rem;
+    background-color: #A5957B; /* Dark brown background for text */
     color: #F4F4F9; /* Light text color for contrast */
-    font-weight: 700;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: 1.125rem;
     text-align: center;
     border-radius: 0.3rem;
     cursor: pointer;
+    transition: 0.3s ease-in-out;
 }
 
 /* Currency Formatting */
