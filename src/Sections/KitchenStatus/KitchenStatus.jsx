@@ -2,13 +2,17 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './KitchenStatus.module.css';
-import Successful from './Payment Result/Successful';
-import Failed from './Payment Result/Failed';
-import logoutIcon from '../../assets/logout.png';
+import Successful from './Payment Result/Successful.jsx';
+import Failed from './Payment Result/Failed.jsx';
 
 const KitchenStatus = () => {
-  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const [all, setAll] = useState(0);
+  const [dine, setDine] = useState(0);
+  const [take, setTake] = useState(0);
+  const [deliverr, setDeliverr] = useState(0);
+  const [pay, setPay] = useState(0);
+  const [detailss, setDeatilss] = useState([]);
   const [tables, setTables] = useState([]);
   const [allOrders, setAllOrders] = useState([]);
   const [deliveries, setDeliveries] = useState([]);
@@ -34,24 +38,28 @@ const KitchenStatus = () => {
           order_type:''
       });
 
+      const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+      const [isAsideVisible, setIsAsideVisible] = useState(true);
+
       const handleLogout = () => {
         setIsLogoutOpen(true);
     };
 
     const confirmLogout = () => {
-      setIsLogoutOpen(false);
-      navigate("/login");
-  };
+        setIsLogoutOpen(false);
+        navigate("/login");
+    };
 
+    const cancelLogout = () => {
+        setIsLogoutOpen(false);
+    };
 
-  const cancelLogout = () => {
-    setIsLogoutOpen(false);
-};
 
   const fetchOrderHistory = async () => {
     try {
       const response = await axios.get('http://localhost:10000/order/order-history');
       setAllOrders(response.data);
+
     } catch (err) {
       setError('Failed to fetch order history. Please try again later.');
     }
@@ -121,11 +129,11 @@ const KitchenStatus = () => {
       const sortedData = jsonData.sort((a, b) => a.name.localeCompare(b.name));
   
       setProducts(sortedData);
+
     } catch (err) {
       console.error('Error fetching products:', err.message);
     }
   };
-
 
 
     fetchProducts();
@@ -157,8 +165,12 @@ const KitchenStatus = () => {
     setView((prevView) => (prevView === 'orders' ? 'orderHistory' : 'orders'));
   };
 
-  const handleStatusClick = (orderId) => {
+
+
+  const handleStatusClick = (orderId, name, firstName, lastName, numppl, phone, date, time, tableID, items) => {
     setSelectedOrderId(orderId);
+    setDeatilss([orderId, name,firstName, lastName, numppl, phone, date, time, tableID, items]);
+    console.log(detailss);
     if(orderTypeFilter === "pay-later"){
       setModalOpenPayLater(true);
     }
@@ -328,67 +340,186 @@ const KitchenStatus = () => {
 
 
 
-
-
-
-
-
-
-
-    
-
-const handleGCashPayment = async () => {
-    const admin = 14;
-    
-
-
-    const selectedOrder = allOrders.find(order => order.order_id === selectedOrderId);
-    const items = selectedOrder ? selectedOrder.items : [];
-    
-
-    try {
-        // Step 1: Create checkout session
-        const response = await fetch("http://localhost:10000/api/create-gcash-checkout-session", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                user_id: admin,
-                lineItems: items.map((product) => ({
-                    quantity: product.order_quantity,
-                    name: product.menu_name,
-                    price: ((parseFloat(products.find(p => p.menu_id === product.menu_id)?.price) + parseFloat(products.find(p => p.menu_id === product.menu_id)?.price) * 0.1) || 0).toFixed(2)
-                })),
-            }),
-        });
-         console.log(price);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const responseData = await response.json();
-        const { url } = responseData;
-
-        if (!url) {
-            console.error("No URL received from the API:", responseData);
-            return;
-        }
-
-        window.location.href = url; // Redirect to the GCash payment provider
-
-    } catch (error) {
-        console.error("Error during payment and data addition:", error);
+  const handleGCashPayment = async (items, order_id) => {
+    // Validate that items is defined and is an array (this might be a redundant check
+    // if we are going to fetch the order details anyway, but we'll keep it)
+    if (!items || !Array.isArray(items)) {
+      console.error("Invalid items parameter. Expected an array, but received:", items);
+      return;
     }
-};
+  
+    const admin = 14;
+  
+    try {
+      // Step 1: Create checkout session
+      const checkoutResponse = await fetch(
+        "http://localhost:10000/api/create-gcash-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id: admin,
+            lineItems: items.map((product) => {
+              const foundProduct = products.find((p) => p.menu_id === product.menu_id);
+              const basePrice = parseFloat(foundProduct?.price) || 0;
+              const priceWithTax = basePrice + basePrice * 0.1;
+              return {
+                quantity: product.order_quantity,
+                name: product.menu_name,
+                price: priceWithTax.toFixed(2),
+              };
+            }),
+          })
+        }
+      );
+  
+      if (!checkoutResponse.ok) {
+        throw new Error(
+          `HTTP error while creating checkout session: ${checkoutResponse.status}`
+        );
+      }
+  
+      const checkoutData = await checkoutResponse.json();
+      const { url } = checkoutData;
+      if (!url) {
+        throw new Error("No URL received from the checkout session API");
+      }
+  
+      // Step 2: Update payment status to 'paid'
+      const updateResponse = await fetch(
+        `http://localhost:10000/order/update-is-paid/${order_id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      console.log("ORDER IS PAID");
+      if (!updateResponse.ok) {
+        throw new Error(`Error updating is_paid status: ${updateResponse.status}`);
+      }
+  
+      // Step 3: Fetch order details, order quantities, and products
+      // 3a. Get order details
+      const orderResponse = await fetch(
+        "http://localhost:10000/order/get-order",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!orderResponse.ok) {
+        throw new Error(`HTTP error fetching order: ${orderResponse.status}`);
+      }
+      const ordersData = await orderResponse.json();
+      const currentOrder = ordersData.find((order) => order.order_id === order_id);
+      if (!currentOrder) {
+        throw new Error("Order not found");
+      }
+  
+      // 3b. Get order quantities
+      const quantitiesResponse = await fetch(
+        "http://localhost:10000/order/get-order-quantities",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!quantitiesResponse.ok) {
+        throw new Error(`HTTP error fetching order quantities: ${quantitiesResponse.status}`);
+      }
+      const orderQuantities = await quantitiesResponse.json();
+      // Filter quantities for the current order (assuming each record has order_id, menu_id, and quantity)
 
+      const currentOrderQuantities = orderQuantities.filter(q => q.order_id === order_id);
 
+      // 3c. Get products
+      const productResponse = await fetch(
+        "http://localhost:10000/menu/get-product",
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      if (!productResponse.ok) {
+        throw new Error(`HTTP error fetching products: ${productResponse.status}`);
+      }
+      const productsData = await productResponse.json();
+  
+      // Step 4: Build and post salesData for each order item
+      const salesPromises = currentOrderQuantities.map(async (quantityItem) => {
+        // quantityItem should include order_id, menu_id, and quantity
+        const product = productsData.find(p => p.menu_id === quantityItem.menu_id);
+        if (!product) {
+          console.error(`Product with menu_id ${quantityItem.menu_id} not found.`);
+          return;
+        }
+        const pricePerUnit = parseFloat(product.price) || 0;
+        const qty = parseFloat(quantityItem.order_quantity) || 0;
+        const amount = pricePerUnit * qty;
+        const serviceCharge = amount * 0.1;
+        const grossSales = amount + serviceCharge;
+  
+        // Construct the salesData object
+        const salesData = {
+          amount: parseFloat(amount.toFixed(2)),
+          service_charge: parseFloat(serviceCharge.toFixed(2)),
+          gross_sales: parseFloat(grossSales.toFixed(2)),
+          product_name: product.name,
+          category: product.category,
+          quantity_sold: qty,
+          price_per_unit: parseFloat(pricePerUnit.toFixed(2)),
+          mode_of_payment: currentOrder.mop,        // assuming currentOrder.mop is defined (e.g., "GCash")
+          order_type: currentOrder.order_type         // assuming currentOrder.order_type is defined
+        };
+  
+        console.log(salesData);
 
-
-
-
-
-
+        try {
+          const salesResponse = await fetch("http://localhost:10000/sales/add-sales", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(salesData),
+          });
+          if (!salesResponse.ok) {
+            const errorData = await salesResponse.json();
+            throw new Error(`Error adding sales data for product ${product.name}: ${salesResponse.status} ${errorData.message || ""}`);
+          }
+          console.log(`Sales added for product ${product.name}`);
+        } catch (err) {
+          console.error(`Error adding sales data for product ${product.name}:`, err);
+          throw err;
+        }
+      });
+  
+      await Promise.all(salesPromises);
+      console.log("All sales data added successfully");
+  
+      // Step 5: Redirect to the GCash payment provider
+      window.location.href = url;
+    } catch (error) {
+      console.error("Error occurred in handleGCashPayment:", error);
+      // If an error occurs, attempt to update the order as 'not-paid'
+      try {
+        const notPaidResponse = await fetch(
+          `http://localhost:10000/order/update-not-paid/${order_id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        if (!notPaidResponse.ok) {
+          console.error(`Failed to update to not-paid status: ${notPaidResponse.status}`);
+        } else {
+          console.log("Order updated to not-paid status successfully.");
+        }
+      } catch (updateError) {
+        console.error("Error updating not-paid status:", updateError);
+      }
+    }
+  };
+  
 
 
 
@@ -405,8 +536,8 @@ const handleGCashPayment = async () => {
     );
   });
   
-  
-  
+
+
   const filteredPreparingOrders = sortedAllOrders.filter((order) => {
     const ordertype = filterOrderType(order) || '';
     const searchQueryLower = searchQuery.toLowerCase();
@@ -416,7 +547,7 @@ const handleGCashPayment = async () => {
     }
   
     return (
-      order.status === 'preparing' &&
+      (order.status === 'preparing' || !order.ispaid) && // Include unpaid orders
       (order.order_id?.toString().toLowerCase().includes(searchQueryLower) ||
         ordertype.toString().toLowerCase().includes(searchQueryLower)) &&
       (orderTypeFilter ? ordertype.includes(orderTypeFilter) : true)
@@ -425,6 +556,41 @@ const handleGCashPayment = async () => {
   
   
   
+  
+  useEffect(() => {
+
+    const alls = sortedAllOrders.filter(order => order.status === 'preparing' ).length;
+    const dineInOrders = new Set([
+      ...sortedAllOrders.filter(order => order.orderType === 'Dine-in' && order.status === 'preparing'),
+      ...sortedAllOrders.filter(order => order.orderType === 'Dine-in' && !order.ispaid)
+    ]).size;
+    
+    const takeOutOrders = new Set([
+      ...sortedAllOrders.filter(order => order.orderType === 'Take-out' && order.status === 'preparing'),
+      ...sortedAllOrders.filter(order => order.orderType === 'Take-out' && !order.ispaid)
+    ]).size;
+    
+    const deliveryOrders = new Set([
+      ...sortedAllOrders.filter(order => order.delivery === true && order.status === 'preparing'),
+      ...sortedAllOrders.filter(order => order.delivery === true && !order.ispaid)
+    ]).size;
+    
+    const payLaterOrders = sortedAllOrders.filter(order => !order.ispaid).length;
+  
+    const forAll = new Set([...sortedAllOrders.filter(order => !order.ispaid), 
+      ...sortedAllOrders.filter(order => order.status === 'preparing')]
+    .map(order => order.order_id)).size;
+
+
+
+      // setAll(alls + payLaterOrders); // Include pay-later orders in "all"
+    setAll(forAll); // Include pay-later orders in "all"
+
+    setDine(dineInOrders);
+    setTake(takeOutOrders);
+    setDeliverr(deliveryOrders);
+    setPay(payLaterOrders);
+  }, [sortedAllOrders]);
   
   
 
@@ -450,9 +616,7 @@ const handleGCashPayment = async () => {
 
   return (
     <section className={styles.section}>
-      <div className={styles.searchContainer}>
-      <h1 className={styles.adminType}>LoLo's Place Kitchen</h1>
-
+      <div className={styles.OrdersSearchContainer}>
         <input
           type="text"
           placeholder="Search by Order ID"
@@ -460,12 +624,17 @@ const handleGCashPayment = async () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           className={styles.searchInput}
         />
-        {/* <button onClick={handleSortChange}>
+        <div className={styles.buttonNavKitchen}>
+
+        <button onClick={handleSortChange}
+        className={styles.OrdersSortButton}>
           Sort Order {sortOrder === 'asc' ? '▲' : '▼'}
-        </button> */}
-                 <button className={styles.sideButton} onClick={handleLogout}>
-                     <img src={logoutIcon} alt="logout" className={styles.buttonIcons} /> Logout
-                 </button>
+        </button>
+                        <button className={styles.buttonOrderHistory  } onClick={handleLogout}>
+                           Logout
+                        </button>
+                        </div>
+
       </div>
       <div className={styles.navButtons}>
         {view === 'orderHistory' && (
@@ -489,19 +658,24 @@ const handleGCashPayment = async () => {
         )}
         {view === 'orders' && (
           <div className={styles.filterContainer}>
-            <button onClick={() => setOrderTypeFilter('')} className={styles.filterButton}>
-              All
-            </button>
-            <button onClick={() => setOrderTypeFilter('dine-in')} className={styles.filterButton}>
-              Dine In
-            </button>
-            <button onClick={() => setOrderTypeFilter('take-out')} className={styles.filterButton}>
-              Take Out
-            </button>
-            <button onClick={() => setOrderTypeFilter('deliveries')} className={styles.filterButton}>
-              Deliveries
-            </button>
-          </div>
+  <button onClick={() => setOrderTypeFilter('')} className={styles.filterButton}>
+    All
+    {all > 0 && <span className={styles.notificationNumber}>{all}</span>}
+  </button>
+  <button onClick={() => setOrderTypeFilter('dine-in')} className={styles.filterButton}>
+    Dine In
+    {dine > 0 && <span className={styles.notificationNumber}>{dine}</span>}
+  </button>
+  <button onClick={() => setOrderTypeFilter('take-out')} className={styles.filterButton}>
+    Take Out
+    {take > 0 && <span className={styles.notificationNumber}>{take}</span>}
+  </button>
+  <button onClick={() => setOrderTypeFilter('deliveries')} className={styles.filterButton}>
+    Deliveries
+    {deliverr > 0 && <span className={styles.notificationNumber}>{deliverr}</span>}
+  </button> 
+</div>
+
         )}
       </div>
       <div className={styles.orderPurchasesContainer}>
@@ -511,18 +685,22 @@ const handleGCashPayment = async () => {
           <p className={styles.error}>{error}</p>
         ) : view === 'orders' ? (
           <div className={styles.pendingOrdersContainer}>
-            <h1 className={styles.pendingOrdersHeaderkitchen}>Pending Orders</h1>
+            <h1 className={styles.pendingOrdersHeader}>Pending Orders</h1>
             {filteredPreparingOrders.length > 0 ? (
               <ul className={styles.orderList}>
                 {filteredPreparingOrders.map((order) => {
                   return (
                     <li key={order.order_id} className={styles.orderItem}>
-                      <h3>Order #{order.order_id}</h3>
+                      <h3 className={styles.ordersH3}>Order #{order.order_id}</h3>
+                      <p>Table: {tables.find((table) => table.table_id === order.tableID) 
+    ? tables.find((table) => table.table_id === order.tableID).table_name 
+    : 'No table applied'}
+</p>
 
 
 
 
-                      <p>Orders:</p>
+                      <p>Items:</p>
                       <ul>
                         {order.items.map((item, index) => (
                           <li key={index}>
@@ -530,22 +708,15 @@ const handleGCashPayment = async () => {
                           </li>
                         ))}
                       </ul>
-                      <button onClick={() => handleStatusClick(order.order_id)}>{
-  orderTypeFilter === "pay-later" 
-    ? "Pay now" 
-    : orderTypeFilter === "deliveries" 
-    ? "Deliver" 
-    : (orderTypeFilter === "Dine-in" || orderTypeFilter === "Take-out") 
-    ? "Serve" 
-    : "Serve"
-}
+          
+                      <button onClick={() => handleStatusClick(order.order_id,order.customerName, order.firstName, order.lastName, order.numberOfPeople,order.phone,order.date,order.time,order.tableID, order.items)}>Details
 </button>
                     </li>
                   );
                 })}
               </ul>
             ) : (
-              <p>No pending orders available.</p>
+              <p className={styles.noOrders}>No pending orders available.</p>
             )}
           </div>
         ) : (
@@ -555,12 +726,8 @@ const handleGCashPayment = async () => {
               <ul className={styles.orderList}>
                 {filteredAllOrders.map((order) => (
                   <li key={order.order_id} className={styles.orderItem}>
-                    <h3>Order #{order.order_id}</h3>
-                    <p>Name: {order.customerName !== null ? order.customerName : `${order.firstName} ${order.lastName}`}</p>  
-                    <p>Number of people: {order.numberOfPeople == null ? "1" : order.numberOfPeople}</p>
-                    <p>Contact Number: {order.phone == "09682823420" ? "N/A" : order.phone}</p>
-                    <p>Date: {formatDate(order.date)}</p>
-                    <p>Time: {formatTime(order.time)}</p>
+                    <h3 className={styles.ordersH3}>Order #{order.order_id}</h3>
+
                     <p>Items:</p>
                     <ul>
                       {order.items.map((item, index) => (
@@ -570,12 +737,12 @@ const handleGCashPayment = async () => {
                       ))}
                     </ul>
                     <p>Order Type: {order.reservation_id != null ? `Reservation` : order.delivery === true ? `Delivery` : order.orderType}</p>                                          
-                    <p>Total: ₱{order.total_amount}  <strong>{order.ispaid === true ? "PAID" : "NOT PAID"}</strong></p>
+                
                   </li>
                 ))}
               </ul>
             ) : (
-              <p>No order history available.</p>
+              <p className={styles.noOrders}>No order history available.</p>
             )}
           </div>
         )}
@@ -584,10 +751,13 @@ const handleGCashPayment = async () => {
         <div className={styles.modalPurchase}>
         <div className={styles.modalOrders}>
           <div className={styles.modalOrder}>
-            <h3>Order is ready to served?</h3>
+            <h3>Mark Order as Served</h3>
+            <h3>Order #{detailss[0]}</h3>
+    
             <div className={styles.navButtonOrders}>
-            <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Not yet</button>
-              <button onClick={handleServeOrder} className={styles.orderButtonsHistory}>Yes</button>
+
+              <button onClick={handleServeOrder} className={styles.orderButtonsHistory}>Served</button>
+              <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Close</button>
 
             </div>
 
@@ -598,24 +768,61 @@ const handleGCashPayment = async () => {
       )}
 
 
-  {isLogoutOpen && (
-                    <div className={styles.modalLogout}>
-                        <div className={styles.logoutOverlay}>
-                            <div className={styles.logout}>
-                                <h2>Confirm logout</h2>
-                                <p>Are you sure you want to log out?</p>
-                                <div className={styles.logoutButtons}>
-                                    <button onClick={confirmLogout} className={styles.confirmButton}>Yes</button>
-                                    <button onClick={cancelLogout} className={styles.cancelButton}>No</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
+{modalOpenPayLater && selectedOrderId && (
+        <div className={styles.modalPurchase}>
+        <div className={styles.modalOrders}>
+          <div className={styles.modalOrder}>
+            <h3>Pay Order Now</h3>
+            <h3>Order #{detailss[0]}</h3>
+            <p>Name: {detailss[1] !== null ? detailss[1] : `${detailss[2]} ${detailss[3]}`}</p>  
+                    <p>Number of people: {detailss[4] == null ? "1" : detailss[4]}</p>
+                    <p>Contact Number: {detailss[5] == "09682823420" ? "No number inputed" : detailss[3]}</p>
+                    <p>Date: {formatDate(detailss[6])}</p>
+                    <p>Time: {formatTime(detailss[7])}</p>
+                    <p>Table: {tables.find((table) => table.table_id === detailss[8]) 
+    ? tables.find((table) => table.table_id === detailss[8]).table_name 
+    : 'No table applied'}
+</p>
+            <div className={styles.navButtonOrders}>
+            <button onClick={handlePayNow} className={styles.orderButtonsHistory}>CASH Pay</button>
+            <button 
+  onClick={() => handleGCashPayment(detailss[9], detailss[0])} 
+  className={styles.orderButtonsHistory}
+>
+  GCASH Pay
+</button>
 
-<Routes>
-        <Route path="successful" element={<Successful selectedOrderId/>} />
-        <Route path="failed" element={<Failed selectedOrderId/>} />
+
+              <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Cancel</button>
+
+            </div>
+
+          </div>
+        </div>
+        </div>
+
+      )}
+
+        {isLogoutOpen && (
+                          <div className={styles.logoutModal}>
+                                  <div className={styles.logoutOverlay}>
+                                  <div className={styles.logout}>
+                                      <h2>Confirm logout</h2>
+                                      <p>Are you sure you want to log out?</p>
+                                      <div className={styles.logoutButtons}>
+                                          <button onClick={confirmLogout} className={styles.confirmButton}>Yes</button>
+                                          <button onClick={cancelLogout} className={styles.cancelButton}>No</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+      
+                      )}
+      
+
+      <Routes>
+        <Route path="/successful" element={<Successful/>} />
+        <Route path="/failed" element={<Failed />} />
       </Routes>
 
     </section>

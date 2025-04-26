@@ -40,7 +40,7 @@ const LoginPage = () => {
 
     // If both fields are valid, you can proceed with the form submission
     try {
-      const response = await axios.post('http://localhost:5000/api/login', {
+      const response = await axios.post('http://localhost:10000/api/login', {
         identifier, 
         password,
       });
@@ -75,7 +75,7 @@ const LoginPage = () => {
 
     // Send OTP
     try {
-      await axios.post('http://localhost:5000/api/send-otp', { email });
+      await axios.post('http://localhost:10000/api/send-otp', { email });
       setEmail(email); // Store email for OTP verification
       setShowOTPModal(true); // Show OTP modal
     } catch (error) {
@@ -85,12 +85,12 @@ const LoginPage = () => {
 
   const handleOTPVerification = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/verify-otp', { email, otp });
+      const response = await axios.post('http://localhost:10000/api/verify-otp', { email, otp });
       if (response.status === 200) {
         alert('OTP verified successfully!');
         setShowOTPModal(false); // Hide OTP modal
         // Proceed with signup
-        const signupResponse = await axios.post('http://localhost:5000/api/signup', {
+        const signupResponse = await axios.post('http://localhost:10000/api/signup', {
           firstName: document.getElementById('signup-firstname').value,
           lastName: document.getElementById('signup-lastname').value,
           address: document.getElementById('signup-address').value,

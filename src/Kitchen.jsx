@@ -35,12 +35,9 @@ const Cashier = () => {
 
     return (
       <section className={styles.MainSection}>
-
-            <div className={styles.mainContent}>
                 <Routes>
                     <Route path="*" element={<KitchenStatus />} />
                 </Routes>
-            </div>
 
         </section>
     );

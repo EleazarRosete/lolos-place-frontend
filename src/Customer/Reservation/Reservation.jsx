@@ -226,7 +226,7 @@ const Reservation = () => {
     
   
   try {
-    const response = await axios.post('http://localhost:5000/api/reservations', orderDetails);
+    const response = await axios.post('http://localhost:10000/api/reservations', orderDetails);
 
     if (response.status === 201) {
       setConfirmationPopupVisible(false);
@@ -284,7 +284,7 @@ const handleInputChange = async (e) => {
     }
 
     try {
-      const response = await axios.get(`http://localhost:5000/api/total-guests/${value}`);
+      const response = await axios.get(`http://localhost:10000/api/total-guests/${value}`);
       const totalGuests = response.data.totalGuests || 0;
       const slotsLeft = 100 - totalGuests; // Calculate available slots
       setAvailableSlots(slotsLeft); // Update available slots
@@ -384,7 +384,7 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
     };
 
     try {
-        const response = await axios.post('http://localhost:5000/api/create-gcash-checkout-session', body);
+        const response = await axios.post('http://localhost:10000/api/create-gcash-checkout-session', body);
 
         const { url } = response.data;
 

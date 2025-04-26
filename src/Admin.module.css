@@ -9,8 +9,15 @@
   overflow: hidden;
 }
 
+
+
 .mainContent{
   width: 84%;
+}
+
+
+.kitchenMainContent{
+  width: 100%;
 }
 
 .aside {

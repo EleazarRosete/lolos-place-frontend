@@ -56,7 +56,7 @@ const UserProfile = () => {
     }
 
     try {
-        const response = await axios.post('http://localhost:5000/api/changeCustomerPassword', {
+        const response = await axios.post('http://localhost:10000/api/changeCustomerPassword', {
           id, 
           oldPassword, 
           newPassword, 
@@ -95,7 +95,7 @@ const handleSaveDetails = async () => {
   }
 
   try {
-      const response = await axios.post('http://localhost:5000/api/changeCustomerDetails', {
+      const response = await axios.post('http://localhost:10000/api/changeCustomerDetails', {
         id, 
         email, 
         phone, 
