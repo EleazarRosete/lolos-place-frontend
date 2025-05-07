@@ -46,7 +46,7 @@ const SuccessPage = () => {
     };
   
     try {
-      const response = await axios.post('http://localhost:10000/api/orders', orderDetails);
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/orders', orderDetails);
   
       if (response.status === 201) {
         setCartOrders([]);

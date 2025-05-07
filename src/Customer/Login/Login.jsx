@@ -21,6 +21,7 @@ const LoginPage = () => {
   };
 
   const handleLoginSubmit = async () => {
+
     const identifier = document.getElementById('login-identifier').value;
     const password = document.getElementById('login-password').value; 
 
@@ -40,6 +41,8 @@ const LoginPage = () => {
 
     // If both fields are valid, you can proceed with the form submission
     try {
+
+
       const response = await axios.post('http://localhost:10000/api/login', {
         identifier, 
         password,
@@ -47,8 +50,21 @@ const LoginPage = () => {
 
       if (response.status === 200) {
         const customer = response.data.data; // Adjust according to your API response structure
-        setCustomer(customer); // Set customer context with the logged-in user
-        navigate('/', { replace: true }); // Redirect to home
+        console.log("user id ko to ",customer);
+
+        if(customer.id === 14){
+          navigate('/admin');
+        }
+        else if(customer.id === 13){
+          navigate('/cashier');
+        }
+        else if(customer.id === 55){
+          navigate('/kitchen');
+        }
+        else{
+          setCustomer(customer); // Set customer context with the logged-in user
+          navigate('/', { replace: true }); // Redirect to home
+        }
       } else if (response.status === 401) {
         alert(`Invalid credentials`);
       } else if (response.status === 404) {
@@ -85,12 +101,12 @@ const LoginPage = () => {
 
   const handleOTPVerification = async () => {
     try {
-      const response = await axios.post('http://localhost:10000/api/verify-otp', { email, otp });
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/verify-otp', { email, otp });
       if (response.status === 200) {
         alert('OTP verified successfully!');
         setShowOTPModal(false); // Hide OTP modal
         // Proceed with signup
-        const signupResponse = await axios.post('http://localhost:10000/api/signup', {
+        const signupResponse = await axios.post('https://lolos-place-backend.onrender.com/api/signup', {
           firstName: document.getElementById('signup-firstname').value,
           lastName: document.getElementById('signup-lastname').value,
           address: document.getElementById('signup-address').value,

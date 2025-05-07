@@ -10,9 +10,13 @@ function Inventory() {
     const [showConfirmRemove, setShowConfirmRemove] = useState(false);
     const [itemToRemove, setItemToRemove] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [selectedCategory, setSelectedCategory] = useState('All');
     const [filteredItems, setFilteredItems] = useState([]);
+
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const [selectedSubCategory, setSelectedSubCategory] = useState('');
     const [categories, setCategories] = useState([]);
+    const [mainCategories, setMainCategories] = useState([]);
+
     const [sortByQuantityAsc, setSortByQuantityAsc] = useState(true);
     const [sortByNameAsc, setSortByNameAsc] = useState(true);      
 
@@ -33,15 +37,33 @@ function Inventory() {
             console.error('Error fetching products:', err.message);
         }
     };
-    
-    const extractCategories = (products) => {
-        const uniqueCategories = [...new Set(products.map(item => item.category))];
-        setCategories(uniqueCategories);
-    };
 
-    useEffect(() => {
+        useEffect(() => {
         getProduct();
     }, []);
+    
+    const extractCategories = (product) => {
+        const uniqueCategories = [...new Set(product.map(item => item.main_category))];
+        setMainCategories(uniqueCategories);
+    };
+
+
+    const handleCategoryChange = (e) => {
+        const category = e.target.value;
+        setSelectedCategory(category);
+        setSelectedSubCategory(''); // reset sub-category when category changes
+        const filteredMainCategories = product.filter(product => product.main_category === category);
+        setCategories([...new Set(filteredMainCategories.map(item => item.category))]);
+        console.log("KEFKE", categories);
+
+    };
+
+    // Handle sub-category change
+    const handleSubCategoryChange = (e) => {
+        setSelectedSubCategory(e.target.value);
+    };
+
+
 
     useEffect(() => {
         const filtered = product.filter(item =>
@@ -51,11 +73,23 @@ function Inventory() {
     }, [searchTerm, product]);
 
     useEffect(() => {
-        const filtered = selectedCategory === "All" 
-            ? product 
-            : product.filter(item => item.category === selectedCategory);
+        let filtered = product;
+    
+        // Filter by main category
+        if (selectedCategory !== "All") {
+            filtered = filtered.filter(item => item.main_category === selectedCategory);
+        }
+    
+        // Filter by sub-category only if a valid sub-category is selected
+        if (selectedSubCategory && selectedSubCategory !== "All") {
+            filtered = filtered.filter(item => item.category === selectedSubCategory);
+        }
+    
+        // Set the filtered results
         setFilteredItems(filtered);
-    }, [selectedCategory, product]);
+    }, [selectedCategory, selectedSubCategory, product]);
+    
+    
 
     const handleAddItem = (newItem) => {
         const newItemsList = [...product, { menu_id: Date.now(), ...newItem }];
@@ -141,15 +175,28 @@ function Inventory() {
                         <button className={styles.inventoryButtons} onClick={handleSortByName}>Sort by Name</button>
                         <button className={styles.inventoryButtons} onClick={handleSortByQuantity}>Sort by Quantity</button>
                         <select
-                            className={styles.InventoryCategory}
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
-                        >
-                            <option value="All" >All</option>
-                            {categories.map((category, index) => (
-                                <option key={index} value={category}>{category}</option>
-                            ))}
-                        </select>
+                className={styles.InventoryCategory}
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+            >
+                <option value="All">All</option>
+                {mainCategories.map((category, index) => (
+                    <option key={index} value={category}>{category}</option>
+                ))}
+            </select>
+
+            {selectedCategory !== 'All' && (
+                <select
+                    className={styles.InventoryCategory}
+                    value={selectedSubCategory}
+                    onChange={handleSubCategoryChange}
+                >
+                    <option value="">All</option>
+                    {categories.map((subCategory, index) => (
+                        <option key={index} value={subCategory}>{subCategory}</option>
+                    ))}
+                </select>
+            )}
                         <button className={styles.inventoryButtons} onClick={() => setIsModalOpen(true)}>Add Item</button>
                     </div>
                 </div>

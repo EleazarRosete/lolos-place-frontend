@@ -6,6 +6,8 @@ import Successful from './Payment Result/Successful.jsx';
 import Failed from './Payment Result/Failed.jsx';
 
 const KitchenStatus = () => {
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
   const [all, setAll] = useState(0);
   const [dine, setDine] = useState(0);
@@ -46,9 +48,9 @@ const KitchenStatus = () => {
     };
 
     const confirmLogout = () => {
-        setIsLogoutOpen(false);
-        navigate("/login");
-    };
+      setIsLogoutOpen(false);
+      navigate("/login");
+  };
 
     const cancelLogout = () => {
         setIsLogoutOpen(false);

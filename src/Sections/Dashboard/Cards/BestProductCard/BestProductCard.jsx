@@ -14,7 +14,7 @@ function BestProductCard() {
 
     const getOrders = async () => {
         try {
-            const response = await axios.get('http://localhost:10000/order/order-history');
+            const response = await axios.get('https://lolos-place-backend.onrender.com/order/order-history');
             setFilteredOrders(response.data); // Store all orders initially
         } catch (err) {
             setError('Failed to fetch orders. Please try again later.');

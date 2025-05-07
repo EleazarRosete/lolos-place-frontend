@@ -7,7 +7,7 @@ function InventoryCard() {
 
     const getProduct = async () => {
         try {
-            const response = await fetch("http://localhost:10000/menu/get-low-stocks", {
+            const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-low-stocks", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });

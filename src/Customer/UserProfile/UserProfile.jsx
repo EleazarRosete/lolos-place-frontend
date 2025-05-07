@@ -56,7 +56,7 @@ const UserProfile = () => {
     }
 
     try {
-        const response = await axios.post('http://localhost:10000/api/changeCustomerPassword', {
+        const response = await axios.post('https://lolos-place-backend.onrender.com/api/changeCustomerPassword', {
           id, 
           oldPassword, 
           newPassword, 

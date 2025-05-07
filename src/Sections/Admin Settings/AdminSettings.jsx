@@ -112,162 +112,114 @@ function Admin() {
                 [name]: value || ""  // Ensure it's never undefined
             }));
         }
+        else{
+            setKitchenData(prevState => ({
+            ...prevState,
+            [name]: value || ""  // Ensure it's never undefined
+        }));}
     };
     
     
     const handleSave = async () => {
-        let passwordsMatch = true; // Flag to track password mismatch
-        console.log("OLD PASS A", adminData.oldPassword);
-        console.log("OLD PASS C", cashierData.oldPassword);
-        console.log("OLD PASS K", kitchenData.oldPassword);
-
-
-        // Check if passwords match
+        let passwordsMatch = true;
+    
+        // Validate passwords
         if (adminData.newPassword || cashierData.newPassword || kitchenData.newPassword) {
-            if (adminData.newPassword !== adminData.confirmPassword || cashierData.newPassword !== cashierData.confirmPassword || kitchenData.newPassword !== kitchenData.confirmPassword) {
+            if (
+                adminData.newPassword !== adminData.confirmPassword ||
+                cashierData.newPassword !== cashierData.confirmPassword ||
+                kitchenData.newPassword !== kitchenData.confirmPassword
+            ) {
                 alert("New password and confirm password do not match.");
-                passwordsMatch = false; // Set flag to false
+                passwordsMatch = false;
             }
         }
     
         try {
-            // Proceed with password save if passwords match
             if (passwordsMatch) {
-                const requests = [];
-            
+                // Prepare the updated user data (password included only if updated)
+                const updatedAdminData = {
+                    address: adminData.address,
+                    email: adminData.email,
+                    first_name: adminData.firstName,
+                    last_name: adminData.lastName,
+                    phone: adminData.phone,
+                    user_id: 14
+                };
+        
                 if (adminData.newPassword) {
-                    const adminPayload = {
-                        userId: 14,
-                        oldPassword: adminData.oldPassword,
-                        newPassword: adminData.newPassword,
-                        confirmPassword: adminData.confirmPassword
-                    };
-                    console.log("ADMIN TO", adminPayload);
-                    
-                    // Add the admin password update request to the requests array
-                    requests.push(fetch('http://localhost:10000/user/update-password', {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(adminPayload)
-                    }));
+                    updatedAdminData.password = adminData.newPassword;
                 }
-            
+        
+                const updatedCashierData = {
+                    address: cashierData.address,
+                    email: cashierData.email,
+                    first_name: cashierData.firstName,
+                    last_name: cashierData.lastName,
+                    phone: cashierData.phone,
+                    user_id: 13
+                };
+        
                 if (cashierData.newPassword) {
-                    const cashierPayload = {
-                        userId: 13,
-                        oldPassword: cashierData.oldPassword,
-                        newPassword: cashierData.newPassword,
-                        confirmPassword: cashierData.confirmPassword
-                    };
-                    console.log("CASHIER TO", cashierPayload);
-            
-                    // Add the cashier password update request to the requests array
-                    requests.push(fetch('http://localhost:10000/user/update-password', {
+                    updatedCashierData.password = cashierData.newPassword;
+                }
+        
+                const updatedKitchenData = {
+                    address: kitchenData.address,
+                    email: kitchenData.email,
+                    first_name: kitchenData.firstName,
+                    last_name: kitchenData.lastName,
+                    phone: kitchenData.phone,
+                    user_id: 55
+                };
+        
+                if (kitchenData.newPassword) {
+                    updatedKitchenData.password = kitchenData.newPassword;
+                }
+    
+                // Send data to the server based on selected role
+                if (selectedRole === "admin" || selectedRole === "all") {
+                    const responseAdmin = await fetch('http://localhost:10000/user/update-user', {
                         method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(cashierPayload)
-                    }));
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedAdminData)
+                    });
+    
+                    if (!responseAdmin.ok) throw new Error('Failed to update admin data');
                 }
-            
-                // Wait for both requests to complete
-                try {
-                    const responses = await Promise.all(requests);
-            
-                    // Handle response for admin
-                    const responseAdmin = responses[0];
-                    if (!responseAdmin.ok) {
-                        alert('Failed to update admin password.');
-                    }
-            
-                    // Handle response for cashier if it exists
-                    const responseCashier = responses[1];
-                    if (responseCashier && !responseCashier.ok) {
-                        alert('Failed to update cashier password.');
-                    }
-                } catch (error) {
-                    alert('Error occurred while updating passwords.');
+    
+                if (selectedRole === "cashier" || selectedRole === "all") {
+                    const responseCashier = await fetch('http://localhost:10000/user/update-user', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedCashierData)
+                    });
+    
+                    if (!responseCashier.ok) throw new Error('Failed to update cashier data');
                 }
-            }
-            
     
-            // Update admin and cashier data
-            const updatedAdminData = {
-                address: adminData.address,
-                email: adminData.email,
-                first_name: adminData.firstName,
-                last_name: adminData.lastName,
-                password: adminData.newPassword || adminData.password, // Only include password if it's updated
-                phone: adminData.phone,
-                user_id: 14
-            };
+                if (selectedRole === "kitchen" || selectedRole === "all") {
+                    const responseKitchen = await fetch('http://localhost:10000/user/update-user', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedKitchenData)
+                    });
     
-            const updatedCashierData = {
-                address: cashierData.address,
-                email: cashierData.email,
-                first_name: cashierData.firstName,
-                last_name: cashierData.lastName,
-                password: cashierData.newPassword || cashierData.password, // Only include password if it's updated
-                phone: cashierData.phone,
-                user_id: 13
-            };
-
-            const updatedKitchenData = {
-                address: cashierData.address,
-                email: cashierData.email,
-                first_name: cashierData.firstName,
-                last_name: cashierData.lastName,
-                password: cashierData.newPassword || cashierData.password, // Only include password if it's updated
-                phone: cashierData.phone,
-                user_id: 55
-            };
-
-            // Update user data if fields are not empty
-            if (adminData.firstName !== "" || adminData.email !== "" || adminData.phone !== "" || adminData.address !== "") {
-                const responseAdmin = await fetch('http://localhost:10000/user/update-user', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updatedAdminData)
-                });
-    
-                const responseCashier = await fetch('http://localhost:10000/user/update-user', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updatedCashierData)
-                });
-    
-                if (responseAdmin.ok && responseCashier.ok) {
-                    navigate('/admin');
-                } else {
-                    alert("Failed to update user data.");
+                    if (!responseKitchen.ok) throw new Error('Failed to update kitchen data');
                 }
-
-                const responseKitchen = await fetch('http://localhost:10000/user/update-user', {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updatedKitchenData)
-                });
     
-                if (responseAdmin.ok && responseCashier.ok && responseKitchen.ok) {
-                    navigate('/admin');
-                } else {
-                    alert("Failed to update user data.");
-                }
+                // If all updates succeed, navigate to admin page
+                navigate('/admin');
             }
         } catch (error) {
             console.error("Error updating user data:", error);
             alert("An error occurred while updating.");
         }
     };
+    
+    
+    
+    
     
     const handleCancel = () => {
         navigate('/admin');
@@ -364,6 +316,7 @@ function Admin() {
 <label>Confirm New Password:                    </label>
 
 <input 
+    type="password"
     name="confirmPassword" 
     value={roleData[selectedRole].confirmPassword} 
     onChange={(e) => handleChange(e, selectedRole)} 

@@ -7,6 +7,14 @@ import Successful from '../Payment Result/Successful.jsx';
 import Failed from '../Payment Result/Failed.jsx';
 
 function POS() {
+
+        const [filteredItems, setFilteredItems] = useState([]);
+    
+        const [selectedCategory, setSelectedCategory] = useState('All');
+        const [selectedSubCategory, setSelectedSubCategory] = useState('');
+        const [categories, setCategories] = useState([]);
+        const [mainCategories, setMainCategories] = useState([]);
+
     const navigate = useNavigate();
     const [handleAddNameAndNumberOfPeople, setHandleAddNameAndNumberOfPeople] = useState(false);            
     const [updatedStock, setUpdatedStock] = useState(0);
@@ -16,13 +24,11 @@ function POS() {
     const [searchTerm, setSearchTerm] = useState('');
     const [serviceCharge, setServiceCharge] = useState(0);
     const [quantity, setQuantity] = useState(0);
-    const [selectedCategory, setSelectedCategory] = useState('All');
     const [products, setProducts] = useState([]);
     const [tableID, setTableID] = useState();
     const [table, setTable] = useState([]);
     const [payment, setPayment] = useState([]);
     const [filteredProducts, setFilteredProducts] = useState([]);
-    const [categories, setCategories] = useState([]);
     const [orderDetails, setOrderDetails] = useState(false);
     const [GCashDetails, setGCashtDetails] = useState(false);
     const [CashDetails, setCashDetails] = useState(false);
@@ -217,7 +223,8 @@ function POS() {
     
                 // Sort the products alphabetically by name
                 const sortedData = jsonData.sort((a, b) => a.name.localeCompare(b.name));
-    
+            setFilteredItems(sortedData);
+            extractCategories(sortedData);
                 setProducts(sortedData);
                 setFilteredProducts(sortedData);
             } catch (err) {
@@ -823,6 +830,53 @@ const handleRemoveFromCart = (menu_id) => {
 
 
 
+
+
+
+    const extractCategories = (products) => {
+        const uniqueCategories = [...new Set(products.map(item => item.main_category))];
+        setMainCategories(uniqueCategories);
+    };
+
+
+    const handleCategoryChange = (e) => {
+        const category = e.target.value;
+        setSelectedCategory(category);
+        setSelectedSubCategory(''); // reset sub-category when category changes
+        const filteredMainCategories = products.filter(product => product.main_category === category);
+        setCategories([...new Set(filteredMainCategories.map(item => item.category))]);
+        console.log("KEFKE", categories);
+
+    };
+
+    // Handle sub-category change
+    const handleSubCategoryChange = (e) => {
+        setSelectedSubCategory(e.target.value);
+    };
+
+
+ useEffect(() => {
+        let filtered = products;
+    
+        // Filter by main category
+        if (selectedCategory !== "All") {
+            filtered = filtered.filter(item => item.main_category === selectedCategory);
+        }
+    
+        // Filter by sub-category only if a valid sub-category is selected
+        if (selectedSubCategory && selectedSubCategory !== "All") {
+            filtered = filtered.filter(item => item.category === selectedSubCategory);
+        }
+    
+        // Set the filtered results
+        setFilteredItems(filtered);
+    }, [selectedCategory, selectedSubCategory, products]);
+    
+    
+
+
+
+
     return (
         <section className={styles.section}>
             <div className={styles.posContainer}>
@@ -845,19 +899,29 @@ const handleRemoveFromCart = (menu_id) => {
                         </div>
 
                         <div className={styles.POSFilterContainer}>
-                            <select
-                                className={styles.category}
-                                value={selectedCategory}
-                                onChange={handleSortByCategory}
-                            >
-                                <option value="All">All</option>
-                                {Array.from(new Set(categories.filter(category => category)) // Remove falsy values like null/undefined
-                                    ).map((category, index) => (
-                                    <option key={index} value={category}>
-                                        {category}
-                                    </option>
-                                ))}
-                            </select>
+   <select
+                className={styles.InventoryCategory}
+                value={selectedCategory}
+                onChange={handleCategoryChange}
+            >
+                <option value="All">All</option>
+                {mainCategories.map((category, index) => (
+                    <option key={index} value={category}>{category}</option>
+                ))}
+            </select>
+
+            {selectedCategory !== 'All' && (
+                <select
+                    className={styles.InventoryCategory}
+                    value={selectedSubCategory}
+                    onChange={handleSubCategoryChange}
+                >
+                    <option value="">All</option>
+                    {categories.map((subCategory, index) => (
+                        <option key={index} value={subCategory}>{subCategory}</option>
+                    ))}
+                </select>
+            )}
                         </div>
 
 
@@ -866,8 +930,8 @@ const handleRemoveFromCart = (menu_id) => {
 
                 <div className={styles.menuContainer}>
                     <div className={styles.productContainer}>
-                        {filteredProducts.length > 0 ? (
-                            filteredProducts.map(product => (
+                        {filteredItems.length > 0 ? (
+                            filteredItems.map(product => (
                                 <Product
                                     key={product.menu_id}
                                     menu_id={product.menu_id}

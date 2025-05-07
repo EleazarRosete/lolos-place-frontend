@@ -73,7 +73,7 @@ const Cashier = () => {
             <aside className={`${styles.aside} ${!isAsideVisible ? styles.hidden : styles.show} `}>
                 <div className={styles.logoContainer}>
                     <img src={user} alt="user" className={styles.userIcon} />
-                    <h1 className={styles.lolosplaceuser}>LoLo's Place Admin</h1>
+                    <h1 className={styles.lolosplaceuser}>LoLo's Place Cashier</h1>
                 </div>
                 <div className={styles.navbuttons}>
                 <div className={styles.navgroup1}>

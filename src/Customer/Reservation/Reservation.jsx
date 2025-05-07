@@ -26,7 +26,12 @@ const Reservation = () => {
   const navigate = useNavigate();
   const [mainFilter, setMainFilter] = useState('all');
   const [subFilter, setSubFilter] = useState(null);
-  const [availableSlots, setAvailableSlots] = useState(100); // State for available slots
+  const [availableSlots, setAvailableSlots] = useState(150); // State for available slots
+  const [reservationFee, setReservationFee] = useState(5000);
+  const [numberofPax, setnumberofPax] = useState(0);
+  const currentDate = new Date().toISOString().split('T')[0]; // Current date in YYYY-MM-DD format
+  const [selectedDate, setSelectedDate] = useState(currentDate);
+  
 
   const groupedCategories = menuData.reduce((acc, item) => {
     const mainCategory = item.main_category;
@@ -39,9 +44,29 @@ const Reservation = () => {
   
   const mainCategories = Object.keys(groupedCategories);
 
+
+  useEffect(() => {
+    const fetchTotalGuests = async () => {
+      try {
+        const response = await axios.get(`https://lolos-place-backend.onrender.com/api/total-guests/${selectedDate}`);
+        const totalGuests = response.data.totalGuests || 0;
+        const slotsLeft = 150 - totalGuests;
+        setAvailableSlots(slotsLeft);
+      } catch (error) {
+        console.error('Error fetching total guests:', error);
+        setAvailableSlots(150);
+      }
+    };
+  
+    if (selectedDate) {
+      fetchTotalGuests();
+    }
+  }, [selectedDate]); // <- dependency array, triggers when `value` changes
+  
+
   const validateForm = () => {
     const { name, date, time, guests, contact } = formData;
-    const isValid = name.trim() && date.trim() && time.trim() && !isNaN(guests) && guests >= 2 && guests <= 100 && contact.trim(); // Updated to 100
+    const isValid = name.trim() && date.trim() && time.trim() && !isNaN(guests) && guests >= 2 && guests <= 150 && contact.trim(); // Updated to 100
     setFormValid(isValid);
     return isValid;
   };
@@ -226,7 +251,7 @@ const Reservation = () => {
     
   
   try {
-    const response = await axios.post('http://localhost:10000/api/reservations', orderDetails);
+    const response = await axios.post('https://lolos-place-backend.onrender.com/api/reservations', orderDetails);
 
     if (response.status === 201) {
       setConfirmationPopupVisible(false);
@@ -240,6 +265,37 @@ const Reservation = () => {
     console.error('Error:', error);
     alert('Failed to confirm reservation. Please check your input and try again.');
   }
+
+  if(numberofPax >= 20){
+    const body = {
+      user_id: customer.id, // Assuming `customer.id` is available
+      lineItems: [
+        {
+          currency: 'PHP',
+          amount: Math.round(getTotalAmount() * 100), // Convert to cents for backend
+          name: "Downpayment", // Static or dynamic name for the line item
+          price: getTotalAmount(), // Actual price for the item
+        }
+      ],
+      from: 'some value', // Add 'from' value, replace 'some value' as needed
+    };
+    
+
+
+    try {
+      const response = await axios.post('http://localhost:10000/api/downpayment-gcash-checkout-session', body);
+  
+      const { url } = response.data;
+  
+      window.location.href = url;
+  } catch (error) {
+      console.error('Error initiating payment:', error);
+  }
+  }
+
+
+
+
 };
 
   const closeQrCodePopup = () => {
@@ -259,8 +315,10 @@ const Reservation = () => {
   };
 
   const getTotalAmount = () => {
-    return cartReservations.reduce((total, item) => total + item.price * item.quantity, 0);
-  };
+    return (numberofPax > 50 ? 15000 : (numberofPax >= 20 ? reservationFee : 0)) + (Array.isArray(cartReservations) ? cartReservations.reduce((total, item) => total + item.price * item.quantity, 0) : 0);
+
+    };
+
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -283,14 +341,37 @@ const handleInputChange = async (e) => {
       return;
     }
 
+    if (id === 'guests') {
+      const numericValue = Number(value);
+      setnumberofPax(numericValue);
+    }
+    if(numberofPax >= availableSlots){
+      try {
+        const response = await axios.post(
+          `http://localhost:10000/api/add-total-guests/${formData.date}`, // date from form
+          { guest: formData.guests } // number of guests
+        );
+      
+        const totalGuests = response.data.totalGuests || 0;
+        const slotsLeft = 150 - totalGuests; // Calculate available slots
+        setAvailableSlots(slotsLeft); // Update available slots
+      } catch (error) {
+        console.error('Error adding total guests:', error);
+        setAvailableSlots(150); // Fallback to 100 slots if there's an error
+      }
+      
+    }
+
+
+
     try {
-      const response = await axios.get(`http://localhost:10000/api/total-guests/${value}`);
+      const response = await axios.get(`https://lolos-place-backend.onrender.com/api/total-guests/${value}`);
       const totalGuests = response.data.totalGuests || 0;
-      const slotsLeft = 100 - totalGuests; // Calculate available slots
+      const slotsLeft = 150 - totalGuests; // Calculate available slots
       setAvailableSlots(slotsLeft); // Update available slots
     } catch (error) {
       console.error('Error fetching total guests:', error);
-      setAvailableSlots(100); // Fallback to 100 slots if there's an error
+      setAvailableSlots(150); // Fallback to 100 slots if there's an error
     }
 
     setFormValid(true);
@@ -325,8 +406,8 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
     // Validate guest number on blur
     if (id === 'guests') {
       const guestNumber = parseInt(value, 10);
-      if (guestNumber < 2 || guestNumber > 100) { // Updated from 60 to 100
-        alert("Number of guests must be between 2 and 100."); // Updated error message
+      if (guestNumber < 2 || guestNumber > 150) { // Updated from 60 to 100
+        alert("Number of guests must be between 2 and 150."); // Updated error message
         setFormData((prevData) => ({
           ...prevData,
           [id]: '',
@@ -347,11 +428,11 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
     onChange={handleInputChange}
     onBlur={handleInputBlur}
     min="2"
-    max="100"
+    max="150"
     disabled={!customer} // Disable if no customer is logged in
   />
-  {(formData.guests < 2 || formData.guests > 100) && (
-    <small className="error-message">Guests must be between 2 and 100.</small>
+  {(formData.guests < 2 || formData.guests > 150) && (
+    <small className="error-message">Guests must be between 2 and 150.</small>
   )}
   {formData.guests > availableSlots && (
     <small className="error-message">
@@ -379,12 +460,12 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
         lineItems: cartReservations.map(product => ({
             quantity: product.quantity,
             name: product.name,
-            price: product.price
+            price: getTotalAmount()
         })),
     };
 
     try {
-        const response = await axios.post('http://localhost:10000/api/create-gcash-checkout-session', body);
+        const response = await axios.post('https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session', body);
 
         const { url } = response.data;
 
@@ -443,8 +524,10 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
         name="date"
         required
         value={formData.date}
-        onChange={handleInputChange}
-        min={formatDate(today)}
+        onChange={(e) => {
+          handleInputChange(e);
+          setSelectedDate(e.target.value); // Update the selected date onChange
+        }}        min={formatDate(today)}
         max={formatDate(oneYearLaterDate)}
         onKeyDown={(e) => e.preventDefault()}
         disabled={!customer} // Disable if no customer is logged in
@@ -464,14 +547,17 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
     required
     placeholder="Number of guests"
     value={formData.guests}
-    onChange={handleInputChange}
+    onChange={(e) => {
+      handleInputChange(e);
+      setnumberofPax(e.target.value); // Update the number of guests onChange
+    }}
     onBlur={handleInputBlur}
     min="2"
-    max="100"
+    max="150"
     disabled={!customer} // Disable if no customer is logged in
   />
-  {(formData.guests < 2 || formData.guests > 100) && (
-    <small className="error-message">Guests must be between 2 and 100.</small>
+  {(formData.guests < 2 || formData.guests > 150) && (
+    <small className="error-message">Guests must be between 2 and {availableSlots}.</small>
   )}
   <small className="slots-message">
   {formData.date
@@ -743,6 +829,9 @@ oneYearLaterDate.setFullYear(today.getFullYear() + 1);
                 <p><strong>Number of Guests:</strong> {formData.guests}</p>
                 <p><strong>Contact Number:</strong> {formData.contact}</p>
               </div>
+              {(numberofPax >= 20) && (
+  <h4 className="total">Total: ₱{getTotalAmount()}</h4>
+)}
               <div className="receipt-footer">
                 <button
                   className="confirm-btn"

@@ -36,7 +36,7 @@ const FeedbackForm = () => {
     const averageScore = totalScore / Object.keys(ratings).length;
 
     try {
-      const response = await axios.post('http://localhost:10000/api/feedback', {
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/feedback', {
         name,
         ratings,
         comment,

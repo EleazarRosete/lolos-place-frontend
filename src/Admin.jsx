@@ -80,21 +80,12 @@ const Admin = () => {
 
                 <button className={styles.sideButton} onClick={() => navigateToSection('dashboard')}>
                     <img src={dashboardIcon} alt="dashboard" className={styles.buttonIcons} /> Dashboard
-                </button>
-                <button className={styles.sideButton} onClick={() => navigateToSection('pos')}>
-                    <img src={posIcon} alt="point of sale" className={styles.buttonIcons} /> Point of Sale
-                </button>
-                <button className={styles.sideButton} onClick={() => navigateToSection('orders')}>
-                    <img src={posIcon} alt="orders" className={styles.buttonIcons} /> Orders
-                </button>
-                <button className={styles.sideButton} onClick={() => navigateToSection('inventory')}>
-                    <img src={inventoryIcon} alt="inventory" className={styles.buttonIcons} /> Inventory
-                </button>
+                </button>   
                 <button className={styles.sideButton} onClick={() => navigateToSection('feedback')}>
                     <img src={feedbackIcon} alt="feedback" className={styles.buttonIcons} /> Feedback
                 </button>
                 <button className={styles.sideButton} onClick={() => navigateToSection('adminSettings')}>
-                    <img src={analyticsIcon} alt="adminSettings" className={styles.buttonIcons} /> Admin
+                    <img src={analyticsIcon} alt="adminSettings" className={styles.buttonIcons} />Access Control
                 </button>
                 <button className={styles.sideButton} onClick={handleLogout}>
                     <img src={logoutIcon} alt="logout" className={styles.buttonIcons} /> Logout
@@ -109,9 +100,6 @@ const Admin = () => {
             <div className={styles.mainContent}>
                 <Routes>
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="pos/*" element={<POS />} />
-                    <Route path="orders/*" element={<Purchases />} />
-                    <Route path="inventory" element={<Inventory />} />
                     <Route path="feedback" element={<Feedback />} />
                     <Route path="adminSettings" element={<AdminSettings />} />
                     <Route path="*" element={<Navigate to="dashboard" />} />

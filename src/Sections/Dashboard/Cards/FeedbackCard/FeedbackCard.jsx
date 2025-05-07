@@ -10,7 +10,7 @@ function FeedbackCard() {
 
     const getComments = async () => {
         try {
-            const response = await fetch("http://localhost:10000/feedback/get-comment", {
+            const response = await fetch("https://lolos-place-backend.onrender.com/feedback/get-comment", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });

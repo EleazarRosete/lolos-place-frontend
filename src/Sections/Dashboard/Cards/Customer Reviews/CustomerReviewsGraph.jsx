@@ -90,7 +90,7 @@ const CustomerReviewsGraph = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:10000/graphs/feedback-stats")
+    fetch("https://lolos-place-backend.onrender.com/graphs/feedback-stats")
       .then((response) => response.json())
       .then((data) => {
         // Convert string counts to numbers

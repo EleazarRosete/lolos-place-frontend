@@ -37,7 +37,7 @@ const CustomerPeakHoursGraph = () => {
     const fetchGraphData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:10000/graphs/peak-hours-data", {
+        const response = await axios.get("https://lolos-place-backend.onrender.com/graphs/peak-hours-data", {
           params: { start_date: startDate, end_date: endDate, selected_day: selectedDay },
         });
         setPeakHoursData(response.data);

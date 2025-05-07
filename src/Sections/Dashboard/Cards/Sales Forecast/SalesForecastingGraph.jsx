@@ -25,7 +25,7 @@ const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   useEffect(() => {
     const fetchYears = async () => {
       try {
-        const { data } = await axios.get("http://localhost:10000/graphs/transactions");
+        const { data } = await axios.get("https://lolos-place-backend.onrender.com/graphs/transactions");
         console.log("Fetched Years Data:", data);
         
         if (!Array.isArray(data)) throw new Error("Invalid response format");
@@ -46,8 +46,8 @@ const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
       try {
         let url =
           selectedYear === "Predicted Sales"
-            ? "http://localhost:10000/graphs/predict-sales"
-            : "http://localhost:10000/graphs/transactions";
+            ? "https://lolos-place-backend.onrender.com/graphs/predict-sales"
+            : "https://lolos-place-backend.onrender.com/graphs/transactions";
 
         const { data } = await axios.get(url);
         console.log("Fetched Sales Data:", data);
@@ -139,7 +139,6 @@ const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
               tickFormatter={formatNumber}
               label={{ value: "Total Sales", angle: -90, position: "insideLeft", offset: -5, style:{ fontSize:'12px'} }} tick={{fontSize:10}}
 
-              domain={domain}
               ticks={ticks}
             />
             <Tooltip formatter={(value) => formatNumber(value)} />

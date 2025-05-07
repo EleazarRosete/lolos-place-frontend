@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './DeliveryAndReservation.css'; // Updated stylesheet reference
 import MainLayout from '../../components/MainLayout';
-import { Link } from 'react-router-dom'; // Ensure you have this import for Link
+import { Link, useNavigate } from 'react-router-dom'; // Ensure you have this import for Link
+import { useCustomer } from '../../api/CustomerProvider';
+
+
 
 const DeliveryAndReservation = () => {
+    const { customer} = useCustomer();
+    const navigate = useNavigate(); 
+  
   // Placeholder function for handling order type clicks
   const handleOrderType = (type) => {
     console.log(`${type} selected`);
   };
+
+  useEffect(() => {
+    if (!customer) {
+      navigate("/login");
+    }
+  }, [customer, navigate]);
 
   return (
     <MainLayout>

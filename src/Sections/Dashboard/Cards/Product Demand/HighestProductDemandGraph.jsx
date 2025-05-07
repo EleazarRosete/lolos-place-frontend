@@ -26,7 +26,7 @@ const HighestSellingProducts = () => {
         setLoading(true);
         try {
             const response = await fetch(
-                `http://localhost:10000/graphs/sales-summary?start_date=${startDate}&end_date=${endDate}`
+                `https://lolos-place-backend.onrender.com/graphs/sales-summary?start_date=${startDate}&end_date=${endDate}`
             );
             const data = await response.json();
 

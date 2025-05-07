@@ -45,7 +45,7 @@ const LandingPage = () => {
   useEffect(() => {
     const fetchTopSellers = async () => {
       try {
-        const response = await fetch('http://localhost:10000/api/top-best-sellers');
+        const response = await fetch('https://lolos-place-backend.onrender.com/api/top-best-sellers');
         const data = await response.json();
         
         if (response.ok) {

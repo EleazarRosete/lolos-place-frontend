@@ -25,7 +25,7 @@ const Menu = () => {
   useEffect(() => {
     const fetchMenuData = async () => {
       try {
-        const response = await fetch('http://localhost:10000/api/menu');
+        const response = await fetch('https://lolos-place-backend.onrender.com/api/menu');
         const data = await response.json();
         setMenuData(data);
         setLoading(false);
