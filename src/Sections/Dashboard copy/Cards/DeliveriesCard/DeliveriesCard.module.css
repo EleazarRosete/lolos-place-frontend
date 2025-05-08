@@ -1,0 +1,232 @@
+.section {
+    width: 88%;
+    height: 64vh;
+    max-width: 100%;
+    background-color: #FEF7E1;
+    border: 0;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0;
+    overflow-y: auto;
+    scrollbar-color: #FCF6E6 transparent;
+    scrollbar-width: thin;
+    transition: scrollbar-color 0.3s ease-in-out;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+    position: relative;
+}
+
+.section .txtSyles1{
+    color: #3e2723;
+    background-color: red;
+}
+
+.txtStyles{
+    font-size: 1rem;
+    
+}
+
+.title {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.productList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.productItem {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #333;
+    font-size: 1.1rem;
+    transition: background-color 0.3s;
+}
+
+.productItem:hover {
+    background-color: #e0f7fa;
+}
+
+.loading {
+    font-size: 1rem;
+    color: #999;
+}
+
+@media (max-width: 768px) {
+    .card {
+        max-width: 90%;
+        padding: 15px;
+    }
+
+    .title {
+        font-size: 1.25rem;
+    }
+
+    .productItem {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 1.1rem;
+    }
+
+    .productItem {
+        font-size: 0.9rem;
+    }
+}
+
+.detailsButton{
+    padding: 10px 12px;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-radius: 4px;
+    background-color: #3e2723; /* Updated background color */
+    color: #E5E2E7;
+    cursor: pointer;
+}
+
+.section {
+    padding: 20px;
+    background: #FCF6E6;
+}
+
+
+.deliveryItem {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* .statusButton {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+} */
+
+/* .pending {
+    background-color: #007bff;
+} */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.modalActions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+ 
+
+.navButtonsReservation{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.cancelReservation , .confirmReservationCancel{
+    background: #3e2723;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out ;
+}
+
+
+
+.closeModalStyles , .cancelReservationProcess{
+    background: #3e2723;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out ;
+
+}
+
+
+
+.confirmationModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    background-color: #f9e6c9;
+}
+
+.modalButtons {
+    background-color: transparent;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.noReservationTxt{
+    font-size: .825rem;
+    font-style: italic;
+    opacity: 0.7;
+    padding: 0;
+    margin: 0;
+}
+
+ul{
+    list-style: none;
+}

@@ -8,7 +8,7 @@ function Product({ menu_id, name, price, stock, onAddToOrder, order, onRemove, o
     // Fetch products function
     const getProducts = async () => {
         try {
-            const response = await fetch("http://localhost:10000/menu/get-product", {
+            const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-product", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -44,7 +44,7 @@ function Product({ menu_id, name, price, stock, onAddToOrder, order, onRemove, o
         }
 
         try {
-            const response = await fetch(`http://localhost:10000/menu/add-product-stock-by-one/${menu_id}`, {
+            const response = await fetch(`https://lolos-place-backend.onrender.com/menu/add-product-stock-by-one/${menu_id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" }
             });
@@ -75,7 +75,7 @@ function Product({ menu_id, name, price, stock, onAddToOrder, order, onRemove, o
         }
 
         try {
-            const response = await fetch(`http://localhost:10000/menu/minus-product-stock-by-one/${menu_id}`, {
+            const response = await fetch(`https://lolos-place-backend.onrender.com/menu/minus-product-stock-by-one/${menu_id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
             });

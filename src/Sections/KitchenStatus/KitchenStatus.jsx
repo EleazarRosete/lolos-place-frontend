@@ -59,7 +59,7 @@ const KitchenStatus = () => {
 
   const fetchOrderHistory = async () => {
     try {
-      const response = await axios.get('http://localhost:10000/order/order-history');
+      const response = await axios.get('https://lolos-place-backend.onrender.com/order/order-history');
       setAllOrders(response.data);
 
     } catch (err) {
@@ -69,7 +69,7 @@ const KitchenStatus = () => {
 
   const fetchDeliveries = async () => {
     try {
-      const response = await fetch('http://localhost:10000/order/get-delivery', {
+      const response = await fetch('https://lolos-place-backend.onrender.com/order/get-delivery', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -82,7 +82,7 @@ const KitchenStatus = () => {
 
   const fetchTables = async () => {
     try {
-      const response = await fetch("http://localhost:10000/table/get-table", {
+      const response = await fetch("https://lolos-place-backend.onrender.com/table/get-table", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
       });
@@ -116,7 +116,7 @@ const KitchenStatus = () => {
     };
     const fetchProducts = async () =>{
       try {
-      const response = await fetch("http://localhost:10000/menu/get-product", {
+      const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-product", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -197,7 +197,7 @@ const KitchenStatus = () => {
 
     if (matchedDelivery) {
         try {
-            const response = await fetch(`http://localhost:10000/order/update-delivery/${matchedDelivery.delivery_id}`, {
+            const response = await fetch(`https://lolos-place-backend.onrender.com/order/update-delivery/${matchedDelivery.delivery_id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status: "Delivered" }),
@@ -216,7 +216,7 @@ const KitchenStatus = () => {
     }
 
     try {
-        const response = await axios.put(`http://localhost:10000/order/order-served/${selectedOrderId}`);
+        const response = await axios.put(`https://lolos-place-backend.onrender.com/order/order-served/${selectedOrderId}`);
         if (response.status === 200) {
             await fetchOrderHistory();
             handleCloseModal();
@@ -230,7 +230,7 @@ const KitchenStatus = () => {
 
   const handlePayNow = async () => {
       try {
-      const response = await fetch("http://localhost:10000/order/get-order", {
+      const response = await fetch("https://lolos-place-backend.onrender.com/order/get-order", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -283,7 +283,7 @@ const KitchenStatus = () => {
   
       
       try {
-        const response = await fetch('http://localhost:10000/sales/add-sales', {
+        const response = await fetch('https://lolos-place-backend.onrender.com/sales/add-sales', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedSalesData),
@@ -310,7 +310,7 @@ const KitchenStatus = () => {
         throw new Error("Selected order ID is not defined.");
       }
     
-      const response = await fetch(`http://localhost:10000/order/update-is-paid/${selectedOrderId}`, {
+      const response = await fetch(`https://lolos-place-backend.onrender.com/order/update-is-paid/${selectedOrderId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -355,7 +355,7 @@ const KitchenStatus = () => {
     try {
       // Step 1: Create checkout session
       const checkoutResponse = await fetch(
-        "http://localhost:10000/api/create-gcash-checkout-session",
+        "https://lolos-place-backend.onrender.com/api/create-gcash-checkout-session",
         {
           method: "POST",
           headers: {
@@ -391,7 +391,7 @@ const KitchenStatus = () => {
   
       // Step 2: Update payment status to 'paid'
       const updateResponse = await fetch(
-        `http://localhost:10000/order/update-is-paid/${order_id}`,
+        `https://lolos-place-backend.onrender.com/order/update-is-paid/${order_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -405,7 +405,7 @@ const KitchenStatus = () => {
       // Step 3: Fetch order details, order quantities, and products
       // 3a. Get order details
       const orderResponse = await fetch(
-        "http://localhost:10000/order/get-order",
+        "https://lolos-place-backend.onrender.com/order/get-order",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -422,7 +422,7 @@ const KitchenStatus = () => {
   
       // 3b. Get order quantities
       const quantitiesResponse = await fetch(
-        "http://localhost:10000/order/get-order-quantities",
+        "https://lolos-place-backend.onrender.com/order/get-order-quantities",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -438,7 +438,7 @@ const KitchenStatus = () => {
 
       // 3c. Get products
       const productResponse = await fetch(
-        "http://localhost:10000/menu/get-product",
+        "https://lolos-place-backend.onrender.com/menu/get-product",
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -479,7 +479,7 @@ const KitchenStatus = () => {
         console.log(salesData);
 
         try {
-          const salesResponse = await fetch("http://localhost:10000/sales/add-sales", {
+          const salesResponse = await fetch("https://lolos-place-backend.onrender.com/sales/add-sales", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(salesData),
@@ -505,7 +505,7 @@ const KitchenStatus = () => {
       // If an error occurs, attempt to update the order as 'not-paid'
       try {
         const notPaidResponse = await fetch(
-          `http://localhost:10000/order/update-not-paid/${order_id}`,
+          `https://lolos-place-backend.onrender.com/order/update-not-paid/${order_id}`,
           {
             method: "PUT",
             headers: { "Content-Type": "application/json" },

@@ -13,7 +13,7 @@ import SalesForecast from './Cards/Sales Forecast/SalesForecastingGraph.jsx';
 
 function Dashboard() { 
     const [activeGraph, setActiveGraph] = useState('productDemand');
-    const [activeReservationTab, setActiveReservationTab] = useState('sold'); // 'today', 'upcoming', or 'sold'
+    const [activeReservationTab, setActiveReservationTab] = useState('today'); // 'today', 'upcoming', or 'sold'
 
 
     const renderGraph = () => {
@@ -74,6 +74,18 @@ function Dashboard() {
     <div className={styles.secondCardContainer}>
         <div className={styles.reservationNavButtons}>
           <button
+            className={`${styles.reservationButton} ${activeReservationTab === 'today' ? styles.active : ''}`}
+            onClick={() => setActiveReservationTab('today')}
+          >
+            Today's Reservation
+          </button>
+          <button
+            className={`${styles.reservationButton} ${activeReservationTab === 'upcoming' ? styles.active : ''}`}
+            onClick={() => setActiveReservationTab('upcoming')}
+          >
+            Upcoming Reservation
+          </button>
+          <button
             className={`${styles.reservationButton} ${activeReservationTab === 'sold' ? styles.active : ''}`}
             onClick={() => setActiveReservationTab('sold')}
           >
@@ -82,6 +94,8 @@ function Dashboard() {
         </div>
 
         <div className={styles.reservationCardContainer}>
+          {activeReservationTab === 'today' && <ReservationCard />}
+          {activeReservationTab === 'upcoming' && <UpcomingReservation />}
           {activeReservationTab === 'sold' && <SoldProducts />}
         </div>
       </div>

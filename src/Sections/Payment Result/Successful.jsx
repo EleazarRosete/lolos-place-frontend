@@ -123,7 +123,7 @@ function Successful() {
 
 
 // Navigate after a slight delay to ensure the page reloads first
-    navigate("/admin/pos", { replace: true });
+    navigate("/cashier/pos", { replace: true });
                 }
             }
         } catch (error) {

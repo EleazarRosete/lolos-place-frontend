@@ -75,7 +75,7 @@ const SuccessPage = () => {
 
 
     try {
-        const response = await axios.post('http://localhost:10000/api/reservations', orderDetails);
+        const response = await axios.post('https://lolos-place-backend.onrender.com/api/reservations', orderDetails);
 
         if (response.status === 201) {
             setCartReservations([]);
@@ -93,7 +93,7 @@ const SuccessPage = () => {
     const fetchPaymentStatus = async () => {
         const user_id = customer.id;
         try {
-            const response = await axios.get(`http://localhost:10000/api/check-payment-status/${user_id}`);
+            const response = await axios.get(`https://lolos-place-backend.onrender.com/api/check-payment-status/${user_id}`);
             if (sessionId === response.data.session_id && response.data.payment_status === 'pending') {
               if (isAdvanceOrder) {
                 console.log(isAdvanceOrder);

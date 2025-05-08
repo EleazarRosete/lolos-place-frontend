@@ -1,0 +1,202 @@
+/* General Section */
+.section {
+    width: 100%;
+    position: relative;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+/* Graph and Feedback Container (Flexbox Row) */
+.graphContainer {
+    display: flex;
+    justify-content: center; /* Align items in a row without wrapping */
+    align-items: center; /* Align items to the top of the container */
+    gap: 1rem; /* Small space between the two sections */
+    width: 100%;
+    overflow-x: scroll; /* Allows horizontal scrolling */
+    scroll-snap-type: x mandatory; /* For smooth scroll snapping */
+}
+
+/* Graph Styling */
+.graph {
+    min-width: 100%; /* Ensure each graph takes full width of the container */
+    flex: none; /* Prevents the graph from growing */
+    scroll-snap-align: start; /* Makes sure each graph snaps into place */
+}
+
+.active {
+    border: 2px solid #3e2723; /* Border for active graph */
+}
+
+/* Arrow Buttons Styling */
+.arrowButton {
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 2rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 50%;
+}
+
+.arrowButton:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.arrowButton:first-of-type {
+    left: 1%; /* Left arrow button */
+    transform: translateY(-50%);
+}
+
+.arrowButton:last-of-type {
+    right: 1%; /* Right arrow button */
+    transform: translateY(-50%);
+}
+
+/* Card Styling */
+.salesTodayCard {
+    width: 28%;
+    max-width: 28%; 
+    height: 10vh;
+    background-color: #FEF7E1;
+    border: 0;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin: 10px;
+    margin: 0;
+    border-radius: 5px;
+    color: #313132;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+
+/* Header Styling */
+.salesTodayCardHeaderTxt {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #3e2723; /* Dark brown color for the vintage look */
+    margin: 0;
+    padding:0;
+}
+
+.dateFilterSale{
+    width: 100%;
+    margin: 0;
+    height: 4vh;
+    display: flex;
+}
+
+.SalesSelectDateLabel{
+    width: 100%;
+    font-size: 0.825;
+    font-weight: 500;
+    margin: 0;
+}
+
+.SalesSelectedDate{
+    width: 90%;
+    font-size: 0.825rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Button Styling */
+.salesText:hover {
+    background-color: #A0764B;
+ /* Lighter brown when hovering */
+}
+
+/* Sales Text Styling */
+.salesText {
+    width: 95%;
+    padding: 0.1rem;
+    background-color: #A5957B; /* Dark brown background for text */
+    color: #F4F4F9; /* Light text color for contrast */
+    font-weight: 500;
+    font-size: 1.125rem;
+    text-align: center;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+/* Currency Formatting */
+body {
+    background-image: url('https://www.transparenttextures.com/patterns/old_wall.png'); /* Optional background texture */
+    background-repeat: repeat;
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 1rem;
+        left: 0;
+    }
+    .textStyle, .textStyle1 {
+        font-size: 1.2rem;
+    }
+
+    .controls {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+
+    .feedbackContainer {
+        height: 75vh;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .section {
+        padding: 1rem;
+        left: 0;
+    }
+
+    .textStyle, .textStyle1 {
+        font-size: 1rem;
+    }
+
+    .controls {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .controls .sort, .controls .filter {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .feedbackContainer {
+        height: 70vh;
+        width: 85%;
+    }
+}
+
+@media (max-width: 1220px) {
+    .section {
+        width: 100%;
+        padding: 1rem;
+        left: 0;
+    }
+    .textStyle1{
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        left: 5%;
+    }
+}

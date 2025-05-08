@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Routes, Route, Navigate } from 'react-router-dom';
 import styles from './Admin.module.css';
-import Dashboard from './Sections/Dashboard/Dashboard.jsx';
+import Dashboard from './Sections/Dashboard copy/Dashboard.jsx';
 import POS from './Sections/POS/POS.jsx';
 import Inventory from './Sections/Inventory/Inventory.jsx';
 import Feedback from './Sections/Feedback/Feedback.jsx';

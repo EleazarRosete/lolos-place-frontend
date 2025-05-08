@@ -283,7 +283,7 @@ const Reservation = () => {
 
 
     try {
-      const response = await axios.post('http://localhost:10000/api/downpayment-gcash-checkout-session', body);
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/downpayment-gcash-checkout-session', body);
   
       const { url } = response.data;
   
@@ -348,7 +348,7 @@ const handleInputChange = async (e) => {
     if(numberofPax >= availableSlots){
       try {
         const response = await axios.post(
-          `http://localhost:10000/api/add-total-guests/${formData.date}`, // date from form
+          `https://lolos-place-backend.onrender.com/api/add-total-guests/${formData.date}`, // date from form
           { guest: formData.guests } // number of guests
         );
       

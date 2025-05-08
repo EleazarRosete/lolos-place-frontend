@@ -1,0 +1,130 @@
+.section {
+    width: 100%;
+    max-width: 2010px; /* Maximum width for large screens */
+    height: 80vh;
+    margin: 0 auto;
+    position: relative;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.graphContainer {
+    background-color: transparent;
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Stack items vertically on all screens */
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.customerFeedbackHeader{
+    font-size: 1rem;
+}
+
+.customerReviewsGraph {
+    width: 100%;
+    max-height: 50%; /* Limits image height */
+    max-width: 800px; /* Restrict graph width on larger screens */
+    object-fit: contain; /* Ensure proportional scaling */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feedbackGraph {
+    background-color: #fff;
+    width: 100%;
+    max-width: 800px; /* Limit width for readability */
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    color: #272626;
+    box-sizing: border-box;
+}
+
+.feedbackGraph strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+}
+
+.loading, .error {
+    color: #3e2723;
+    font-size: 1.4rem;
+    text-align: center;
+    padding: 1rem;
+}
+
+/* Media Queries for tablets */
+@media (max-width: 1024px) {
+    .customerReviewsGraph {
+        max-width: 600px; /* Reduce graph size */
+    }
+
+    .feedbackGraph {
+        max-width: 600px;
+        padding: 1.2rem;
+    }
+
+    .feedbackGraph strong {
+        font-size: 1.2rem;
+    }
+}
+
+/* Media Queries for small screens (smartphones) */
+@media (max-width: 768px) {
+    .graphContainer {
+        gap: 0.5rem; /* Reduce gap for smaller screens */
+    }
+
+    .customerReviewsGraph {
+        max-width: 100%;
+        max-height: 40%; /* Further reduce height */
+    }
+
+    .feedbackGraph {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .feedbackGraph strong {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .section {
+        padding: 0.5rem;
+    }
+
+    .graphContainer {
+        gap: 0.5rem; /* Minimize spacing further */
+    }
+
+    .customerReviewsGraph {
+        max-height: 30%; /* Fit smaller screens */
+    }
+
+    .feedbackGraph {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .feedbackGraph strong {
+        font-size: 0.9rem;
+    }
+
+    .loading, .error {
+        font-size: 1rem; /* Ensure text is readable */
+    }
+}

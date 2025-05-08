@@ -95,7 +95,7 @@ const handleSaveDetails = async () => {
   }
 
   try {
-      const response = await axios.post('http://localhost:10000/api/changeCustomerDetails', {
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/changeCustomerDetails', {
         id, 
         email, 
         phone, 

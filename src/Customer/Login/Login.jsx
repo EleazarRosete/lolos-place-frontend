@@ -43,7 +43,7 @@ const LoginPage = () => {
     try {
 
 
-      const response = await axios.post('http://localhost:10000/api/login', {
+      const response = await axios.post('https://lolos-place-backend.onrender.com/api/login', {
         identifier, 
         password,
       });
@@ -91,7 +91,7 @@ const LoginPage = () => {
 
     // Send OTP
     try {
-      await axios.post('http://localhost:10000/api/send-otp', { email });
+      await axios.post('https://lolos-place-backend.onrender.com/api/send-otp', { email });
       setEmail(email); // Store email for OTP verification
       setShowOTPModal(true); // Show OTP modal
     } catch (error) {

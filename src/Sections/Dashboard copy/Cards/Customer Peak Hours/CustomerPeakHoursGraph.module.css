@@ -1,0 +1,389 @@
+/* General Section */
+.section {
+  width: 100%;
+  height: 100%; /* Adjusted to make it more responsive */
+  position: relative;
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.peakHoursInsight{
+  width: 100%;
+  height: 15%;
+  margin: 0;
+  margin-top: 1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.insightss{
+  width: 100%;
+  height: 100%;
+text-overflow: ellipsis;
+  font-size: 0.825rem;
+  font-weight: 300;
+  text-align: center;
+  margin: 0;
+}
+
+.CustomerPeakHoursGraphHeader{
+  margin: 0;
+  font-size: 1rem;
+
+}
+/* Graph and Feedback Container (Flexbox Row) */
+.graphFeedbackContainer {
+  display: flex;
+  justify-content: center; /* Align items in a row without wrapping */
+  align-items: flex-start; /* Align items to the top of the container */
+  gap: 1rem; /* Slightly larger space between the two sections */
+  width: 100%;
+  margin: 0 auto;
+  background-color: transparent;
+  flex-wrap: wrap; /* Allows wrapping on smaller screens */
+}
+
+.filterContainer{
+  display: flex;
+  width: 50%;
+}
+
+.filters{
+  width: 100%;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.filtersDate, .filtersDay{
+  width: 50%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filtersDay{
+  height: 50%;
+  flex: 1;
+}
+
+.filtersDateInput, .filtersDayInput{
+  margin: 0;
+  width: 60%;
+  background-color: #A5957B;
+
+}
+
+.filtersDayInput{
+  background-color: #A5957B;
+  border-radius: 0.2rem;
+  padding: 0.2rem;
+}
+
+.peakHoursContainer{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Graph Container */
+.graphContainer {
+  background-color: transparent;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1; /* Ensures the graph container takes up available space */
+  width: 100%;
+  height: 80%;
+}
+
+.daySelect{
+  color: #000;
+  font-size: 1.05rem;
+  text-align: center;
+  border: 1px solid;
+}
+
+/* Feedback Section */
+.feedbackGraph {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 30%; /* Limits the width of the feedback section */
+  flex: none; /* Prevents the feedback section from growing */
+  text-align: left;
+  color: #272626;
+  overflow-y: auto; /* Allows vertical scrolling */
+  max-height: 400px; /* Set a max height to enable scrolling */
+  margin-top: 2rem;
+}
+
+/* Hide the scrollbar */
+.feedbackGraph::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar */
+}
+
+.graphContainer .customerReviewsGraph {
+  width: 100%;
+  height: 20vh;
+}
+
+/* Graph Styles */
+.customerReviewsGraph,
+.feedbackGraph {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Graph Image */
+.customerReviewsGraph {
+  width: 100%; /* Ensures full width on smaller screens */
+  max-height: 70%; /* Limits image height */
+  object-fit: contain; /* Ensures the image scales proportionally without cropping */
+  background-color: transparent;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading and Error States */
+.loading,
+.error {
+  color:black;
+  font-size: 1.125rem;
+  text-align: center;
+}
+
+/* Insights Tables */
+.insightsContainer {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  text-align: left;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.insight {
+  margin-bottom: 1rem;
+}
+
+.insight h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.insight p {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* Tables for Insights */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th,
+td {
+  padding: 0.5rem;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+td {
+  border-bottom: 1px solid #ddd;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+  .graphFeedbackContainer {
+    flex-direction: column; /* Stack items vertically on medium screens */
+    gap: 1.5rem; /* Adjust the gap */
+  }
+
+  .feedbackGraph {
+    max-width: 80%; /* Makes the feedback section larger on medium screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    height: auto; /* Makes the section's height flexible on smaller screens */
+  }
+
+  .graphFeedbackContainer {
+    flex-direction: column; /* Stack items vertically on small screens */
+    gap: 1rem; /* Reduce the gap between the sections */
+  }
+
+  .graphContainer {
+    width: 100%; /* Ensure graph takes full width */
+    height: 20vh;
+  }
+
+  .graphCustomerPeakHoursGraph{
+    width: 100%;
+    height: 100%;
+  }
+
+  .feedbackGraph {
+    width: 100%; /* Feedback section takes full width */
+    max-height: 250px; /* Adjust max height for small screens */
+    margin-top: 1rem; /* Adds margin above feedback */
+  }
+
+  .customerReviewsGraph {
+    width: 100%; /* Graph takes full width */
+    max-height: 60%; /* Adjust max height */
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    height: auto; /* Ensure section height is flexible */
+    padding: 0.5rem; /* Less padding on smaller screens */
+  }
+
+  .feedbackGraph {
+    max-width: 100%; /* Feedback section takes full width */
+    max-height: 200px; /* Further reduce max height on small screens */
+  }
+
+  .graphContainer {
+    padding: 0; /* Remove extra padding for smaller devices */
+  }
+
+  .customerReviewsGraph {
+    width: 100%;
+    max-height: 50%; /* Adjust height for smaller screens */
+  }
+}
+
+
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.8rem;
+  max-width: 40%;
+  width:40%;
+  height: 25vh;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+.modalContentP{
+  background-color: white;
+  padding: 1rem;
+  padding-top: 3rem;
+  border-radius: 0.8rem;
+  max-width: 60%;
+  width:50%;
+  height: 20vh;
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+  position: relative;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.closeModalBtn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.filterBtn {
+  margin-bottom: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+
+/* DIY Modal Styles (add these to your existing CSS) */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark background overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure the modal appears on top */
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 50%;
+  font-size: 16px;
+}
+
+.modalContent div {
+  font-size: 16px;
+}

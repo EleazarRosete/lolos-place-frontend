@@ -1,0 +1,179 @@
+/* Card Styles */
+.InventoryCard {
+    width: 28%;
+    max-width: 28%; 
+    height: 10vh;
+    background-color: #FEF7E1;
+    border: 0;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    margin: 10px;
+    margin: 0;
+    border-radius: 5px;
+    color: #313132;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+.InventoryCardHeaderTxt{
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+
+/* Stock Indicator */
+.card .stockIndicator {
+    color: #0e0e0e;
+    
+    letter-spacing: 0.15em;
+    width: 95%;
+    height: 10vh;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: background-color 0.3s ease-in-out;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+/* High and Low Stocks Background Colors */
+.highStocks {
+    color: green; /* Olive green for high stocks */
+    font-weight: 900;
+
+}
+
+.lowStocks {
+    color: red; /* Firebrick red for low stocks */
+    font-weight: 900;
+
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(14, 14, 14, 0.5);
+    z-index: 100;
+}
+
+.modalContent {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #FEF7E1;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 25%;
+    height: 70%;
+    max-width: 600px;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.inventoryCardDetailsHeader{
+    color: black;
+}
+
+.InventoryCardDetailsStock{
+    width: 100%;
+    height: 85%;
+    max-height: 85%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    overflow-y: auto;
+}
+
+.InventoryCardDetailsStock::-webkit-scrollbar {
+    display: none; 
+  }
+
+.noLowStocks{
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-size: 1rem;
+    font-style: italic;
+}
+
+/* Modal Close Button */
+.closeModalButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        max-width: 90%; /* Increase card width for tablets and mobile devices */
+        padding: 1rem;
+    }
+
+    .cardHeaderTxt {
+        font-size: 1.2rem; /* Adjust font size for mobile */
+    }
+
+    .card .stockIndicator {
+        font-size: 0.9rem; /* Slightly larger font size on mobile */
+        height: 12vh;
+    }
+
+    .modalContent {
+        width: 70%; /* Increase modal width for mobile */
+        height: 40%; /* Adjust height for mobile */
+    }
+
+    .modalOverlay {
+        background-color: rgba(14, 14, 14, 0.6); /* Slightly darker overlay for better visibility */
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        max-width: 95%; /* Full-width card on small mobile devices */
+    }
+
+    .cardHeaderTxt {
+        font-size: 1rem; /* Adjust font size for small devices */
+    }
+
+    .card .stockIndicator {
+        font-size: 1rem; /* Larger font size for smaller screens */
+        height: 15vh;
+    }
+
+    .modalContent {
+        width: 85%; /* Modal takes more space on small screens */
+        height: 50%; /* Increase modal height */
+    }
+
+    .modalOverlay {
+        background-color: rgba(14, 14, 14, 0.7); /* Darker overlay for better visibility */
+    }
+}

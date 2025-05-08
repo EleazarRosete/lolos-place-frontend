@@ -1,0 +1,122 @@
+.section {
+    width: 88%;
+    height: 65vh;
+    background-color: #FEF7E1;
+    border: 0;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: flex-start;
+    margin: 10px;
+    margin: 0;
+    border-radius: 5px;
+    color: #313132;
+    box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -webkit-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);
+    -moz-box-shadow: 0px 8px 8px 0px rgba(62,39,35,1);   
+    border-top: 1px solid #3e2723;
+}
+
+.filterSection{
+    width: 100%;
+    display: flex;
+    padding-bottom: 2%;
+    margin-bottom: 2%;
+    border-bottom: 1px solid ;
+}
+
+h1{
+    margin: 0;
+}
+
+.filterSection label{
+    width: 30%;
+    margin: 0;
+}
+
+.filterSection input{
+    width: 45%;
+    margin: 0;
+}
+
+.productSoldContainer{
+    width: 100%;
+    margin: 0;
+    height: 100%;
+    padding: 0;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.productSoldContainer p {
+    margin: 0;
+}
+
+
+.title {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.productList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.productItem {
+    background-color: #3e2723;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    color: #E5E2E7;
+    text-align: center;
+    font-size: 1.1rem;
+    transition: background-color 0.3s;
+    transition:  0.3s ease-in-out;
+}
+
+.productList .productItem:hover {
+    background-color: #6d4c41;
+    cursor: pointer;
+}
+
+.loading {
+    font-size: 1rem;
+    color: #999;
+}
+
+@media (max-width: 768px) {
+    .card {
+        max-width: 90%;
+        padding: 15px;
+    }
+
+    .title {
+        font-size: 1.25rem;
+    }
+
+    .productItem {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 1.1rem;
+    }
+
+    .productItem {
+        font-size: 0.9rem;
+    }
+}

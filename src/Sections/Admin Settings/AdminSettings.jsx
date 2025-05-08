@@ -46,7 +46,7 @@ function Admin() {
 
     useEffect(() => {
         // Fetch Admin Data
-        fetch('http://localhost:10000/user/get-user?id=14')
+        fetch('https://lolos-place-backend.onrender.com/user/get-user?id=14')
             .then(response => response.json())
             .then(data => {
                 setAdminData({
@@ -63,7 +63,7 @@ function Admin() {
             .catch(error => console.error("Error fetching admin data:", error));
         
         // Fetch Cashier Data
-        fetch('http://localhost:10000/user/get-user?id=13')
+        fetch('https://lolos-place-backend.onrender.com/user/get-user?id=13')
             .then(response => response.json())
             .then(data => {
                 setCashierData({
@@ -80,7 +80,7 @@ function Admin() {
             .catch(error => console.error("Error fetching cashier data:", error));
 
                     // Fetch Kitchen Data
-        fetch('http://localhost:10000/user/get-user?id=55')
+        fetch('https://lolos-place-backend.onrender.com/user/get-user?id=55')
         .then(response => response.json())
         .then(data => {
             setKitchenData({
@@ -179,7 +179,7 @@ function Admin() {
     
                 // Send data to the server based on selected role
                 if (selectedRole === "admin" || selectedRole === "all") {
-                    const responseAdmin = await fetch('http://localhost:10000/user/update-user', {
+                    const responseAdmin = await fetch('https://lolos-place-backend.onrender.com/user/update-user', {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(updatedAdminData)
@@ -189,7 +189,7 @@ function Admin() {
                 }
     
                 if (selectedRole === "cashier" || selectedRole === "all") {
-                    const responseCashier = await fetch('http://localhost:10000/user/update-user', {
+                    const responseCashier = await fetch('https://lolos-place-backend.onrender.com/user/update-user', {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(updatedCashierData)
@@ -199,7 +199,7 @@ function Admin() {
                 }
     
                 if (selectedRole === "kitchen" || selectedRole === "all") {
-                    const responseKitchen = await fetch('http://localhost:10000/user/update-user', {
+                    const responseKitchen = await fetch('https://lolos-place-backend.onrender.com/user/update-user', {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(updatedKitchenData)

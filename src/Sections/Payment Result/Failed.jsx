@@ -8,7 +8,7 @@ function Failed() {
   useEffect(() => {
     const deleteTempData = async () => {
       try {
-        const response = await fetch("http://localhost:10000/order/delete-temp-data", {
+        const response = await fetch("https://lolos-place-backend.onrender.com/order/delete-temp-data", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -23,7 +23,7 @@ function Failed() {
 
         // Navigate after 1 second
         const timer = setTimeout(() => {
-          navigate("/admin/pos");
+          navigate("/cashier/pos");
         }, 1000);
 
         return () => clearTimeout(timer);

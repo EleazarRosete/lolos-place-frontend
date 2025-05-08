@@ -22,7 +22,7 @@ function Inventory() {
 
     const getProduct = async () => {
         try {
-            const response = await fetch("http://localhost:10000/menu/get-product", {
+            const response = await fetch("https://lolos-place-backend.onrender.com/menu/get-product", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" },
             });
@@ -102,7 +102,7 @@ function Inventory() {
 
     const handleRemoveItem = async (id) => {
         try {
-            await fetch(`http://localhost:10000/menu/delete-product/${id}`, {
+            await fetch(`https://lolos-place-backend.onrender.com/menu/delete-product/${id}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
