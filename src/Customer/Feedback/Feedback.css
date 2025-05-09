@@ -2,7 +2,7 @@
 .feedback-page {
     font-family: Arial, sans-serif;
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #dfd6c7;
     min-height: 100vh; /* Minimum height of 110% of the viewport height */
     height: auto; /* Let the element grow based on content */
     
