@@ -29,10 +29,74 @@ const OrderHistory = () => {
       } finally {
         setLoading(false);
       }
+
+      console.log("ORDERS", orders);
+
     };
 
     fetchOrderHistory();
   }, [customer]);
+
+
+
+
+
+
+
+
+
+
+  const addHoursToTime = (timeStr, hoursToAdd) => {
+    const [hour, minute, second] = timeStr.split(":").map(Number);
+    const date = new Date();
+    date.setHours(hour + hoursToAdd);
+    date.setMinutes(minute);
+    date.setSeconds(second || 0);
+    return date; // Return Date object
+  };
+  
+
+
+  const formatReservationTime = (date) => {
+    return date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
+  
+
+
+
+
+
+
+
+const formatTime = (timeStr, order_type) => {
+  const [hour, minute, second] = timeStr.split(":").map(Number);
+  const time = new Date();
+
+  time.setHours(hour);
+  time.setMinutes(minute);
+  time.setSeconds(second);
+
+  // Apply offset ONLY if not a Delivery
+  if (order_type !== "Delivery") {
+    time.setHours(time.getHours());
+  }
+
+  return time.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
+};
+
+
+
+
+  
+  
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -63,16 +127,23 @@ const OrderHistory = () => {
 
               return (
                 <div className="order-card" key={order.order_id}>
-                  <p><strong>Order Type:</strong> {order.order_type}</p>
+<p><strong>Order Type:</strong> {
+  order.order_type 
+    ? order.order_type 
+    : order.delivery
+      ? 'Delivery' 
+      : 'Reservation'
+}</p>
                   <p><strong>Date:</strong> {formatDate(order.date)}</p>
-                  <p><strong>Time:</strong> {order.time}</p>
+                  <p><strong>Time:</strong> {formatTime(order.time, order.order_type)}</p>
 
-                  {order.order_type === "Reservation" && (
-                    <>
-                      <p><strong>Reservation Date:</strong> {formatDate(order.reservation_date)}</p>
-                      <p><strong>Reservation Time:</strong> {order.reservation_time}</p>
-                    </>
-                  )}
+{order.order_type === "Reservation" && (
+  <>
+    <p><strong>Reservation Date:</strong> {formatDate(order.reservation_date)}</p>
+    <p><strong>Reservation Time:</strong> {formatReservationTime(addHoursToTime(order.time, 12))}</p>
+    </>
+)}
+
 
                   <h3 className="item-header">Ordered Items</h3>
                   <div className="items-columns">

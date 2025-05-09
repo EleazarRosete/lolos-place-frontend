@@ -10,10 +10,49 @@ import locationIcon from '../assets/location.png';
 import mailIcon from '../assets/mail.png';
 import telephoneIcon from '../assets/telephone.png';
 
+
 const MainLayout = ({ children }) => {
-  const { customer, setCustomer } = useCustomer();
+  const { customer, setCustomer, setMenuData, setCategories } = useCustomer();
   const [dropdownActive, setDropdownActive] = useState(false);
   const [burgerMenuActive, setBurgerMenuActive] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    const fetchMenuData = async () => {
+      try {
+        const response = await fetch('https://lolos-place-backend.onrender.com/api/menu');
+        const data = await response.json();
+        setMenuData(data);
+        setLoading(false);
+        const uniqueCategories = [...new Set(data.map((item) => item.category))];
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error('Error fetching menu data:', error);
+        setLoading(false);
+      }
+    };
+    fetchMenuData();
+  }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // Scroll to top function
   const scrollToTop = () => {
