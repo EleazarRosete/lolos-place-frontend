@@ -150,9 +150,9 @@ const Purchases = () => {
 
 
 
-  const handleStatusClick = (orderId, name, firstName, lastName, numppl, phone, date, time, tableID, items) => {
+  const handleStatusClick = (orderId, name, firstName, lastName, numppl, phone, date, time, tableID, items, status) => {
     setSelectedOrderId(orderId);
-    setDeatilss([orderId, name,firstName, lastName, numppl, phone, date, time, tableID, items]);
+    setDeatilss([orderId, name,firstName, lastName, numppl, phone, date, time, tableID, items, status]);
     console.log(detailss);
     if(orderTypeFilter === "pay-later"){
       setModalOpenPayLater(true);
@@ -567,12 +567,13 @@ const Purchases = () => {
 
 
       // setAll(alls + payLaterOrders); // Include pay-later orders in "all"
-    setAll(forAll); // Include pay-later orders in "all"
 
     setDine(dineInOrders);
     setTake(takeOutOrders);
     setDeliverr(deliveryOrders);
     setPay(payLaterOrders);
+    setAll(dine+take+deliverr); // Include pay-later orders in "all"
+
   }, [sortedAllOrders]);
   
   
@@ -675,6 +676,7 @@ const Purchases = () => {
                   return (
                     <li key={order.order_id} className={styles.orderItem}>
                       <h3 className={styles.ordersH3}>Order #{order.order_id}</h3>
+                      <p>Status: {order.status}</p>
                       <p>Table: {tables.find((table) => table.table_id === order.tableID) 
     ? tables.find((table) => table.table_id === order.tableID).table_name 
     : 'No table applied'}
@@ -692,7 +694,7 @@ const Purchases = () => {
                         ))}
                       </ul>
                       <p>Total: ₱{order.total_amount}  <strong>{order.ispaid === true ? "PAID" : "NOT PAID"}</strong></p>
-                      <button onClick={() => handleStatusClick(order.order_id,order.customerName, order.firstName, order.lastName, order.numberOfPeople,order.phone,order.date,order.time,order.tableID, order.items)}>Details
+                      <button onClick={() => handleStatusClick(order.order_id,order.customerName, order.firstName, order.lastName, order.numberOfPeople,order.phone,order.date,order.time,order.tableID, order.items, order.status)}>Details
 </button>
                     </li>
                   );
@@ -740,6 +742,7 @@ const Purchases = () => {
           <div className={styles.modalOrder}>
             <h3>Mark Order as Served</h3>
             <h3>Order #{detailss[0]}</h3>
+            <p>Status: {detailss[10]}</p>
             <p>Name: {detailss[1] !== null ? detailss[1] : `${detailss[2]} ${detailss[3]}`}</p>  
                     <p>Number of people: {detailss[4] == null ? "1" : detailss[4]}</p>
                     <p>Contact Number: {detailss[5] == "09682823420" ? "No number inputed" : detailss[5]}</p>
@@ -751,7 +754,6 @@ const Purchases = () => {
 </p>
             <div className={styles.navButtonOrders}>
 
-              <button onClick={handleServeOrder} className={styles.orderButtonsHistory}>Served</button>
               <button onClick={handleCloseModal} className={styles.orderButtonsHistory}>Close</button>
 
             </div>
@@ -769,6 +771,8 @@ const Purchases = () => {
           <div className={styles.modalOrder}>
             <h3>Pay Order Now</h3>
             <h3>Order #{detailss[0]}</h3>
+            <p>Status: {detailss[10]}</p>
+
             <p>Name: {detailss[1] !== null ? detailss[1] : `${detailss[2]} ${detailss[3]}`}</p>  
                     <p>Number of people: {detailss[4] == null ? "1" : detailss[4]}</p>
                     <p>Contact Number: {detailss[5] == "09682823420" ? "No number inputed" : detailss[5]}</p>

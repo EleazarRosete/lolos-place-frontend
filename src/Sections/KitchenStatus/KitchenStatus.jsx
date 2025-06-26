@@ -194,10 +194,12 @@ const KitchenStatus = () => {
 
   const handleServeOrder = async () => {
     const matchedDelivery = deliveries.find(delivery => delivery.order_id === selectedOrderId);
+    
 
     if (matchedDelivery) {
+
         try {
-            const response = await fetch(`https://lolos-place-backend.onrender.com/order/update-delivery/${matchedDelivery.delivery_id}`, {
+            const response = await fetch(`http://localhost:10000/order/update-delivery/${matchedDelivery.delivery_id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status: "Delivered" }),
@@ -207,6 +209,7 @@ const KitchenStatus = () => {
                     prev.filter(delivery => delivery.delivery_id !== matchedDelivery.delivery_id)
                 );
                 handleCloseModal();
+                  location.reload();
             } else {
                 console.error("Failed to update delivery status.");
             }
@@ -216,10 +219,15 @@ const KitchenStatus = () => {
     }
 
     try {
-        const response = await axios.put(`https://lolos-place-backend.onrender.com/order/order-served/${selectedOrderId}`);
+        const response = await axios.put(`http://localhost:10000/order/order-served/${selectedOrderId}`);
         if (response.status === 200) {
             await fetchOrderHistory();
+
+              console.log("HEREE", selectedOrderId)
+
             handleCloseModal();
+            location.reload();
+
         }
     } catch (error) {
         alert('Failed to update order status. Please try again later.');
@@ -540,21 +548,20 @@ const KitchenStatus = () => {
   
 
 
-  const filteredPreparingOrders = sortedAllOrders.filter((order) => {
-    const ordertype = filterOrderType(order) || '';
-    const searchQueryLower = searchQuery.toLowerCase();
-  
-    if (orderTypeFilter === 'pay-later') {
-      return !order.ispaid && order.order_id?.toString().toLowerCase().includes(searchQueryLower);
-    }
-  
-    return (
-      (order.status === 'preparing' || !order.ispaid) && // Include unpaid orders
-      (order.order_id?.toString().toLowerCase().includes(searchQueryLower) ||
-        ordertype.toString().toLowerCase().includes(searchQueryLower)) &&
-      (orderTypeFilter ? ordertype.includes(orderTypeFilter) : true)
-    );
-  });
+const filteredPreparingOrders = sortedAllOrders.filter((order) => {
+  const ordertype = filterOrderType(order) || '';
+  const searchQueryLower = searchQuery.toLowerCase();
+
+  // Only include orders with status 'preparing'
+  if (order.status !== 'preparing') return false;
+
+  // Apply search filter on order_id and order type
+  return (
+    order.order_id?.toString().toLowerCase().includes(searchQueryLower) ||
+    ordertype.toLowerCase().includes(searchQueryLower)
+  );
+});
+
   
   
   
@@ -586,12 +593,13 @@ const KitchenStatus = () => {
 
 
       // setAll(alls + payLaterOrders); // Include pay-later orders in "all"
-    setAll(forAll); // Include pay-later orders in "all"
 
     setDine(dineInOrders);
     setTake(takeOutOrders);
     setDeliverr(deliveryOrders);
     setPay(payLaterOrders);
+     setAll(dine+take+deliverr); // Include pay-later orders in "all"
+
   }, [sortedAllOrders]);
   
   
