@@ -115,7 +115,6 @@ const MainLayout = ({ children }) => {
     <div className="main-layout">
       <header className="mainlayout-header">
         <img className="logo" src={logo} alt="Restaurant Logo" />
-        <h1>Lolo's Place</h1>
 
         {/* Burger Icon for small screens */}
         <img

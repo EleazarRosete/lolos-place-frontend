@@ -207,7 +207,7 @@ const KitchenStatus = () => {
             if (response.ok) {
                 setDeliveries(prev =>
                     prev.filter(delivery => delivery.delivery_id !== matchedDelivery.delivery_id)
-                );
+                );  
                 handleCloseModal();
                   location.reload();
             } else {
